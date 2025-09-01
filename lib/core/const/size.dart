@@ -1,0 +1,33 @@
+class AppSize {
+  AppSize._();
+  static const double inputContentVerticalSpace = 10.0;
+  static const double inputContentHorizontalSpace = 8.0;
+  static const double inputBorderWidth = 1.0;
+  static const double inputBorderRadius = 8.0;
+  static const double inputRoundedRadius = 28.0;
+  static const double pageHorizontalSpace = 20.0;
+  static const double pageVerticalSpace = 20.0;
+  static const double paragraphSpace = 25.0;
+  static const double paragraphSpaceDense = 10.0;
+  static const double paragraphSpaceTight = 15.0;
+  static const double paragraphSpaceLoose = 35.0;
+  static const double paragraphSpaceVeryLoose = 55.0;
+  static const double insideSpace = 5.0;
+  static const double insideSpaceDense = 3.0;
+  static const double insideSpaceLoose = 8.0;
+  static const double indentNormal = 15.0;
+  static const double indentDense = 10.0;
+  static const double indentLoose = 20.0;
+  static const double generalBorderRadius = 20.0;
+  static const double standardButtonHeight = 48.0;
+  static const double fontButtonSize = 16.0;
+  static const double fontButtonSmall = 13.0;
+  static const double fontButtonLarge = 18.0;
+  static const double headIconSize = 44.0;
+  static const double headIconLarge = 58.0;
+  static const double iconSmaller = 16.0;
+  static const double iconSmall = 20.0;
+  static const double iconMedium = 24.0;
+  static const double iconLarge = 30.0;
+  static const double iconLarger = 38.0;
+}

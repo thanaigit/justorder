@@ -1,0 +1,4 @@
+enum QueryOptions {
+  single,
+  maybeSingle,
+}

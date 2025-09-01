@@ -1,0 +1,18 @@
+enum QueryOperators {
+  match,
+  equal,
+  orEqual,
+  notEqual,
+  greater,
+  greaterOrEqual,
+  less,
+  lessOrEqual,
+  likeSensitive,
+  likeInsensitive,
+  isNull,
+  isNotNull,
+  isIn,
+  contains,
+  containedBy,
+  between,
+}
