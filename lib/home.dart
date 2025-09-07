@@ -17,7 +17,7 @@ import 'core/presentation/widgets/buttons/scale_button.dart';
 import 'core/presentation/widgets/gap.dart';
 import 'core/providers/app_common_data_provider.dart';
 import 'core/utilities/func_utils.dart';
-import 'presentation/widgets/setting_menu.dart';
+import 'views/widgets/setting_menu.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});

@@ -49,11 +49,6 @@ class _SettingMenuState extends State<SettingMenu> {
   @override
   Widget build(BuildContext context) {
     const spaceHgt = AppSize.paragraphSpace;
-    final headerStyle = AppTextStyles.headerMediumStyle(
-      context,
-      sizeOffset: 1,
-      color: AppColors.criticalHighlight,
-    );
     final menuStyle = AppTextStyles.headerMediumStyle(
       context,
       sizeOffset: -0.5,
@@ -66,6 +61,12 @@ class _SettingMenuState extends State<SettingMenu> {
           header: 'ที่อยู่',
           headerStyle: menuStyle,
           description: 'กำหนดที่อยู่ร้านสำหรับการออกใบเสร็จรับเงิน',
+        ),
+        const Gap.height(spaceHgt),
+        _menuButtonText(
+          header: 'หมายเลขโทรศัพท์',
+          headerStyle: menuStyle,
+          description: 'กำหนดหมายเลขโทรศัพท์ของร้านเพื่อแสดงในใบเสร็จรับเงิน',
         ),
         const Gap.height(spaceHgt),
         _menuButtonText(

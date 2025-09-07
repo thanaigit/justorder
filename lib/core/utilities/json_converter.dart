@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../domain/entities/exceptions/invalid_datatype_exception.dart';
+import '../domain/exceptions/invalid_datatype_exception.dart';
 
 class JsonConverter {
   static Map<String, dynamic>? toMap(dynamic source) {

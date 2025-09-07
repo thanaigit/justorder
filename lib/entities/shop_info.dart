@@ -1,0 +1,152 @@
+import '../core/domain/entities/base_class.dart';
+import '../core/enum/data_status.dart';
+import '../enum/service_charge_method.dart';
+import 'address/address.dart';
+
+class ShopInfo extends BaseClass {
+  final int? id;
+  final String? name;
+  final bool takeHomeOnly;
+  final bool allDay;
+  final Address? address;
+  final String? urlMap;
+  final bool hasServiceCharge;
+  final double? servicePercent;
+  final ServiceChargeMethod? serviceChargeMethod;
+  final bool serviceCalcAll;
+  final bool serviceCalcTakehome;
+  final bool recommendedGroupAuto;
+  final String? recommendedGroupName;
+  final bool vatInside;
+  final double? vatPercent;
+  final bool includeVat;
+  final String? taxID;
+  ShopInfo({
+    this.id,
+    this.name,
+    this.takeHomeOnly = false,
+    this.allDay = false,
+    this.address,
+    this.urlMap,
+    this.hasServiceCharge = false,
+    this.servicePercent,
+    this.serviceChargeMethod,
+    this.serviceCalcAll = true,
+    this.serviceCalcTakehome = false,
+    this.recommendedGroupAuto = true,
+    this.recommendedGroupName,
+    this.vatInside = false,
+    this.vatPercent,
+    this.includeVat = false,
+    this.taxID,
+    super.dataStatus,
+    super.createdBy,
+    super.createdTime,
+    super.updatedBy,
+    super.updatedTime,
+    super.deviceId,
+    super.appName,
+    super.appVersion,
+  });
+
+  ShopInfo copyWith({
+    int? id,
+    String? name,
+    bool? takeHomeOnly,
+    bool? allDay,
+    Address? address,
+    String? urlMap,
+    bool? hasServiceCharge,
+    double? servicePercent,
+    ServiceChargeMethod? serviceChargeMethod,
+    bool? serviceCalcAll,
+    bool? serviceCalcTakehome,
+    bool? recommendedGroupAuto,
+    String? recommendedGroupName,
+    bool? vatInside,
+    double? vatPercent,
+    bool? includeVat,
+    String? taxID,
+    DataStatus? dataStatus,
+    String? createdBy,
+    DateTime? createdTime,
+    String? updatedBy,
+    DateTime? updatedTime,
+    String? deviceId,
+    String? appName,
+    String? appVersion,
+  }) {
+    return ShopInfo(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      takeHomeOnly: takeHomeOnly ?? this.takeHomeOnly,
+      allDay: allDay ?? this.allDay,
+      address: address ?? this.address,
+      urlMap: urlMap ?? this.urlMap,
+      hasServiceCharge: hasServiceCharge ?? this.hasServiceCharge,
+      servicePercent: servicePercent ?? this.servicePercent,
+      serviceChargeMethod: serviceChargeMethod ?? this.serviceChargeMethod,
+      serviceCalcAll: serviceCalcAll ?? this.serviceCalcAll,
+      serviceCalcTakehome: serviceCalcTakehome ?? this.serviceCalcTakehome,
+      recommendedGroupAuto: recommendedGroupAuto ?? this.recommendedGroupAuto,
+      recommendedGroupName: recommendedGroupName ?? this.recommendedGroupName,
+      vatInside: vatInside ?? this.vatInside,
+      vatPercent: vatPercent ?? this.vatPercent,
+      includeVat: includeVat ?? this.includeVat,
+      taxID: taxID ?? this.taxID,
+      dataStatus: dataStatus ?? this.dataStatus,
+      createdBy: createdBy ?? this.createdBy,
+      createdTime: createdTime ?? this.createdTime,
+      updatedBy: updatedBy ?? this.updatedBy,
+      updatedTime: updatedTime ?? this.updatedTime,
+      deviceId: deviceId ?? this.deviceId,
+      appName: appName ?? this.appName,
+      appVersion: appVersion ?? this.appVersion,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ShopInfo &&
+        other.id == id &&
+        other.name == name &&
+        other.takeHomeOnly == takeHomeOnly &&
+        other.allDay == allDay &&
+        other.address == address &&
+        other.urlMap == urlMap &&
+        other.hasServiceCharge == hasServiceCharge &&
+        other.servicePercent == servicePercent &&
+        other.serviceChargeMethod == serviceChargeMethod &&
+        other.serviceCalcAll == serviceCalcAll &&
+        other.serviceCalcTakehome == serviceCalcTakehome &&
+        other.recommendedGroupAuto == recommendedGroupAuto &&
+        other.recommendedGroupName == recommendedGroupName &&
+        other.vatInside == vatInside &&
+        other.vatPercent == vatPercent &&
+        other.includeVat == includeVat &&
+        other.taxID == taxID;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        name.hashCode ^
+        takeHomeOnly.hashCode ^
+        allDay.hashCode ^
+        address.hashCode ^
+        urlMap.hashCode ^
+        hasServiceCharge.hashCode ^
+        servicePercent.hashCode ^
+        serviceChargeMethod.hashCode ^
+        serviceCalcAll.hashCode ^
+        serviceCalcTakehome.hashCode ^
+        recommendedGroupAuto.hashCode ^
+        recommendedGroupName.hashCode ^
+        vatInside.hashCode ^
+        vatPercent.hashCode ^
+        includeVat.hashCode ^
+        taxID.hashCode;
+  }
+}
