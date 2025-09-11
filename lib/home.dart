@@ -4,9 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/const/colors.dart';
 import 'core/const/size.dart';
-import 'core/data/providers/app_info_provider.dart';
 import 'core/data/repositories/app_common_data_repo.dart';
-import 'core/data/repositories/app_info_repo.dart';
 import 'core/enum/app_langs.dart';
 import 'core/enum/scales_value.dart';
 import 'core/langs/language.dart';
@@ -17,7 +15,12 @@ import 'core/presentation/widgets/buttons/scale_button.dart';
 import 'core/presentation/widgets/gap.dart';
 import 'core/providers/app_common_data_provider.dart';
 import 'core/utilities/func_utils.dart';
+import 'view_model/shop_info_view_model.dart';
+import 'views/pages/shop/shop_info_edit_addr.dart';
+import 'views/pages/shop/shop_info_edit_phone.dart';
+import 'views/pages/shop/shop_info_tax_service.dart';
 import 'views/widgets/setting_menu.dart';
+import 'views/widgets/shop/shop_info_summary.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -28,10 +31,12 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   bool _firstBuild = true;
-  late AppInfoRepository _appInfo;
   late AppCommonDataRepository _appDataRepo;
   final _pageIndexNotifier = ValueNotifier<int>(2);
   final _pageController = PageController();
+  final _editModeNotifier = ValueNotifier<bool>(false);
+  final _textEditController = TextEditingController();
+  final _focusNode = FocusNode();
   final List<double> _scales = ScalesValue.toList();
 
   int _scaleToIndex(double scaleFactor) {
@@ -41,7 +46,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     return 0;
   }
 
-  void setAppCommonData() {
+  void _setAppCommonData() {
     AppLanguages appLang = _appDataRepo.getLanguage();
     ScalesValue appScale = _appDataRepo.getScale();
     if (appLang != AppLang.of(context)!.language) {
@@ -52,20 +57,38 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
   }
 
+  void _loadShop() {
+    ref.read(shopInfoViewModelProvider.notifier).loadShop();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadShop();
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _appInfo = ref.read(appInfoProvider);
     _appDataRepo = ref.read(appCommonDataProvider);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_firstBuild) {
         _firstBuild = false;
-        Future.delayed(const Duration(milliseconds: 100), () {
-          setAppCommonData();
+        Future.delayed(const Duration(milliseconds: 50), () {
+          _setAppCommonData();
           _pageController.jumpToPage(_pageIndexNotifier.value);
         });
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _pageIndexNotifier.dispose();
+    _editModeNotifier.dispose();
+    _pageController.dispose();
+    _textEditController.dispose();
+    super.dispose();
   }
 
   @override
@@ -92,8 +115,14 @@ class _HomePageState extends ConsumerState<HomePage> {
     final headerStyle = AppTextStyles.headerMediumStyle(
       context,
       sizeOffset: 1,
-      color: AppColors.criticalHighlight,
+      weight: FontWeight.bold,
+      color: Colors.deepPurple.shade800,
     );
+
+    final shop = ref.watch(shopInfoViewModelProvider);
+    final shopExists = (shop != null) && (shop.id != null);
+    debugPrint('shop = ${shop.toString()}');
+    debugPrint('shopExists = $shopExists');
 
     void setScale(ScalesValue scale) => AppScales.of(context)!.scale = scale;
 
@@ -106,35 +135,44 @@ class _HomePageState extends ConsumerState<HomePage> {
           AppSize.pageVerticalSpace,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              // height: 100,
-              padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
-              decoration: BoxDecoration(
-                color: Colors.blue.shade50,
-                borderRadius: BorderRadius.circular(12.0),
-                border: Border.all(
-                  width: 1.0,
-                  color: Colors.blue.shade100,
-                  style: BorderStyle.solid,
-                ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Icon(Icons.store, color: Colors.deepPurple, size: AppSize.iconLarge),
+                const Gap.width(GapSize.dense),
+                Text('กำหนดข้อมูลร้าน', style: headerStyle),
+              ],
+            ),
+            const Gap.height(AppSize.indentNormal),
+            ShopInfoSummary(
+              forPublicInfo: false,
+              onPressAddress: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ShopInfoEditAddr()),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('ร้าน'),
-                      GestureDetector(child: Icon(Icons.edit, color: Colors.grey.shade600)),
-                    ],
-                  ),
-                  const Gap.height(GapSize.normal),
-                  Text('กำหนดชื่อร้านของคุณ', style: headerStyle),
-                ],
+              onPressPhone: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ShopInfoEditPhonePage()),
+              ),
+              onPressTaxService: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ShopInfoTaxServicePage()),
               ),
             ),
-            SettingMenu(),
+            const Gap.height(GapSize.mostLoose),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Icon(Icons.list_alt, color: Colors.deepPurple, size: AppSize.iconLarge),
+                const Gap.width(GapSize.dense),
+                Text('กำหนดข้อมูลอื่นๆ', style: headerStyle),
+              ],
+            ),
+            SettingMenu(enabled: shopExists),
           ],
         ),
       );

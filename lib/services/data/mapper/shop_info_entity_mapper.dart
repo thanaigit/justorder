@@ -33,12 +33,9 @@ extension ShopInfoEntityMapper on ShopInfo {
       includeVat: Value<bool>(includeVat),
       taxID: Value<String?>(taxID),
       dataStatus: Value<DataStatus>(dataStatus),
-      createdBy: Value<String?>(createdBy),
       createdTime: Value<DateTime?>(createdTime),
-      updatedBy: Value<String?>(updatedBy),
       updatedTime: Value<DateTime?>(updatedTime),
-      deviceId: Value<String?>(deviceId),
-      appName: Value<String?>(appName),
+      deviceID: Value<String?>(deviceID),
       appVersion: Value<String?>(appVersion),
     );
   }

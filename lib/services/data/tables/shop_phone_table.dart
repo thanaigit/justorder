@@ -9,11 +9,8 @@ class ShopPhoneTable extends Table {
   late final phoneNo = text()();
   late final note = text().nullable()();
   late final dataStatus = textEnum<DataStatus>().withDefault(Constant(DataStatus.active.text))();
-  late final createdBy = text().nullable()();
-  late final createdTime = text().nullable()();
-  late final updatedBy = text().nullable()();
-  late final updatedTime = text().nullable()();
-  late final deviceId = text().nullable()();
-  late final appName = text().nullable()();
+  late final createdTime = dateTime().nullable()();
+  late final updatedTime = dateTime().nullable()();
+  late final deviceID = text().nullable()();
   late final appVersion = text().nullable()();
 }

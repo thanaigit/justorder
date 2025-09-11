@@ -34,12 +34,9 @@ extension ShopInfoDataMapper on ShopInfoTableData {
       includeVat: includeVat,
       taxID: taxID,
       dataStatus: dataStatus,
-      createdBy: createdBy,
       createdTime: createdTime,
-      updatedBy: updatedBy,
       updatedTime: updatedTime,
-      deviceId: deviceId,
-      appName: appName,
+      deviceID: deviceID,
       appVersion: appVersion,
     );
   }

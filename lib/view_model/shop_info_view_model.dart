@@ -23,12 +23,14 @@ class ShopInfoViewModel extends StateNotifier<ShopInfo?> {
   Future<Result<bool>> createShop(ShopInfo shop) async {
     final result = await repo.createShop(shop);
     if (result.hasError) return Result<bool>(success: false, error: result.error);
+    state = result.success;
     return const Result<bool>(success: true);
   }
 
   Future<Result<bool>> updateShop(ShopInfo shop) async {
     final result = await repo.updateShop(shop);
     if (result.hasError) return Result<bool>(success: false, error: result.error);
+    state = result.success;
     return const Result<bool>(success: true);
   }
 }

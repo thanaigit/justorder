@@ -319,17 +319,6 @@ class $ShopInfoTableTable extends ShopInfoTable
         requiredDuringInsert: false,
         defaultValue: Constant(DataStatus.active.text),
       ).withConverter<DataStatus>($ShopInfoTableTable.$converterdataStatus);
-  static const VerificationMeta _createdByMeta = const VerificationMeta(
-    'createdBy',
-  );
-  @override
-  late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
-    'created_by',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
   static const VerificationMeta _createdTimeMeta = const VerificationMeta(
     'createdTime',
   );
@@ -339,17 +328,6 @@ class $ShopInfoTableTable extends ShopInfoTable
     aliasedName,
     true,
     type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _updatedByMeta = const VerificationMeta(
-    'updatedBy',
-  );
-  @override
-  late final GeneratedColumn<String> updatedBy = GeneratedColumn<String>(
-    'updated_by',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
   static const VerificationMeta _updatedTimeMeta = const VerificationMeta(
@@ -363,23 +341,12 @@ class $ShopInfoTableTable extends ShopInfoTable
     type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _deviceIdMeta = const VerificationMeta(
-    'deviceId',
+  static const VerificationMeta _deviceIDMeta = const VerificationMeta(
+    'deviceID',
   );
   @override
-  late final GeneratedColumn<String> deviceId = GeneratedColumn<String>(
-    'device_id',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _appNameMeta = const VerificationMeta(
-    'appName',
-  );
-  @override
-  late final GeneratedColumn<String> appName = GeneratedColumn<String>(
-    'app_name',
+  late final GeneratedColumn<String> deviceID = GeneratedColumn<String>(
+    'device_i_d',
     aliasedName,
     true,
     type: DriftSqlType.string,
@@ -424,12 +391,9 @@ class $ShopInfoTableTable extends ShopInfoTable
     includeVat,
     taxID,
     dataStatus,
-    createdBy,
     createdTime,
-    updatedBy,
     updatedTime,
-    deviceId,
-    appName,
+    deviceID,
     appVersion,
   ];
   @override
@@ -629,12 +593,6 @@ class $ShopInfoTableTable extends ShopInfoTable
         taxID.isAcceptableOrUnknown(data['tax_i_d']!, _taxIDMeta),
       );
     }
-    if (data.containsKey('created_by')) {
-      context.handle(
-        _createdByMeta,
-        createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta),
-      );
-    }
     if (data.containsKey('created_time')) {
       context.handle(
         _createdTimeMeta,
@@ -642,12 +600,6 @@ class $ShopInfoTableTable extends ShopInfoTable
           data['created_time']!,
           _createdTimeMeta,
         ),
-      );
-    }
-    if (data.containsKey('updated_by')) {
-      context.handle(
-        _updatedByMeta,
-        updatedBy.isAcceptableOrUnknown(data['updated_by']!, _updatedByMeta),
       );
     }
     if (data.containsKey('updated_time')) {
@@ -659,16 +611,10 @@ class $ShopInfoTableTable extends ShopInfoTable
         ),
       );
     }
-    if (data.containsKey('device_id')) {
+    if (data.containsKey('device_i_d')) {
       context.handle(
-        _deviceIdMeta,
-        deviceId.isAcceptableOrUnknown(data['device_id']!, _deviceIdMeta),
-      );
-    }
-    if (data.containsKey('app_name')) {
-      context.handle(
-        _appNameMeta,
-        appName.isAcceptableOrUnknown(data['app_name']!, _appNameMeta),
+        _deviceIDMeta,
+        deviceID.isAcceptableOrUnknown(data['device_i_d']!, _deviceIDMeta),
       );
     }
     if (data.containsKey('app_version')) {
@@ -795,29 +741,17 @@ class $ShopInfoTableTable extends ShopInfoTable
           data['${effectivePrefix}data_status'],
         )!,
       ),
-      createdBy: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}created_by'],
-      ),
       createdTime: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_time'],
-      ),
-      updatedBy: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}updated_by'],
       ),
       updatedTime: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}updated_time'],
       ),
-      deviceId: attachedDatabase.typeMapping.read(
+      deviceID: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}device_id'],
-      ),
-      appName: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}app_name'],
+        data['${effectivePrefix}device_i_d'],
       ),
       appVersion: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -871,12 +805,9 @@ class ShopInfoTableData extends DataClass
   final bool includeVat;
   final String? taxID;
   final DataStatus dataStatus;
-  final String? createdBy;
   final DateTime? createdTime;
-  final String? updatedBy;
   final DateTime? updatedTime;
-  final String? deviceId;
-  final String? appName;
+  final String? deviceID;
   final String? appVersion;
   const ShopInfoTableData({
     required this.id,
@@ -905,12 +836,9 @@ class ShopInfoTableData extends DataClass
     required this.includeVat,
     this.taxID,
     required this.dataStatus,
-    this.createdBy,
     this.createdTime,
-    this.updatedBy,
     this.updatedTime,
-    this.deviceId,
-    this.appName,
+    this.deviceID,
     this.appVersion,
   });
   @override
@@ -980,23 +908,14 @@ class ShopInfoTableData extends DataClass
         $ShopInfoTableTable.$converterdataStatus.toSql(dataStatus),
       );
     }
-    if (!nullToAbsent || createdBy != null) {
-      map['created_by'] = Variable<String>(createdBy);
-    }
     if (!nullToAbsent || createdTime != null) {
       map['created_time'] = Variable<DateTime>(createdTime);
-    }
-    if (!nullToAbsent || updatedBy != null) {
-      map['updated_by'] = Variable<String>(updatedBy);
     }
     if (!nullToAbsent || updatedTime != null) {
       map['updated_time'] = Variable<DateTime>(updatedTime);
     }
-    if (!nullToAbsent || deviceId != null) {
-      map['device_id'] = Variable<String>(deviceId);
-    }
-    if (!nullToAbsent || appName != null) {
-      map['app_name'] = Variable<String>(appName);
+    if (!nullToAbsent || deviceID != null) {
+      map['device_i_d'] = Variable<String>(deviceID);
     }
     if (!nullToAbsent || appVersion != null) {
       map['app_version'] = Variable<String>(appVersion);
@@ -1062,24 +981,15 @@ class ShopInfoTableData extends DataClass
           ? const Value.absent()
           : Value(taxID),
       dataStatus: Value(dataStatus),
-      createdBy: createdBy == null && nullToAbsent
-          ? const Value.absent()
-          : Value(createdBy),
       createdTime: createdTime == null && nullToAbsent
           ? const Value.absent()
           : Value(createdTime),
-      updatedBy: updatedBy == null && nullToAbsent
-          ? const Value.absent()
-          : Value(updatedBy),
       updatedTime: updatedTime == null && nullToAbsent
           ? const Value.absent()
           : Value(updatedTime),
-      deviceId: deviceId == null && nullToAbsent
+      deviceID: deviceID == null && nullToAbsent
           ? const Value.absent()
-          : Value(deviceId),
-      appName: appName == null && nullToAbsent
-          ? const Value.absent()
-          : Value(appName),
+          : Value(deviceID),
       appVersion: appVersion == null && nullToAbsent
           ? const Value.absent()
           : Value(appVersion),
@@ -1129,12 +1039,9 @@ class ShopInfoTableData extends DataClass
       dataStatus: $ShopInfoTableTable.$converterdataStatus.fromJson(
         serializer.fromJson<String>(json['dataStatus']),
       ),
-      createdBy: serializer.fromJson<String?>(json['createdBy']),
       createdTime: serializer.fromJson<DateTime?>(json['createdTime']),
-      updatedBy: serializer.fromJson<String?>(json['updatedBy']),
       updatedTime: serializer.fromJson<DateTime?>(json['updatedTime']),
-      deviceId: serializer.fromJson<String?>(json['deviceId']),
-      appName: serializer.fromJson<String?>(json['appName']),
+      deviceID: serializer.fromJson<String?>(json['deviceID']),
       appVersion: serializer.fromJson<String?>(json['appVersion']),
     );
   }
@@ -1174,12 +1081,9 @@ class ShopInfoTableData extends DataClass
       'dataStatus': serializer.toJson<String>(
         $ShopInfoTableTable.$converterdataStatus.toJson(dataStatus),
       ),
-      'createdBy': serializer.toJson<String?>(createdBy),
       'createdTime': serializer.toJson<DateTime?>(createdTime),
-      'updatedBy': serializer.toJson<String?>(updatedBy),
       'updatedTime': serializer.toJson<DateTime?>(updatedTime),
-      'deviceId': serializer.toJson<String?>(deviceId),
-      'appName': serializer.toJson<String?>(appName),
+      'deviceID': serializer.toJson<String?>(deviceID),
       'appVersion': serializer.toJson<String?>(appVersion),
     };
   }
@@ -1211,12 +1115,9 @@ class ShopInfoTableData extends DataClass
     bool? includeVat,
     Value<String?> taxID = const Value.absent(),
     DataStatus? dataStatus,
-    Value<String?> createdBy = const Value.absent(),
     Value<DateTime?> createdTime = const Value.absent(),
-    Value<String?> updatedBy = const Value.absent(),
     Value<DateTime?> updatedTime = const Value.absent(),
-    Value<String?> deviceId = const Value.absent(),
-    Value<String?> appName = const Value.absent(),
+    Value<String?> deviceID = const Value.absent(),
     Value<String?> appVersion = const Value.absent(),
   }) => ShopInfoTableData(
     id: id ?? this.id,
@@ -1263,12 +1164,9 @@ class ShopInfoTableData extends DataClass
     includeVat: includeVat ?? this.includeVat,
     taxID: taxID.present ? taxID.value : this.taxID,
     dataStatus: dataStatus ?? this.dataStatus,
-    createdBy: createdBy.present ? createdBy.value : this.createdBy,
     createdTime: createdTime.present ? createdTime.value : this.createdTime,
-    updatedBy: updatedBy.present ? updatedBy.value : this.updatedBy,
     updatedTime: updatedTime.present ? updatedTime.value : this.updatedTime,
-    deviceId: deviceId.present ? deviceId.value : this.deviceId,
-    appName: appName.present ? appName.value : this.appName,
+    deviceID: deviceID.present ? deviceID.value : this.deviceID,
     appVersion: appVersion.present ? appVersion.value : this.appVersion,
   );
   ShopInfoTableData copyWithCompanion(ShopInfoTableCompanion data) {
@@ -1337,16 +1235,13 @@ class ShopInfoTableData extends DataClass
       dataStatus: data.dataStatus.present
           ? data.dataStatus.value
           : this.dataStatus,
-      createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
       createdTime: data.createdTime.present
           ? data.createdTime.value
           : this.createdTime,
-      updatedBy: data.updatedBy.present ? data.updatedBy.value : this.updatedBy,
       updatedTime: data.updatedTime.present
           ? data.updatedTime.value
           : this.updatedTime,
-      deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
-      appName: data.appName.present ? data.appName.value : this.appName,
+      deviceID: data.deviceID.present ? data.deviceID.value : this.deviceID,
       appVersion: data.appVersion.present
           ? data.appVersion.value
           : this.appVersion,
@@ -1382,12 +1277,9 @@ class ShopInfoTableData extends DataClass
           ..write('includeVat: $includeVat, ')
           ..write('taxID: $taxID, ')
           ..write('dataStatus: $dataStatus, ')
-          ..write('createdBy: $createdBy, ')
           ..write('createdTime: $createdTime, ')
-          ..write('updatedBy: $updatedBy, ')
           ..write('updatedTime: $updatedTime, ')
-          ..write('deviceId: $deviceId, ')
-          ..write('appName: $appName, ')
+          ..write('deviceID: $deviceID, ')
           ..write('appVersion: $appVersion')
           ..write(')'))
         .toString();
@@ -1421,12 +1313,9 @@ class ShopInfoTableData extends DataClass
     includeVat,
     taxID,
     dataStatus,
-    createdBy,
     createdTime,
-    updatedBy,
     updatedTime,
-    deviceId,
-    appName,
+    deviceID,
     appVersion,
   ]);
   @override
@@ -1459,12 +1348,9 @@ class ShopInfoTableData extends DataClass
           other.includeVat == this.includeVat &&
           other.taxID == this.taxID &&
           other.dataStatus == this.dataStatus &&
-          other.createdBy == this.createdBy &&
           other.createdTime == this.createdTime &&
-          other.updatedBy == this.updatedBy &&
           other.updatedTime == this.updatedTime &&
-          other.deviceId == this.deviceId &&
-          other.appName == this.appName &&
+          other.deviceID == this.deviceID &&
           other.appVersion == this.appVersion);
 }
 
@@ -1495,12 +1381,9 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
   final Value<bool> includeVat;
   final Value<String?> taxID;
   final Value<DataStatus> dataStatus;
-  final Value<String?> createdBy;
   final Value<DateTime?> createdTime;
-  final Value<String?> updatedBy;
   final Value<DateTime?> updatedTime;
-  final Value<String?> deviceId;
-  final Value<String?> appName;
+  final Value<String?> deviceID;
   final Value<String?> appVersion;
   const ShopInfoTableCompanion({
     this.id = const Value.absent(),
@@ -1529,12 +1412,9 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
     this.includeVat = const Value.absent(),
     this.taxID = const Value.absent(),
     this.dataStatus = const Value.absent(),
-    this.createdBy = const Value.absent(),
     this.createdTime = const Value.absent(),
-    this.updatedBy = const Value.absent(),
     this.updatedTime = const Value.absent(),
-    this.deviceId = const Value.absent(),
-    this.appName = const Value.absent(),
+    this.deviceID = const Value.absent(),
     this.appVersion = const Value.absent(),
   });
   ShopInfoTableCompanion.insert({
@@ -1564,12 +1444,9 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
     this.includeVat = const Value.absent(),
     this.taxID = const Value.absent(),
     this.dataStatus = const Value.absent(),
-    this.createdBy = const Value.absent(),
     this.createdTime = const Value.absent(),
-    this.updatedBy = const Value.absent(),
     this.updatedTime = const Value.absent(),
-    this.deviceId = const Value.absent(),
-    this.appName = const Value.absent(),
+    this.deviceID = const Value.absent(),
     this.appVersion = const Value.absent(),
   }) : name = Value(name);
   static Insertable<ShopInfoTableData> custom({
@@ -1599,12 +1476,9 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
     Expression<bool>? includeVat,
     Expression<String>? taxID,
     Expression<String>? dataStatus,
-    Expression<String>? createdBy,
     Expression<DateTime>? createdTime,
-    Expression<String>? updatedBy,
     Expression<DateTime>? updatedTime,
-    Expression<String>? deviceId,
-    Expression<String>? appName,
+    Expression<String>? deviceID,
     Expression<String>? appVersion,
   }) {
     return RawValuesInsertable({
@@ -1638,12 +1512,9 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
       if (includeVat != null) 'include_vat': includeVat,
       if (taxID != null) 'tax_i_d': taxID,
       if (dataStatus != null) 'data_status': dataStatus,
-      if (createdBy != null) 'created_by': createdBy,
       if (createdTime != null) 'created_time': createdTime,
-      if (updatedBy != null) 'updated_by': updatedBy,
       if (updatedTime != null) 'updated_time': updatedTime,
-      if (deviceId != null) 'device_id': deviceId,
-      if (appName != null) 'app_name': appName,
+      if (deviceID != null) 'device_i_d': deviceID,
       if (appVersion != null) 'app_version': appVersion,
     });
   }
@@ -1675,12 +1546,9 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
     Value<bool>? includeVat,
     Value<String?>? taxID,
     Value<DataStatus>? dataStatus,
-    Value<String?>? createdBy,
     Value<DateTime?>? createdTime,
-    Value<String?>? updatedBy,
     Value<DateTime?>? updatedTime,
-    Value<String?>? deviceId,
-    Value<String?>? appName,
+    Value<String?>? deviceID,
     Value<String?>? appVersion,
   }) {
     return ShopInfoTableCompanion(
@@ -1710,12 +1578,9 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
       includeVat: includeVat ?? this.includeVat,
       taxID: taxID ?? this.taxID,
       dataStatus: dataStatus ?? this.dataStatus,
-      createdBy: createdBy ?? this.createdBy,
       createdTime: createdTime ?? this.createdTime,
-      updatedBy: updatedBy ?? this.updatedBy,
       updatedTime: updatedTime ?? this.updatedTime,
-      deviceId: deviceId ?? this.deviceId,
-      appName: appName ?? this.appName,
+      deviceID: deviceID ?? this.deviceID,
       appVersion: appVersion ?? this.appVersion,
     );
   }
@@ -1811,23 +1676,14 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
         $ShopInfoTableTable.$converterdataStatus.toSql(dataStatus.value),
       );
     }
-    if (createdBy.present) {
-      map['created_by'] = Variable<String>(createdBy.value);
-    }
     if (createdTime.present) {
       map['created_time'] = Variable<DateTime>(createdTime.value);
-    }
-    if (updatedBy.present) {
-      map['updated_by'] = Variable<String>(updatedBy.value);
     }
     if (updatedTime.present) {
       map['updated_time'] = Variable<DateTime>(updatedTime.value);
     }
-    if (deviceId.present) {
-      map['device_id'] = Variable<String>(deviceId.value);
-    }
-    if (appName.present) {
-      map['app_name'] = Variable<String>(appName.value);
+    if (deviceID.present) {
+      map['device_i_d'] = Variable<String>(deviceID.value);
     }
     if (appVersion.present) {
       map['app_version'] = Variable<String>(appVersion.value);
@@ -1864,12 +1720,9 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
           ..write('includeVat: $includeVat, ')
           ..write('taxID: $taxID, ')
           ..write('dataStatus: $dataStatus, ')
-          ..write('createdBy: $createdBy, ')
           ..write('createdTime: $createdTime, ')
-          ..write('updatedBy: $updatedBy, ')
           ..write('updatedTime: $updatedTime, ')
-          ..write('deviceId: $deviceId, ')
-          ..write('appName: $appName, ')
+          ..write('deviceID: $deviceID, ')
           ..write('appVersion: $appVersion')
           ..write(')'))
         .toString();
@@ -1937,67 +1790,34 @@ class $ShopPhoneTableTable extends ShopPhoneTable
         requiredDuringInsert: false,
         defaultValue: Constant(DataStatus.active.text),
       ).withConverter<DataStatus>($ShopPhoneTableTable.$converterdataStatus);
-  static const VerificationMeta _createdByMeta = const VerificationMeta(
-    'createdBy',
-  );
-  @override
-  late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
-    'created_by',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
   static const VerificationMeta _createdTimeMeta = const VerificationMeta(
     'createdTime',
   );
   @override
-  late final GeneratedColumn<String> createdTime = GeneratedColumn<String>(
+  late final GeneratedColumn<DateTime> createdTime = GeneratedColumn<DateTime>(
     'created_time',
     aliasedName,
     true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _updatedByMeta = const VerificationMeta(
-    'updatedBy',
-  );
-  @override
-  late final GeneratedColumn<String> updatedBy = GeneratedColumn<String>(
-    'updated_by',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
+    type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
   );
   static const VerificationMeta _updatedTimeMeta = const VerificationMeta(
     'updatedTime',
   );
   @override
-  late final GeneratedColumn<String> updatedTime = GeneratedColumn<String>(
+  late final GeneratedColumn<DateTime> updatedTime = GeneratedColumn<DateTime>(
     'updated_time',
     aliasedName,
     true,
-    type: DriftSqlType.string,
+    type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _deviceIdMeta = const VerificationMeta(
-    'deviceId',
+  static const VerificationMeta _deviceIDMeta = const VerificationMeta(
+    'deviceID',
   );
   @override
-  late final GeneratedColumn<String> deviceId = GeneratedColumn<String>(
-    'device_id',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _appNameMeta = const VerificationMeta(
-    'appName',
-  );
-  @override
-  late final GeneratedColumn<String> appName = GeneratedColumn<String>(
-    'app_name',
+  late final GeneratedColumn<String> deviceID = GeneratedColumn<String>(
+    'device_i_d',
     aliasedName,
     true,
     type: DriftSqlType.string,
@@ -2021,12 +1841,9 @@ class $ShopPhoneTableTable extends ShopPhoneTable
     phoneNo,
     note,
     dataStatus,
-    createdBy,
     createdTime,
-    updatedBy,
     updatedTime,
-    deviceId,
-    appName,
+    deviceID,
     appVersion,
   ];
   @override
@@ -2066,12 +1883,6 @@ class $ShopPhoneTableTable extends ShopPhoneTable
         note.isAcceptableOrUnknown(data['note']!, _noteMeta),
       );
     }
-    if (data.containsKey('created_by')) {
-      context.handle(
-        _createdByMeta,
-        createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta),
-      );
-    }
     if (data.containsKey('created_time')) {
       context.handle(
         _createdTimeMeta,
@@ -2079,12 +1890,6 @@ class $ShopPhoneTableTable extends ShopPhoneTable
           data['created_time']!,
           _createdTimeMeta,
         ),
-      );
-    }
-    if (data.containsKey('updated_by')) {
-      context.handle(
-        _updatedByMeta,
-        updatedBy.isAcceptableOrUnknown(data['updated_by']!, _updatedByMeta),
       );
     }
     if (data.containsKey('updated_time')) {
@@ -2096,16 +1901,10 @@ class $ShopPhoneTableTable extends ShopPhoneTable
         ),
       );
     }
-    if (data.containsKey('device_id')) {
+    if (data.containsKey('device_i_d')) {
       context.handle(
-        _deviceIdMeta,
-        deviceId.isAcceptableOrUnknown(data['device_id']!, _deviceIdMeta),
-      );
-    }
-    if (data.containsKey('app_name')) {
-      context.handle(
-        _appNameMeta,
-        appName.isAcceptableOrUnknown(data['app_name']!, _appNameMeta),
+        _deviceIDMeta,
+        deviceID.isAcceptableOrUnknown(data['device_i_d']!, _deviceIDMeta),
       );
     }
     if (data.containsKey('app_version')) {
@@ -2145,29 +1944,17 @@ class $ShopPhoneTableTable extends ShopPhoneTable
           data['${effectivePrefix}data_status'],
         )!,
       ),
-      createdBy: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}created_by'],
-      ),
       createdTime: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
+        DriftSqlType.dateTime,
         data['${effectivePrefix}created_time'],
       ),
-      updatedBy: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}updated_by'],
-      ),
       updatedTime: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
+        DriftSqlType.dateTime,
         data['${effectivePrefix}updated_time'],
       ),
-      deviceId: attachedDatabase.typeMapping.read(
+      deviceID: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}device_id'],
-      ),
-      appName: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}app_name'],
+        data['${effectivePrefix}device_i_d'],
       ),
       appVersion: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -2192,12 +1979,9 @@ class ShopPhoneTableData extends DataClass
   final String phoneNo;
   final String? note;
   final DataStatus dataStatus;
-  final String? createdBy;
-  final String? createdTime;
-  final String? updatedBy;
-  final String? updatedTime;
-  final String? deviceId;
-  final String? appName;
+  final DateTime? createdTime;
+  final DateTime? updatedTime;
+  final String? deviceID;
   final String? appVersion;
   const ShopPhoneTableData({
     required this.id,
@@ -2205,12 +1989,9 @@ class ShopPhoneTableData extends DataClass
     required this.phoneNo,
     this.note,
     required this.dataStatus,
-    this.createdBy,
     this.createdTime,
-    this.updatedBy,
     this.updatedTime,
-    this.deviceId,
-    this.appName,
+    this.deviceID,
     this.appVersion,
   });
   @override
@@ -2227,23 +2008,14 @@ class ShopPhoneTableData extends DataClass
         $ShopPhoneTableTable.$converterdataStatus.toSql(dataStatus),
       );
     }
-    if (!nullToAbsent || createdBy != null) {
-      map['created_by'] = Variable<String>(createdBy);
-    }
     if (!nullToAbsent || createdTime != null) {
-      map['created_time'] = Variable<String>(createdTime);
-    }
-    if (!nullToAbsent || updatedBy != null) {
-      map['updated_by'] = Variable<String>(updatedBy);
+      map['created_time'] = Variable<DateTime>(createdTime);
     }
     if (!nullToAbsent || updatedTime != null) {
-      map['updated_time'] = Variable<String>(updatedTime);
+      map['updated_time'] = Variable<DateTime>(updatedTime);
     }
-    if (!nullToAbsent || deviceId != null) {
-      map['device_id'] = Variable<String>(deviceId);
-    }
-    if (!nullToAbsent || appName != null) {
-      map['app_name'] = Variable<String>(appName);
+    if (!nullToAbsent || deviceID != null) {
+      map['device_i_d'] = Variable<String>(deviceID);
     }
     if (!nullToAbsent || appVersion != null) {
       map['app_version'] = Variable<String>(appVersion);
@@ -2258,24 +2030,15 @@ class ShopPhoneTableData extends DataClass
       phoneNo: Value(phoneNo),
       note: note == null && nullToAbsent ? const Value.absent() : Value(note),
       dataStatus: Value(dataStatus),
-      createdBy: createdBy == null && nullToAbsent
-          ? const Value.absent()
-          : Value(createdBy),
       createdTime: createdTime == null && nullToAbsent
           ? const Value.absent()
           : Value(createdTime),
-      updatedBy: updatedBy == null && nullToAbsent
-          ? const Value.absent()
-          : Value(updatedBy),
       updatedTime: updatedTime == null && nullToAbsent
           ? const Value.absent()
           : Value(updatedTime),
-      deviceId: deviceId == null && nullToAbsent
+      deviceID: deviceID == null && nullToAbsent
           ? const Value.absent()
-          : Value(deviceId),
-      appName: appName == null && nullToAbsent
-          ? const Value.absent()
-          : Value(appName),
+          : Value(deviceID),
       appVersion: appVersion == null && nullToAbsent
           ? const Value.absent()
           : Value(appVersion),
@@ -2295,12 +2058,9 @@ class ShopPhoneTableData extends DataClass
       dataStatus: $ShopPhoneTableTable.$converterdataStatus.fromJson(
         serializer.fromJson<String>(json['dataStatus']),
       ),
-      createdBy: serializer.fromJson<String?>(json['createdBy']),
-      createdTime: serializer.fromJson<String?>(json['createdTime']),
-      updatedBy: serializer.fromJson<String?>(json['updatedBy']),
-      updatedTime: serializer.fromJson<String?>(json['updatedTime']),
-      deviceId: serializer.fromJson<String?>(json['deviceId']),
-      appName: serializer.fromJson<String?>(json['appName']),
+      createdTime: serializer.fromJson<DateTime?>(json['createdTime']),
+      updatedTime: serializer.fromJson<DateTime?>(json['updatedTime']),
+      deviceID: serializer.fromJson<String?>(json['deviceID']),
       appVersion: serializer.fromJson<String?>(json['appVersion']),
     );
   }
@@ -2315,12 +2075,9 @@ class ShopPhoneTableData extends DataClass
       'dataStatus': serializer.toJson<String>(
         $ShopPhoneTableTable.$converterdataStatus.toJson(dataStatus),
       ),
-      'createdBy': serializer.toJson<String?>(createdBy),
-      'createdTime': serializer.toJson<String?>(createdTime),
-      'updatedBy': serializer.toJson<String?>(updatedBy),
-      'updatedTime': serializer.toJson<String?>(updatedTime),
-      'deviceId': serializer.toJson<String?>(deviceId),
-      'appName': serializer.toJson<String?>(appName),
+      'createdTime': serializer.toJson<DateTime?>(createdTime),
+      'updatedTime': serializer.toJson<DateTime?>(updatedTime),
+      'deviceID': serializer.toJson<String?>(deviceID),
       'appVersion': serializer.toJson<String?>(appVersion),
     };
   }
@@ -2331,12 +2088,9 @@ class ShopPhoneTableData extends DataClass
     String? phoneNo,
     Value<String?> note = const Value.absent(),
     DataStatus? dataStatus,
-    Value<String?> createdBy = const Value.absent(),
-    Value<String?> createdTime = const Value.absent(),
-    Value<String?> updatedBy = const Value.absent(),
-    Value<String?> updatedTime = const Value.absent(),
-    Value<String?> deviceId = const Value.absent(),
-    Value<String?> appName = const Value.absent(),
+    Value<DateTime?> createdTime = const Value.absent(),
+    Value<DateTime?> updatedTime = const Value.absent(),
+    Value<String?> deviceID = const Value.absent(),
     Value<String?> appVersion = const Value.absent(),
   }) => ShopPhoneTableData(
     id: id ?? this.id,
@@ -2344,12 +2098,9 @@ class ShopPhoneTableData extends DataClass
     phoneNo: phoneNo ?? this.phoneNo,
     note: note.present ? note.value : this.note,
     dataStatus: dataStatus ?? this.dataStatus,
-    createdBy: createdBy.present ? createdBy.value : this.createdBy,
     createdTime: createdTime.present ? createdTime.value : this.createdTime,
-    updatedBy: updatedBy.present ? updatedBy.value : this.updatedBy,
     updatedTime: updatedTime.present ? updatedTime.value : this.updatedTime,
-    deviceId: deviceId.present ? deviceId.value : this.deviceId,
-    appName: appName.present ? appName.value : this.appName,
+    deviceID: deviceID.present ? deviceID.value : this.deviceID,
     appVersion: appVersion.present ? appVersion.value : this.appVersion,
   );
   ShopPhoneTableData copyWithCompanion(ShopPhoneTableCompanion data) {
@@ -2361,16 +2112,13 @@ class ShopPhoneTableData extends DataClass
       dataStatus: data.dataStatus.present
           ? data.dataStatus.value
           : this.dataStatus,
-      createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
       createdTime: data.createdTime.present
           ? data.createdTime.value
           : this.createdTime,
-      updatedBy: data.updatedBy.present ? data.updatedBy.value : this.updatedBy,
       updatedTime: data.updatedTime.present
           ? data.updatedTime.value
           : this.updatedTime,
-      deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
-      appName: data.appName.present ? data.appName.value : this.appName,
+      deviceID: data.deviceID.present ? data.deviceID.value : this.deviceID,
       appVersion: data.appVersion.present
           ? data.appVersion.value
           : this.appVersion,
@@ -2385,12 +2133,9 @@ class ShopPhoneTableData extends DataClass
           ..write('phoneNo: $phoneNo, ')
           ..write('note: $note, ')
           ..write('dataStatus: $dataStatus, ')
-          ..write('createdBy: $createdBy, ')
           ..write('createdTime: $createdTime, ')
-          ..write('updatedBy: $updatedBy, ')
           ..write('updatedTime: $updatedTime, ')
-          ..write('deviceId: $deviceId, ')
-          ..write('appName: $appName, ')
+          ..write('deviceID: $deviceID, ')
           ..write('appVersion: $appVersion')
           ..write(')'))
         .toString();
@@ -2403,12 +2148,9 @@ class ShopPhoneTableData extends DataClass
     phoneNo,
     note,
     dataStatus,
-    createdBy,
     createdTime,
-    updatedBy,
     updatedTime,
-    deviceId,
-    appName,
+    deviceID,
     appVersion,
   );
   @override
@@ -2420,12 +2162,9 @@ class ShopPhoneTableData extends DataClass
           other.phoneNo == this.phoneNo &&
           other.note == this.note &&
           other.dataStatus == this.dataStatus &&
-          other.createdBy == this.createdBy &&
           other.createdTime == this.createdTime &&
-          other.updatedBy == this.updatedBy &&
           other.updatedTime == this.updatedTime &&
-          other.deviceId == this.deviceId &&
-          other.appName == this.appName &&
+          other.deviceID == this.deviceID &&
           other.appVersion == this.appVersion);
 }
 
@@ -2435,12 +2174,9 @@ class ShopPhoneTableCompanion extends UpdateCompanion<ShopPhoneTableData> {
   final Value<String> phoneNo;
   final Value<String?> note;
   final Value<DataStatus> dataStatus;
-  final Value<String?> createdBy;
-  final Value<String?> createdTime;
-  final Value<String?> updatedBy;
-  final Value<String?> updatedTime;
-  final Value<String?> deviceId;
-  final Value<String?> appName;
+  final Value<DateTime?> createdTime;
+  final Value<DateTime?> updatedTime;
+  final Value<String?> deviceID;
   final Value<String?> appVersion;
   const ShopPhoneTableCompanion({
     this.id = const Value.absent(),
@@ -2448,12 +2184,9 @@ class ShopPhoneTableCompanion extends UpdateCompanion<ShopPhoneTableData> {
     this.phoneNo = const Value.absent(),
     this.note = const Value.absent(),
     this.dataStatus = const Value.absent(),
-    this.createdBy = const Value.absent(),
     this.createdTime = const Value.absent(),
-    this.updatedBy = const Value.absent(),
     this.updatedTime = const Value.absent(),
-    this.deviceId = const Value.absent(),
-    this.appName = const Value.absent(),
+    this.deviceID = const Value.absent(),
     this.appVersion = const Value.absent(),
   });
   ShopPhoneTableCompanion.insert({
@@ -2462,12 +2195,9 @@ class ShopPhoneTableCompanion extends UpdateCompanion<ShopPhoneTableData> {
     required String phoneNo,
     this.note = const Value.absent(),
     this.dataStatus = const Value.absent(),
-    this.createdBy = const Value.absent(),
     this.createdTime = const Value.absent(),
-    this.updatedBy = const Value.absent(),
     this.updatedTime = const Value.absent(),
-    this.deviceId = const Value.absent(),
-    this.appName = const Value.absent(),
+    this.deviceID = const Value.absent(),
     this.appVersion = const Value.absent(),
   }) : shopID = Value(shopID),
        phoneNo = Value(phoneNo);
@@ -2477,12 +2207,9 @@ class ShopPhoneTableCompanion extends UpdateCompanion<ShopPhoneTableData> {
     Expression<String>? phoneNo,
     Expression<String>? note,
     Expression<String>? dataStatus,
-    Expression<String>? createdBy,
-    Expression<String>? createdTime,
-    Expression<String>? updatedBy,
-    Expression<String>? updatedTime,
-    Expression<String>? deviceId,
-    Expression<String>? appName,
+    Expression<DateTime>? createdTime,
+    Expression<DateTime>? updatedTime,
+    Expression<String>? deviceID,
     Expression<String>? appVersion,
   }) {
     return RawValuesInsertable({
@@ -2491,12 +2218,9 @@ class ShopPhoneTableCompanion extends UpdateCompanion<ShopPhoneTableData> {
       if (phoneNo != null) 'phone_no': phoneNo,
       if (note != null) 'note': note,
       if (dataStatus != null) 'data_status': dataStatus,
-      if (createdBy != null) 'created_by': createdBy,
       if (createdTime != null) 'created_time': createdTime,
-      if (updatedBy != null) 'updated_by': updatedBy,
       if (updatedTime != null) 'updated_time': updatedTime,
-      if (deviceId != null) 'device_id': deviceId,
-      if (appName != null) 'app_name': appName,
+      if (deviceID != null) 'device_i_d': deviceID,
       if (appVersion != null) 'app_version': appVersion,
     });
   }
@@ -2507,12 +2231,9 @@ class ShopPhoneTableCompanion extends UpdateCompanion<ShopPhoneTableData> {
     Value<String>? phoneNo,
     Value<String?>? note,
     Value<DataStatus>? dataStatus,
-    Value<String?>? createdBy,
-    Value<String?>? createdTime,
-    Value<String?>? updatedBy,
-    Value<String?>? updatedTime,
-    Value<String?>? deviceId,
-    Value<String?>? appName,
+    Value<DateTime?>? createdTime,
+    Value<DateTime?>? updatedTime,
+    Value<String?>? deviceID,
     Value<String?>? appVersion,
   }) {
     return ShopPhoneTableCompanion(
@@ -2521,12 +2242,9 @@ class ShopPhoneTableCompanion extends UpdateCompanion<ShopPhoneTableData> {
       phoneNo: phoneNo ?? this.phoneNo,
       note: note ?? this.note,
       dataStatus: dataStatus ?? this.dataStatus,
-      createdBy: createdBy ?? this.createdBy,
       createdTime: createdTime ?? this.createdTime,
-      updatedBy: updatedBy ?? this.updatedBy,
       updatedTime: updatedTime ?? this.updatedTime,
-      deviceId: deviceId ?? this.deviceId,
-      appName: appName ?? this.appName,
+      deviceID: deviceID ?? this.deviceID,
       appVersion: appVersion ?? this.appVersion,
     );
   }
@@ -2551,23 +2269,14 @@ class ShopPhoneTableCompanion extends UpdateCompanion<ShopPhoneTableData> {
         $ShopPhoneTableTable.$converterdataStatus.toSql(dataStatus.value),
       );
     }
-    if (createdBy.present) {
-      map['created_by'] = Variable<String>(createdBy.value);
-    }
     if (createdTime.present) {
-      map['created_time'] = Variable<String>(createdTime.value);
-    }
-    if (updatedBy.present) {
-      map['updated_by'] = Variable<String>(updatedBy.value);
+      map['created_time'] = Variable<DateTime>(createdTime.value);
     }
     if (updatedTime.present) {
-      map['updated_time'] = Variable<String>(updatedTime.value);
+      map['updated_time'] = Variable<DateTime>(updatedTime.value);
     }
-    if (deviceId.present) {
-      map['device_id'] = Variable<String>(deviceId.value);
-    }
-    if (appName.present) {
-      map['app_name'] = Variable<String>(appName.value);
+    if (deviceID.present) {
+      map['device_i_d'] = Variable<String>(deviceID.value);
     }
     if (appVersion.present) {
       map['app_version'] = Variable<String>(appVersion.value);
@@ -2583,12 +2292,9 @@ class ShopPhoneTableCompanion extends UpdateCompanion<ShopPhoneTableData> {
           ..write('phoneNo: $phoneNo, ')
           ..write('note: $note, ')
           ..write('dataStatus: $dataStatus, ')
-          ..write('createdBy: $createdBy, ')
           ..write('createdTime: $createdTime, ')
-          ..write('updatedBy: $updatedBy, ')
           ..write('updatedTime: $updatedTime, ')
-          ..write('deviceId: $deviceId, ')
-          ..write('appName: $appName, ')
+          ..write('deviceID: $deviceID, ')
           ..write('appVersion: $appVersion')
           ..write(')'))
         .toString();
@@ -2638,12 +2344,9 @@ typedef $$ShopInfoTableTableCreateCompanionBuilder =
       Value<bool> includeVat,
       Value<String?> taxID,
       Value<DataStatus> dataStatus,
-      Value<String?> createdBy,
       Value<DateTime?> createdTime,
-      Value<String?> updatedBy,
       Value<DateTime?> updatedTime,
-      Value<String?> deviceId,
-      Value<String?> appName,
+      Value<String?> deviceID,
       Value<String?> appVersion,
     });
 typedef $$ShopInfoTableTableUpdateCompanionBuilder =
@@ -2674,12 +2377,9 @@ typedef $$ShopInfoTableTableUpdateCompanionBuilder =
       Value<bool> includeVat,
       Value<String?> taxID,
       Value<DataStatus> dataStatus,
-      Value<String?> createdBy,
       Value<DateTime?> createdTime,
-      Value<String?> updatedBy,
       Value<DateTime?> updatedTime,
-      Value<String?> deviceId,
-      Value<String?> appName,
+      Value<String?> deviceID,
       Value<String?> appVersion,
     });
 
@@ -2858,18 +2558,8 @@ class $$ShopInfoTableTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnFilters<String> get createdBy => $composableBuilder(
-    column: $table.createdBy,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<DateTime> get createdTime => $composableBuilder(
     column: $table.createdTime,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get updatedBy => $composableBuilder(
-    column: $table.updatedBy,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2878,13 +2568,8 @@ class $$ShopInfoTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get deviceId => $composableBuilder(
-    column: $table.deviceId,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get appName => $composableBuilder(
-    column: $table.appName,
+  ColumnFilters<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3058,18 +2743,8 @@ class $$ShopInfoTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get createdBy => $composableBuilder(
-    column: $table.createdBy,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<DateTime> get createdTime => $composableBuilder(
     column: $table.createdTime,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get updatedBy => $composableBuilder(
-    column: $table.updatedBy,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3078,13 +2753,8 @@ class $$ShopInfoTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get deviceId => $composableBuilder(
-    column: $table.deviceId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get appName => $composableBuilder(
-    column: $table.appName,
+  ColumnOrderings<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3221,27 +2891,18 @@ class $$ShopInfoTableTableAnnotationComposer
         builder: (column) => column,
       );
 
-  GeneratedColumn<String> get createdBy =>
-      $composableBuilder(column: $table.createdBy, builder: (column) => column);
-
   GeneratedColumn<DateTime> get createdTime => $composableBuilder(
     column: $table.createdTime,
     builder: (column) => column,
   );
-
-  GeneratedColumn<String> get updatedBy =>
-      $composableBuilder(column: $table.updatedBy, builder: (column) => column);
 
   GeneratedColumn<DateTime> get updatedTime => $composableBuilder(
     column: $table.updatedTime,
     builder: (column) => column,
   );
 
-  GeneratedColumn<String> get deviceId =>
-      $composableBuilder(column: $table.deviceId, builder: (column) => column);
-
-  GeneratedColumn<String> get appName =>
-      $composableBuilder(column: $table.appName, builder: (column) => column);
+  GeneratedColumn<String> get deviceID =>
+      $composableBuilder(column: $table.deviceID, builder: (column) => column);
 
   GeneratedColumn<String> get appVersion => $composableBuilder(
     column: $table.appVersion,
@@ -3329,12 +2990,9 @@ class $$ShopInfoTableTableTableManager
                 Value<bool> includeVat = const Value.absent(),
                 Value<String?> taxID = const Value.absent(),
                 Value<DataStatus> dataStatus = const Value.absent(),
-                Value<String?> createdBy = const Value.absent(),
                 Value<DateTime?> createdTime = const Value.absent(),
-                Value<String?> updatedBy = const Value.absent(),
                 Value<DateTime?> updatedTime = const Value.absent(),
-                Value<String?> deviceId = const Value.absent(),
-                Value<String?> appName = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
                 Value<String?> appVersion = const Value.absent(),
               }) => ShopInfoTableCompanion(
                 id: id,
@@ -3363,12 +3021,9 @@ class $$ShopInfoTableTableTableManager
                 includeVat: includeVat,
                 taxID: taxID,
                 dataStatus: dataStatus,
-                createdBy: createdBy,
                 createdTime: createdTime,
-                updatedBy: updatedBy,
                 updatedTime: updatedTime,
-                deviceId: deviceId,
-                appName: appName,
+                deviceID: deviceID,
                 appVersion: appVersion,
               ),
           createCompanionCallback:
@@ -3400,12 +3055,9 @@ class $$ShopInfoTableTableTableManager
                 Value<bool> includeVat = const Value.absent(),
                 Value<String?> taxID = const Value.absent(),
                 Value<DataStatus> dataStatus = const Value.absent(),
-                Value<String?> createdBy = const Value.absent(),
                 Value<DateTime?> createdTime = const Value.absent(),
-                Value<String?> updatedBy = const Value.absent(),
                 Value<DateTime?> updatedTime = const Value.absent(),
-                Value<String?> deviceId = const Value.absent(),
-                Value<String?> appName = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
                 Value<String?> appVersion = const Value.absent(),
               }) => ShopInfoTableCompanion.insert(
                 id: id,
@@ -3434,12 +3086,9 @@ class $$ShopInfoTableTableTableManager
                 includeVat: includeVat,
                 taxID: taxID,
                 dataStatus: dataStatus,
-                createdBy: createdBy,
                 createdTime: createdTime,
-                updatedBy: updatedBy,
                 updatedTime: updatedTime,
-                deviceId: deviceId,
-                appName: appName,
+                deviceID: deviceID,
                 appVersion: appVersion,
               ),
           withReferenceMapper: (p0) => p0
@@ -3507,12 +3156,9 @@ typedef $$ShopPhoneTableTableCreateCompanionBuilder =
       required String phoneNo,
       Value<String?> note,
       Value<DataStatus> dataStatus,
-      Value<String?> createdBy,
-      Value<String?> createdTime,
-      Value<String?> updatedBy,
-      Value<String?> updatedTime,
-      Value<String?> deviceId,
-      Value<String?> appName,
+      Value<DateTime?> createdTime,
+      Value<DateTime?> updatedTime,
+      Value<String?> deviceID,
       Value<String?> appVersion,
     });
 typedef $$ShopPhoneTableTableUpdateCompanionBuilder =
@@ -3522,12 +3168,9 @@ typedef $$ShopPhoneTableTableUpdateCompanionBuilder =
       Value<String> phoneNo,
       Value<String?> note,
       Value<DataStatus> dataStatus,
-      Value<String?> createdBy,
-      Value<String?> createdTime,
-      Value<String?> updatedBy,
-      Value<String?> updatedTime,
-      Value<String?> deviceId,
-      Value<String?> appName,
+      Value<DateTime?> createdTime,
+      Value<DateTime?> updatedTime,
+      Value<String?> deviceID,
       Value<String?> appVersion,
     });
 
@@ -3590,33 +3233,18 @@ class $$ShopPhoneTableTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnFilters<String> get createdBy => $composableBuilder(
-    column: $table.createdBy,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get createdTime => $composableBuilder(
+  ColumnFilters<DateTime> get createdTime => $composableBuilder(
     column: $table.createdTime,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get updatedBy => $composableBuilder(
-    column: $table.updatedBy,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get updatedTime => $composableBuilder(
+  ColumnFilters<DateTime> get updatedTime => $composableBuilder(
     column: $table.updatedTime,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get deviceId => $composableBuilder(
-    column: $table.deviceId,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get appName => $composableBuilder(
-    column: $table.appName,
+  ColumnFilters<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3678,33 +3306,18 @@ class $$ShopPhoneTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get createdBy => $composableBuilder(
-    column: $table.createdBy,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get createdTime => $composableBuilder(
+  ColumnOrderings<DateTime> get createdTime => $composableBuilder(
     column: $table.createdTime,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get updatedBy => $composableBuilder(
-    column: $table.updatedBy,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get updatedTime => $composableBuilder(
+  ColumnOrderings<DateTime> get updatedTime => $composableBuilder(
     column: $table.updatedTime,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get deviceId => $composableBuilder(
-    column: $table.deviceId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get appName => $composableBuilder(
-    column: $table.appName,
+  ColumnOrderings<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3761,27 +3374,18 @@ class $$ShopPhoneTableTableAnnotationComposer
         builder: (column) => column,
       );
 
-  GeneratedColumn<String> get createdBy =>
-      $composableBuilder(column: $table.createdBy, builder: (column) => column);
-
-  GeneratedColumn<String> get createdTime => $composableBuilder(
+  GeneratedColumn<DateTime> get createdTime => $composableBuilder(
     column: $table.createdTime,
     builder: (column) => column,
   );
 
-  GeneratedColumn<String> get updatedBy =>
-      $composableBuilder(column: $table.updatedBy, builder: (column) => column);
-
-  GeneratedColumn<String> get updatedTime => $composableBuilder(
+  GeneratedColumn<DateTime> get updatedTime => $composableBuilder(
     column: $table.updatedTime,
     builder: (column) => column,
   );
 
-  GeneratedColumn<String> get deviceId =>
-      $composableBuilder(column: $table.deviceId, builder: (column) => column);
-
-  GeneratedColumn<String> get appName =>
-      $composableBuilder(column: $table.appName, builder: (column) => column);
+  GeneratedColumn<String> get deviceID =>
+      $composableBuilder(column: $table.deviceID, builder: (column) => column);
 
   GeneratedColumn<String> get appVersion => $composableBuilder(
     column: $table.appVersion,
@@ -3845,12 +3449,9 @@ class $$ShopPhoneTableTableTableManager
                 Value<String> phoneNo = const Value.absent(),
                 Value<String?> note = const Value.absent(),
                 Value<DataStatus> dataStatus = const Value.absent(),
-                Value<String?> createdBy = const Value.absent(),
-                Value<String?> createdTime = const Value.absent(),
-                Value<String?> updatedBy = const Value.absent(),
-                Value<String?> updatedTime = const Value.absent(),
-                Value<String?> deviceId = const Value.absent(),
-                Value<String?> appName = const Value.absent(),
+                Value<DateTime?> createdTime = const Value.absent(),
+                Value<DateTime?> updatedTime = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
                 Value<String?> appVersion = const Value.absent(),
               }) => ShopPhoneTableCompanion(
                 id: id,
@@ -3858,12 +3459,9 @@ class $$ShopPhoneTableTableTableManager
                 phoneNo: phoneNo,
                 note: note,
                 dataStatus: dataStatus,
-                createdBy: createdBy,
                 createdTime: createdTime,
-                updatedBy: updatedBy,
                 updatedTime: updatedTime,
-                deviceId: deviceId,
-                appName: appName,
+                deviceID: deviceID,
                 appVersion: appVersion,
               ),
           createCompanionCallback:
@@ -3873,12 +3471,9 @@ class $$ShopPhoneTableTableTableManager
                 required String phoneNo,
                 Value<String?> note = const Value.absent(),
                 Value<DataStatus> dataStatus = const Value.absent(),
-                Value<String?> createdBy = const Value.absent(),
-                Value<String?> createdTime = const Value.absent(),
-                Value<String?> updatedBy = const Value.absent(),
-                Value<String?> updatedTime = const Value.absent(),
-                Value<String?> deviceId = const Value.absent(),
-                Value<String?> appName = const Value.absent(),
+                Value<DateTime?> createdTime = const Value.absent(),
+                Value<DateTime?> updatedTime = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
                 Value<String?> appVersion = const Value.absent(),
               }) => ShopPhoneTableCompanion.insert(
                 id: id,
@@ -3886,12 +3481,9 @@ class $$ShopPhoneTableTableTableManager
                 phoneNo: phoneNo,
                 note: note,
                 dataStatus: dataStatus,
-                createdBy: createdBy,
                 createdTime: createdTime,
-                updatedBy: updatedBy,
                 updatedTime: updatedTime,
-                deviceId: deviceId,
-                appName: appName,
+                deviceID: deviceID,
                 appVersion: appVersion,
               ),
           withReferenceMapper: (p0) => p0

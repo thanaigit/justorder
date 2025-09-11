@@ -1,23 +1,17 @@
 import '../../enum/data_status.dart';
 
 abstract class BaseClass {
-  final String? createdBy;
   final DateTime? createdTime;
-  final String? updatedBy;
   final DateTime? updatedTime;
   final DataStatus dataStatus;
-  final String? deviceId;
-  final String? appName;
+  final String? deviceID;
   final String? appVersion;
 
   BaseClass({
-    this.createdBy,
     this.createdTime,
-    this.updatedBy,
     this.updatedTime,
     this.dataStatus = DataStatus.active,
-    this.deviceId,
-    this.appName,
+    this.deviceID,
     this.appVersion,
   });
 

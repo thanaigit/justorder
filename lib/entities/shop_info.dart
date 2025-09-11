@@ -40,12 +40,9 @@ class ShopInfo extends BaseClass {
     this.includeVat = false,
     this.taxID,
     super.dataStatus,
-    super.createdBy,
     super.createdTime,
-    super.updatedBy,
     super.updatedTime,
-    super.deviceId,
-    super.appName,
+    super.deviceID,
     super.appVersion,
   });
 
@@ -68,12 +65,9 @@ class ShopInfo extends BaseClass {
     bool? includeVat,
     String? taxID,
     DataStatus? dataStatus,
-    String? createdBy,
     DateTime? createdTime,
-    String? updatedBy,
     DateTime? updatedTime,
-    String? deviceId,
-    String? appName,
+    String? deviceID,
     String? appVersion,
   }) {
     return ShopInfo(
@@ -95,12 +89,9 @@ class ShopInfo extends BaseClass {
       includeVat: includeVat ?? this.includeVat,
       taxID: taxID ?? this.taxID,
       dataStatus: dataStatus ?? this.dataStatus,
-      createdBy: createdBy ?? this.createdBy,
       createdTime: createdTime ?? this.createdTime,
-      updatedBy: updatedBy ?? this.updatedBy,
       updatedTime: updatedTime ?? this.updatedTime,
-      deviceId: deviceId ?? this.deviceId,
-      appName: appName ?? this.appName,
+      deviceID: deviceID ?? this.deviceID,
       appVersion: appVersion ?? this.appVersion,
     );
   }
@@ -148,5 +139,10 @@ class ShopInfo extends BaseClass {
         vatPercent.hashCode ^
         includeVat.hashCode ^
         taxID.hashCode;
+  }
+
+  @override
+  String toString() {
+    return 'ShopInfo(id: $id, name: $name, takeHomeOnly: $takeHomeOnly, allDay: $allDay, address: $address, urlMap: $urlMap, hasServiceCharge: $hasServiceCharge, servicePercent: $servicePercent, serviceChargeMethod: $serviceChargeMethod, serviceCalcAll: $serviceCalcAll, serviceCalcTakehome: $serviceCalcTakehome, recommendedGroupAuto: $recommendedGroupAuto, recommendedGroupName: $recommendedGroupName, vatInside: $vatInside, vatPercent: $vatPercent, includeVat: $includeVat, taxID: $taxID)';
   }
 }

@@ -88,7 +88,8 @@ class Address {
   }
 
   String toThaiLetterAddress({bool singleLine = false}) {
-    bool isKrungtep = (province != null && (province?.trim() != '')) &&
+    bool isKrungtep =
+        (province != null && (province?.trim() != '')) &&
         ((province!.contains('กรุงเทพ')) || province!.contains('กทม'));
     String sSoi = (soi != null && (soi?.trim() != '')) ? 'ซ.$soi' : '';
     String sRd = (road != null && (road?.trim() != '')) ? 'ถ.$road' : '';
@@ -103,6 +104,8 @@ class Address {
         : '';
     return singleLine
         ? '${no ?? ''} ${village ?? ''} $sSoi $sRd $sTb $sAp $sProv ${zipCode ?? ''}'.trim()
-        : '${no ?? ''} ${village ?? ''} $sSoi\n$sRd $sTb\n$sAp $sProv ${zipCode ?? ''}'.trim();
+        : ('${no ?? ''} ${village ?? ''}').length < 35
+        ? '${no ?? ''} ${village ?? ''} $sSoi\n$sRd $sTb\n$sAp $sProv ${zipCode ?? ''}'.trim()
+        : '${no ?? ''} ${village ?? ''}\n$sSoi $sRd\n$sTb $sAp\n$sProv ${zipCode ?? ''}'.trim();
   }
 }

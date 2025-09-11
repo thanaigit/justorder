@@ -31,11 +31,8 @@ class ShopInfoTable extends Table {
   TextColumn get taxID => text().nullable()();
   TextColumn get dataStatus =>
       textEnum<DataStatus>().withDefault(Constant(DataStatus.active.text))();
-  TextColumn get createdBy => text().nullable()();
   DateTimeColumn get createdTime => dateTime().nullable()();
-  TextColumn get updatedBy => text().nullable()();
   DateTimeColumn get updatedTime => dateTime().nullable()();
-  TextColumn get deviceId => text().nullable()();
-  TextColumn get appName => text().nullable()();
+  TextColumn get deviceID => text().nullable()();
   TextColumn get appVersion => text().nullable()();
 }

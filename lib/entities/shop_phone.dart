@@ -12,12 +12,9 @@ class ShopPhone extends BaseClass {
     this.phoneNo,
     this.note,
     super.dataStatus,
-    super.createdBy,
     super.createdTime,
-    super.updatedBy,
     super.updatedTime,
-    super.deviceId,
-    super.appName,
+    super.deviceID,
     super.appVersion,
   });
 
@@ -27,11 +24,9 @@ class ShopPhone extends BaseClass {
     String? phoneNo,
     String? note,
     DataStatus? dataStatus,
-    String? createdBy,
     DateTime? createdTime,
-    String? updatedBy,
     DateTime? updatedTime,
-    String? deviceId,
+    String? deviceID,
     String? appName,
     String? appVersion,
   }) {
@@ -41,12 +36,9 @@ class ShopPhone extends BaseClass {
       phoneNo: phoneNo ?? this.phoneNo,
       note: note ?? this.note,
       dataStatus: dataStatus ?? this.dataStatus,
-      createdBy: createdBy ?? this.createdBy,
       createdTime: createdTime ?? this.createdTime,
-      updatedBy: updatedBy ?? this.updatedBy,
       updatedTime: updatedTime ?? this.updatedTime,
-      deviceId: deviceId ?? this.deviceId,
-      appName: appName ?? this.appName,
+      deviceID: deviceID ?? this.deviceID,
       appVersion: appVersion ?? this.appVersion,
     );
   }
