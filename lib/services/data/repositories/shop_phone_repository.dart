@@ -36,9 +36,9 @@ class ShopPhoneRepository {
     }
   }
 
-  Future<Result<ShopPhone>> createShopPhone(ShopPhone phone) async {
+  Future<Result<ShopPhone>> createShopPhone(ShopPhone phone, {required int shopID}) async {
     final shopPhone = phone.copyWith(
-      createdTime: DateTime.now(),
+      shopID: shopID,
       deviceID: deviceDataRepo.info.serial,
       appVersion: appInfoRepo.data.fullVerion,
     );

@@ -23,8 +23,7 @@ class ShopPhoneViewModel extends StateNotifier<List<ShopPhone>?> {
   }
 
   Future<Result<bool>> createShopPhone(ShopPhone phone) async {
-    final shopPhone = phone.copyWith(shopID: shopID);
-    final result = await repo.createShopPhone(shopPhone);
+    final result = await repo.createShopPhone(phone, shopID: shopID);
     if (result.hasError) return Result<bool>(success: false, error: result.error);
     var phones = state != null ? List.of(state!) : null;
     phones = (phones != null) ? [...phones, result.success!] : [result.success!];

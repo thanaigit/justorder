@@ -121,8 +121,8 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     final shop = ref.watch(shopInfoViewModelProvider);
     final shopExists = (shop != null) && (shop.id != null);
-    debugPrint('shop = ${shop.toString()}');
-    debugPrint('shopExists = $shopExists');
+    // debugPrint('shop = ${shop.toString()}');
+    // debugPrint('shopExists = $shopExists');
 
     void setScale(ScalesValue scale) => AppScales.of(context)!.scale = scale;
 

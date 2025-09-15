@@ -9,7 +9,6 @@ import 'package:image_editor_plus/options.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:uri_to_file/uri_to_file.dart';
 import 'package:image_editor_plus/image_editor_plus.dart';
-// import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_ui/utils/validator.dart';
@@ -21,7 +20,10 @@ import '../../../data/providers/device_data_provider.dart';
 import '../../../data/repositories/device_data_repo.dart';
 import '../../../data/services/image_converter.dart';
 import '../../../domain/entities/image_base.dart';
+import '../../../enum/app_langs.dart';
 import '../../../enum/dialog_type.dart';
+import '../../../langs/language.dart';
+import '../../../langs/translators/image_viewer_strings.dart';
 import '../../../utilities/routes/page_trace.dart';
 import '../../../utilities/toast_message.dart';
 import '../../dialogs/message_dialog.dart';
@@ -75,19 +77,10 @@ import '../error_page.dart';
 class MenuObject {
   final Widget? icon;
   final String? caption;
-  MenuObject({
-    this.icon,
-    this.caption,
-  });
+  MenuObject({this.icon, this.caption});
 
-  MenuObject copyWith({
-    Widget? icon,
-    String? caption,
-  }) {
-    return MenuObject(
-      icon: icon ?? this.icon,
-      caption: caption ?? this.caption,
-    );
+  MenuObject copyWith({Widget? icon, String? caption}) {
+    return MenuObject(icon: icon ?? this.icon, caption: caption ?? this.caption);
   }
 }
 
@@ -143,6 +136,8 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
   File? _imageFile;
   Uint8List? _imageInt;
   ImageProvider<Object>? _imageProvider;
+  late AppLanguages _lang;
+  late ImageViewerStrings _imageStrs;
   late DeviceDataRepository _deviceDataRepo;
   final progressNotifier = ValueNotifier<bool>(false);
   // final imageNotifier = ValueNotifier<ImageProvider<Object>?>(null);
@@ -152,10 +147,7 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
   Widget hozSpaceWidget() => const Gap.width(8.0);
 
   void openErrorPage(String? errorMessage) {
-    PageTrace.push(
-      context,
-      page: ErrorPage(errorMessage: errorMessage),
-    );
+    PageTrace.push(context, page: ErrorPage(errorMessage: errorMessage));
   }
 
   Future<void> openErrorDialog({String? title, String? message}) async {
@@ -191,8 +183,10 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
         return false;
       }
       await openErrorDialog(
-        title: widget.permissionDenyTitle ?? 'Permission Deny',
-        message: widget.permissionDenyMessage ??
+        title: widget.permissionDenyTitle ?? _imageStrs.permissionDenyTitle ?? 'Permission Deny',
+        message:
+            widget.permissionDenyMessage ??
+            _imageStrs.permissionDenyMessage ??
             'Can not do this operation because permission was not granted.',
       );
       return false;
@@ -209,8 +203,10 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
         return false;
       }
       await openErrorDialog(
-        title: widget.permissionDenyTitle ?? 'Permission Deny',
-        message: widget.permissionDenyMessage ??
+        title: widget.permissionDenyTitle ?? _imageStrs.permissionDenyTitle ?? 'Permission Deny',
+        message:
+            widget.permissionDenyMessage ??
+            _imageStrs.permissionDenyMessage ??
             'Can not do this operation because permission was not granted.',
       );
       return false;
@@ -227,7 +223,7 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
         progressNotifier.value = true;
         _imageFile = File(image.path);
         _imageInt = await image.readAsBytes();
-        _image = Image.memory(_imageInt!);
+        _image = Image.file(File(image.path)); // Image.memory(_imageInt!);
         setState(() => _imageProvider = _image!.image);
         // imageNotifier.value = _imageProvider;
       } finally {
@@ -249,7 +245,7 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
     try {
       _imageFile = File(image.path);
       _imageInt = await image.readAsBytes();
-      _image = Image.memory(_imageInt!);
+      _image = Image.file(File(image.path)); //Image.memory(_imageInt!);
       setState(() => _imageProvider = _image!.image);
       // imageNotifier.value = _imageProvider;
     } finally {
@@ -283,7 +279,11 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
           );
           if (respond['isSuccess'] == true) {
             progressNotifier.value = false;
-            openToastMessage(widget.saveMessage ?? 'Successfully saved image to your gallery.');
+            openToastMessage(
+              widget.saveMessage ??
+                  _imageStrs.saveMessage ??
+                  'Successfully saved image to your gallery.',
+            );
           } else {
             var errMsg = respond['errorMessage'];
             if (StringValidator(errMsg).isNotBlank) {
@@ -297,7 +297,9 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
         openErrorPage(e.toString());
       }
     } else {
-      openToastMessage(widget.cantSaveMessage ?? 'Image cannot be saved.');
+      openToastMessage(
+        widget.cantSaveMessage ?? _imageStrs.cantSaveMessage ?? 'Image cannot be saved.',
+      );
     }
   }
 
@@ -388,15 +390,27 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _lang = AppLang.of(context)!.language;
+    final imgTitle = _lang == AppLanguages.thai ? 'รูปพื้นหลัง' : 'Background Picture';
+    _imageStrs = ImageViewerStrings(lang: _lang, title: imgTitle);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final MenuObject? menu1 =
-        (widget.menus != null && (widget.menus!.length >= 1)) ? widget.menus![0] : null;
-    final MenuObject? menu2 =
-        (widget.menus != null && (widget.menus!.length >= 2)) ? widget.menus![1] : null;
-    final MenuObject? menu3 =
-        (widget.menus != null && (widget.menus!.length >= 3)) ? widget.menus![2] : null;
-    final MenuObject? menu4 =
-        (widget.menus != null && (widget.menus!.length >= 4)) ? widget.menus![3] : null;
+    final MenuObject? menu1 = (widget.menus != null && (widget.menus!.length >= 1))
+        ? widget.menus![0]
+        : null;
+    final MenuObject? menu2 = (widget.menus != null && (widget.menus!.length >= 2))
+        ? widget.menus![1]
+        : null;
+    final MenuObject? menu3 = (widget.menus != null && (widget.menus!.length >= 3))
+        ? widget.menus![2]
+        : null;
+    final MenuObject? menu4 = (widget.menus != null && (widget.menus!.length >= 4))
+        ? widget.menus![3]
+        : null;
 
     List<PopupMenuItem<int>> menuList = <PopupMenuItem<int>>[];
     if (widget.canSelectImage) {
@@ -411,13 +425,13 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
               hozSpaceWidget(),
               (menu1 != null)
                   ? Text(
-                      menu1.caption ?? 'Select picture',
+                      menu1.caption ?? _imageStrs.menusName?[0] ?? 'Select picture',
                       style: const TextStyle(
                         fontFamily: AppFonts.decoratedFontName,
                         fontWeight: FontWeight.w400,
                       ),
                     )
-                  : const Text('Select picture'),
+                  : Text(_imageStrs.menusName?[0] ?? 'Select picture'),
             ],
           ),
         ),
@@ -435,13 +449,13 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
               hozSpaceWidget(),
               (menu2 != null)
                   ? Text(
-                      menu2.caption ?? 'Take a photo',
+                      menu2.caption ?? _imageStrs.menusName?[1] ?? 'Take a photo',
                       style: const TextStyle(
                         fontFamily: AppFonts.decoratedFontName,
                         fontWeight: FontWeight.w400,
                       ),
                     )
-                  : const Text('Take a photo'),
+                  : Text(_imageStrs.menusName?[1] ?? 'Take a photo'),
             ],
           ),
         ),
@@ -460,13 +474,13 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
               hozSpaceWidget(),
               (menu3 != null)
                   ? Text(
-                      menu3.caption ?? 'Save picture to device',
+                      menu3.caption ?? _imageStrs.menusName?[2] ?? 'Save picture to device',
                       style: const TextStyle(
                         fontFamily: AppFonts.decoratedFontName,
                         fontWeight: FontWeight.w400,
                       ),
                     )
-                  : const Text('Save picture to device'),
+                  : Text(_imageStrs.menusName?[2] ?? 'Save picture to device'),
             ],
           ),
         ),
@@ -485,13 +499,13 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
               hozSpaceWidget(),
               (menu4 != null)
                   ? Text(
-                      menu4.caption ?? 'Edit picture',
+                      menu4.caption ?? _imageStrs.menusName?[3] ?? 'Edit picture',
                       style: const TextStyle(
                         fontFamily: AppFonts.decoratedFontName,
                         fontWeight: FontWeight.w400,
                       ),
                     )
-                  : const Text('Edit picture'),
+                  : Text(_imageStrs.menusName?[3] ?? 'Edit picture'),
             ],
           ),
         ),
@@ -519,7 +533,7 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
           iconSize: AppSize.iconLarge,
           icon: const Icon(Icons.close),
         ),
-        title: (widget.pageTitle != null) ? Text(widget.pageTitle!) : null,
+        title: Text(widget.pageTitle ?? _imageStrs.pageTitle ?? 'Picture Viewer'),
         actions: [
           if (widget.canEditImage ||
               widget.canSaveImage ||
@@ -550,16 +564,16 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
               icon: const Icon(Icons.check),
               onPressed: (_imageFile != null)
                   ? () => Navigator.pop(
-                        context,
-                        ImageBase(
-                          image: _image,
-                          imageInt: _imageInt,
-                          imageFile: _imageFile,
-                          imageBase64: (_imageInt != null)
-                              ? ImageConverter.uint8ListToBase64(_imageInt!)
-                              : null,
-                        ),
-                      )
+                      context,
+                      ImageBase(
+                        image: _image,
+                        imageInt: _imageInt,
+                        imageFile: _imageFile,
+                        imageBase64: (_imageInt != null)
+                            ? ImageConverter.uint8ListToBase64(_imageInt!)
+                            : null,
+                      ),
+                    )
                   : null,
             ),
         ],
@@ -579,20 +593,21 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
                             ],
                           )
                         : picView();
-                  })
+                  },
+                )
               : Padding(
                   padding: const EdgeInsets.symmetric(horizontal: AppSize.pageHorizontalSpace),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       StandardButton(
-                        caption: menu1?.caption ?? 'Select picture',
+                        caption: menu1?.caption ?? _imageStrs.menusName?[0] ?? 'Select picture',
                         icon: menu1?.icon ?? const Icon(Icons.add_photo_alternate),
                         onPressed: () => selectImage(),
                       ),
                       const Gap.height(GapSize.veryLoose * 2),
                       StandardButton(
-                        caption: menu2?.caption ?? 'Take a photo',
+                        caption: menu2?.caption ?? _imageStrs.menusName?[1] ?? 'Take a photo',
                         icon: menu2?.icon ?? const Icon(Icons.photo_camera),
                         onPressed: () => takePhoto(),
                       ),

@@ -21,10 +21,9 @@ extension ShopPhoneEntityMapper on ShopPhone {
   ShopPhoneTableCompanion toCompanion() {
     return ShopPhoneTableCompanion.insert(
       shopID: shopID ?? 0,
-      phoneNo: phoneNo ?? '',
+      phoneNo: Value(phoneNo),
       note: Value(note),
       dataStatus: Value(dataStatus),
-      createdTime: Value(createdTime),
       updatedTime: Value(updatedTime),
       deviceID: Value(deviceID),
       appVersion: Value(appVersion),

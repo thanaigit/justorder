@@ -8,7 +8,8 @@ import '../../database.dart';
 extension ShopInfoEntityMapper on ShopInfo {
   ShopInfoTableCompanion toCompanion() {
     return ShopInfoTableCompanion.insert(
-      name: name ?? '',
+      id: Value<int>(id!),
+      name: Value<String?>(name),
       takeHomeOnly: Value<bool>(takeHomeOnly),
       allDay: Value<bool>(allDay),
       addressNo: Value<String?>(address?.no),
@@ -32,8 +33,8 @@ extension ShopInfoEntityMapper on ShopInfo {
       vatPercent: Value<double?>(vatPercent),
       includeVat: Value<bool>(includeVat),
       taxID: Value<String?>(taxID),
+      logoImagePath: Value<String?>(logoImagePath),
       dataStatus: Value<DataStatus>(dataStatus),
-      createdTime: Value<DateTime?>(createdTime),
       updatedTime: Value<DateTime?>(updatedTime),
       deviceID: Value<String?>(deviceID),
       appVersion: Value<String?>(appVersion),

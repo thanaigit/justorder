@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../core/const/assets_manager.dart';
 import '../../../core/domain/entities/menu_item_value.dart';
 import '../../../core/presentation/widgets/profile_avatar.dart';
+import '../../../core/providers/image_local_storage_provider.dart';
+import '../../../entities/shop_info.dart';
 
-class ShopAvatar extends StatelessWidget {
-  final ImageProvider<Object>? image;
+class ShopAvatar extends ConsumerWidget {
+  // final ImageProvider<Object>? image;
+  final ShopInfo? shop;
   final BoxShape shape;
   final double? size;
   final double? minSize;
@@ -30,7 +34,7 @@ class ShopAvatar extends StatelessWidget {
   final VoidCallback? onTap;
   const ShopAvatar({
     super.key,
-    this.image,
+    this.shop,
     this.shape = BoxShape.circle,
     this.size,
     this.minSize,
@@ -55,35 +59,48 @@ class ShopAvatar extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return ProfileAvatar(
-      image: image,
-      shape: shape,
-      size: size,
-      minSize: minSize,
-      maxSize: maxSize,
-      backgroundColor: backgroundColor,
-      defaultIconColor: defaultIconColor,
-      borderColor: borderColor,
-      shadowColor: shadowColor,
-      progressColor: progressColor,
-      borderWidth: borderWidth,
-      borderRadius: borderRadius,
-      shadowOffset: shadowOffset,
-      showBorder: showBorder,
-      showShadow: showShadow,
-      showMenuIcon: showMenuIcon,
-      showLoading: showLoading,
-      useFadeEffect: useFadeEffect,
-      menuIcon: menuIcon,
-      menuItems: menuItems,
-      onMenuSelected: onMenuSelected,
-      onTap: onTap,
-      defaultAvatarImage: SvgPicture.asset(
-        AssetsManager.shopDefaultImage,
-        fit: BoxFit.cover,
-        theme: SvgTheme(currentColor: Theme.of(context).primaryColor),
-      ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    Widget profileAvatar({ImageProvider<Object>? image, bool isLoadning = false}) {
+      return ProfileAvatar(
+        image: image,
+        shape: shape,
+        size: size,
+        minSize: minSize,
+        maxSize: maxSize,
+        backgroundColor: backgroundColor,
+        defaultIconColor: defaultIconColor,
+        borderColor: borderColor,
+        shadowColor: shadowColor,
+        progressColor: progressColor,
+        borderWidth: borderWidth,
+        borderRadius: borderRadius,
+        shadowOffset: shadowOffset,
+        showBorder: showBorder,
+        showShadow: showShadow,
+        showMenuIcon: showMenuIcon,
+        showLoading: isLoadning,
+        useFadeEffect: useFadeEffect,
+        menuIcon: menuIcon,
+        menuItems: menuItems,
+        onMenuSelected: onMenuSelected,
+        onTap: onTap,
+        defaultAvatarImage: SvgPicture.asset(
+          AssetsManager.shopDefaultImage,
+          fit: BoxFit.cover,
+          theme: SvgTheme(currentColor: Theme.of(context).primaryColor),
+        ),
+      );
+    }
+
+    debugPrint('Shop logoPath : ${shop?.logoImagePath}');
+    final loadAsync = ref.watch(imageLocalLoadProvider(shop?.logoImagePath ?? ''));
+    return loadAsync.when(
+      data: (data) {
+        final image = data.success;
+        return profileAvatar(image: image?.imageProvider, isLoadning: false);
+      },
+      error: (err, stack) => profileAvatar(isLoadning: false),
+      loading: () => profileAvatar(isLoadning: true),
     );
   }
 }

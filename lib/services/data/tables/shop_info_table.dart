@@ -4,8 +4,8 @@ import '../../../core/enum/data_status.dart';
 import '../../../enum/service_charge_method.dart';
 
 class ShopInfoTable extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get name => text()();
+  IntColumn get id => integer()();
+  TextColumn get name => text().nullable()();
   TextColumn get addressNo => text().nullable()();
   TextColumn get addressVillage => text().nullable()();
   TextColumn get addressSoi => text().nullable()();
@@ -29,10 +29,14 @@ class ShopInfoTable extends Table {
   RealColumn get vatPercent => real().nullable()();
   BoolColumn get includeVat => boolean().clientDefault(() => false)();
   TextColumn get taxID => text().nullable()();
+  TextColumn get logoImagePath => text().nullable()();
   TextColumn get dataStatus =>
       textEnum<DataStatus>().withDefault(Constant(DataStatus.active.text))();
-  DateTimeColumn get createdTime => dateTime().nullable()();
+  DateTimeColumn get createdTime => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedTime => dateTime().nullable()();
   TextColumn get deviceID => text().nullable()();
   TextColumn get appVersion => text().nullable()();
+
+  @override
+  Set<Column<Object>>? get primaryKey => {id};
 }

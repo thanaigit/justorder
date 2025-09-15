@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:justorder/core/presentation/widgets/null_box.dart';
-import 'package:justorder/view_model/shop_info_view_model.dart';
+import 'package:justorder/core/domain/entities/image_base.dart';
 import 'package:my_ui/widgets/common/input/text_input.dart';
 
 import '../../../../core/const/colors.dart';
@@ -10,8 +9,11 @@ import '../../../../core/const/icon_data.dart';
 import '../../../../core/const/size.dart';
 import '../../../../core/presentation/styles/text_styles.dart';
 import '../../../../core/presentation/widgets/gap.dart';
+import '../../../core/presentation/pages/images/image_viewer.dart';
+import '../../../core/presentation/widgets/null_box.dart';
 import '../../../entities/shop_info.dart';
 import '../../../enum/service_charge_method.dart';
+import '../../../view_model/shop_info_view_model.dart';
 import '../../../view_model/shop_phone_view_model.dart';
 import 'shop_avatar.dart';
 import 'shop_phone_input.dart';
@@ -79,13 +81,14 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
     final headerStyle = AppTextStyles.headerMediumStyle(context, color: fontHeaderColor);
     final subInfoStyle = TextStyle(color: shopExists ? null : AppColors.disableMinorInfoColor);
 
-    void saveShopName() {
+    void saveShopName() async {
       final name = _editNameController.text;
-      if (shop == null) {
+      final countResult = await ref.read(shopInfoViewModelProvider.notifier).countShops();
+      if ((countResult.success ?? 0) == 0) {
         final newShop = ShopInfo(name: name);
         ref.read(shopInfoViewModelProvider.notifier).createShop(newShop);
       } else {
-        final newShop = shop.copyWith(name: name);
+        final newShop = shop!.copyWith(name: name);
         ref.read(shopInfoViewModelProvider.notifier).updateShop(newShop);
       }
       _editNameNotifier.value = false;
@@ -112,7 +115,31 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ShopAvatar(size: size.width / 4.5, image: widget.profileImage, showMenuIcon: false),
+          ShopAvatar(
+            shop: shop,
+            size: size.width / 4.5,
+            showMenuIcon: false,
+            onTap: () async {
+              final imageBase =
+                  await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ImageViewer(pageTitle: 'โลโก้ร้าน'),
+                        ),
+                      )
+                      as ImageBase?;
+              if (imageBase == null) return;
+              if (shopExists) {
+                await ref
+                    .read(shopInfoViewModelProvider.notifier)
+                    .updateShop(shop, logoFile: imageBase.imageFile);
+              } else {
+                await ref
+                    .read(shopInfoViewModelProvider.notifier)
+                    .createShop(ShopInfo(), logoFile: imageBase.imageFile);
+              }
+            },
+          ),
           const Gap.height(GapSize.normal),
           ValueListenableBuilder<bool>(
             valueListenable: _editNameNotifier,

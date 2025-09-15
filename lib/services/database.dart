@@ -18,6 +18,20 @@ class Database extends _$Database {
 
   @override
   int get schemaVersion => 1;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (m) async {
+        await m.createAll();
+      },
+      // onUpgrade: (m, from, to) async {
+      //   if (from == 1 && to == 2) {
+      //     await m.addColumn(shopInfoTable, shopInfoTable.logoImagePath);
+      //   }
+      // },
+    );
+  }
 }
 
 LazyDatabase _openConnection() {

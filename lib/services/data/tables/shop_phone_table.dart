@@ -6,10 +6,10 @@ import 'shop_info_table.dart';
 class ShopPhoneTable extends Table {
   late final id = integer().autoIncrement()();
   late final shopID = integer().references(ShopInfoTable, #id)();
-  late final phoneNo = text()();
+  late final phoneNo = text().nullable()();
   late final note = text().nullable()();
   late final dataStatus = textEnum<DataStatus>().withDefault(Constant(DataStatus.active.text))();
-  late final createdTime = dateTime().nullable()();
+  late final createdTime = dateTime().withDefault(currentDateAndTime)();
   late final updatedTime = dateTime().nullable()();
   late final deviceID = text().nullable()();
   late final appVersion = text().nullable()();

@@ -33,6 +33,7 @@ extension ShopInfoDataMapper on ShopInfoTableData {
       vatPercent: vatPercent,
       includeVat: includeVat,
       taxID: taxID,
+      logoImagePath: logoImagePath,
       dataStatus: dataStatus,
       createdTime: createdTime,
       updatedTime: updatedTime,

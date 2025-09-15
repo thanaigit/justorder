@@ -36,17 +36,55 @@ class ShopInfoRepository {
     }
   }
 
-  Future<Result<ShopInfo>> createShop(ShopInfo shop) async {
-    if (shop.name == null || shop.name!.isEmpty) {
-      return Result<ShopInfo>(
-        error: Failure(message: 'Shop name is required', stackTrace: StackTrace.current),
+  Future<Result<int>> countShops() async {
+    try {
+      final query = db.selectOnly(db.shopInfoTable)..addColumns([countAll()]);
+      final qryResult = await query.getSingle();
+      final countValue = qryResult.read(countAll()) ?? 0;
+      return Result<int>(success: countValue);
+    } catch (e) {
+      return Result<int>(
+        error: Failure(message: e.toString(), stackTrace: StackTrace.current),
       );
     }
-    final shopInfo = shop.copyWith(
-      createdTime: DateTime.now(),
-      deviceID: deviceDataRepo.info.serial,
-      appVersion: appInfoRepo.data.fullVerion,
-    );
+  }
+
+  Future<Result<int>> getLastShopID() async {
+    try {
+      final query = db.selectOnly(db.shopInfoTable)..addColumns([db.shopInfoTable.id.max()]);
+      final qryResult = await query.getSingleOrNull();
+      final lastID = qryResult?.read(db.shopInfoTable.id.max());
+      return Result<int>(success: lastID ?? 0);
+    } catch (e) {
+      return Result<int>(
+        error: Failure(message: e.toString(), stackTrace: StackTrace.current),
+      );
+    }
+  }
+
+  Future<Result<ShopInfo>> createShop(ShopInfo shop) async {
+    // if (shop.name == null || shop.name!.isEmpty) {
+    //   return Result<ShopInfo>(
+    //     error: Failure(message: 'Shop name is required', stackTrace: StackTrace.current),
+    //   );
+    // }
+    ShopInfo? shopInfo;
+    if (shop.id == null) {
+      final idResult = await getLastShopID();
+      if (idResult.hasError) {
+        return Result<ShopInfo>(error: idResult.error);
+      }
+      shopInfo = shop.copyWith(
+        id: (idResult.success ?? 0) + 1,
+        deviceID: deviceDataRepo.info.serial,
+        appVersion: appInfoRepo.data.fullVerion,
+      );
+    } else {
+      shopInfo = shop.copyWith(
+        deviceID: deviceDataRepo.info.serial,
+        appVersion: appInfoRepo.data.fullVerion,
+      );
+    }
     final companion = shopInfo.toCompanion();
     try {
       final data = await db
@@ -61,9 +99,9 @@ class ShopInfoRepository {
   }
 
   Future<Result<ShopInfo>> updateShop(ShopInfo shop) async {
-    if (shop.name == null || shop.name!.isEmpty) {
+    if (shop.id == null) {
       return Result<ShopInfo>(
-        error: Failure(message: 'Shop name is required', stackTrace: StackTrace.current),
+        error: Failure(message: 'Shop ID is required', stackTrace: StackTrace.current),
       );
     }
     final shopInfo = shop.copyWith(

@@ -15,21 +15,17 @@ class $ShopInfoTableTable extends ShopInfoTable
     'id',
     aliasedName,
     false,
-    hasAutoIncrement: true,
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
   );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
     'name',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _addressNoMeta = const VerificationMeta(
     'addressNo',
@@ -309,6 +305,17 @@ class $ShopInfoTableTable extends ShopInfoTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _logoImagePathMeta = const VerificationMeta(
+    'logoImagePath',
+  );
+  @override
+  late final GeneratedColumn<String> logoImagePath = GeneratedColumn<String>(
+    'logo_image_path',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   late final GeneratedColumnWithTypeConverter<DataStatus, String> dataStatus =
       GeneratedColumn<String>(
@@ -326,9 +333,10 @@ class $ShopInfoTableTable extends ShopInfoTable
   late final GeneratedColumn<DateTime> createdTime = GeneratedColumn<DateTime>(
     'created_time',
     aliasedName,
-    true,
+    false,
     type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
   );
   static const VerificationMeta _updatedTimeMeta = const VerificationMeta(
     'updatedTime',
@@ -390,6 +398,7 @@ class $ShopInfoTableTable extends ShopInfoTable
     vatPercent,
     includeVat,
     taxID,
+    logoImagePath,
     dataStatus,
     createdTime,
     updatedTime,
@@ -416,8 +425,6 @@ class $ShopInfoTableTable extends ShopInfoTable
         _nameMeta,
         name.isAcceptableOrUnknown(data['name']!, _nameMeta),
       );
-    } else if (isInserting) {
-      context.missing(_nameMeta);
     }
     if (data.containsKey('address_no')) {
       context.handle(
@@ -593,6 +600,15 @@ class $ShopInfoTableTable extends ShopInfoTable
         taxID.isAcceptableOrUnknown(data['tax_i_d']!, _taxIDMeta),
       );
     }
+    if (data.containsKey('logo_image_path')) {
+      context.handle(
+        _logoImagePathMeta,
+        logoImagePath.isAcceptableOrUnknown(
+          data['logo_image_path']!,
+          _logoImagePathMeta,
+        ),
+      );
+    }
     if (data.containsKey('created_time')) {
       context.handle(
         _createdTimeMeta,
@@ -639,7 +655,7 @@ class $ShopInfoTableTable extends ShopInfoTable
       name: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}name'],
-      )!,
+      ),
       addressNo: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}address_no'],
@@ -735,6 +751,10 @@ class $ShopInfoTableTable extends ShopInfoTable
         DriftSqlType.string,
         data['${effectivePrefix}tax_i_d'],
       ),
+      logoImagePath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}logo_image_path'],
+      ),
       dataStatus: $ShopInfoTableTable.$converterdataStatus.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
@@ -744,7 +764,7 @@ class $ShopInfoTableTable extends ShopInfoTable
       createdTime: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_time'],
-      ),
+      )!,
       updatedTime: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}updated_time'],
@@ -780,7 +800,7 @@ class $ShopInfoTableTable extends ShopInfoTable
 class ShopInfoTableData extends DataClass
     implements Insertable<ShopInfoTableData> {
   final int id;
-  final String name;
+  final String? name;
   final String? addressNo;
   final String? addressVillage;
   final String? addressSoi;
@@ -804,14 +824,15 @@ class ShopInfoTableData extends DataClass
   final double? vatPercent;
   final bool includeVat;
   final String? taxID;
+  final String? logoImagePath;
   final DataStatus dataStatus;
-  final DateTime? createdTime;
+  final DateTime createdTime;
   final DateTime? updatedTime;
   final String? deviceID;
   final String? appVersion;
   const ShopInfoTableData({
     required this.id,
-    required this.name,
+    this.name,
     this.addressNo,
     this.addressVillage,
     this.addressSoi,
@@ -835,8 +856,9 @@ class ShopInfoTableData extends DataClass
     this.vatPercent,
     required this.includeVat,
     this.taxID,
+    this.logoImagePath,
     required this.dataStatus,
-    this.createdTime,
+    required this.createdTime,
     this.updatedTime,
     this.deviceID,
     this.appVersion,
@@ -845,7 +867,9 @@ class ShopInfoTableData extends DataClass
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
     if (!nullToAbsent || addressNo != null) {
       map['address_no'] = Variable<String>(addressNo);
     }
@@ -903,14 +927,15 @@ class ShopInfoTableData extends DataClass
     if (!nullToAbsent || taxID != null) {
       map['tax_i_d'] = Variable<String>(taxID);
     }
+    if (!nullToAbsent || logoImagePath != null) {
+      map['logo_image_path'] = Variable<String>(logoImagePath);
+    }
     {
       map['data_status'] = Variable<String>(
         $ShopInfoTableTable.$converterdataStatus.toSql(dataStatus),
       );
     }
-    if (!nullToAbsent || createdTime != null) {
-      map['created_time'] = Variable<DateTime>(createdTime);
-    }
+    map['created_time'] = Variable<DateTime>(createdTime);
     if (!nullToAbsent || updatedTime != null) {
       map['updated_time'] = Variable<DateTime>(updatedTime);
     }
@@ -926,7 +951,7 @@ class ShopInfoTableData extends DataClass
   ShopInfoTableCompanion toCompanion(bool nullToAbsent) {
     return ShopInfoTableCompanion(
       id: Value(id),
-      name: Value(name),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       addressNo: addressNo == null && nullToAbsent
           ? const Value.absent()
           : Value(addressNo),
@@ -980,10 +1005,11 @@ class ShopInfoTableData extends DataClass
       taxID: taxID == null && nullToAbsent
           ? const Value.absent()
           : Value(taxID),
-      dataStatus: Value(dataStatus),
-      createdTime: createdTime == null && nullToAbsent
+      logoImagePath: logoImagePath == null && nullToAbsent
           ? const Value.absent()
-          : Value(createdTime),
+          : Value(logoImagePath),
+      dataStatus: Value(dataStatus),
+      createdTime: Value(createdTime),
       updatedTime: updatedTime == null && nullToAbsent
           ? const Value.absent()
           : Value(updatedTime),
@@ -1003,7 +1029,7 @@ class ShopInfoTableData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ShopInfoTableData(
       id: serializer.fromJson<int>(json['id']),
-      name: serializer.fromJson<String>(json['name']),
+      name: serializer.fromJson<String?>(json['name']),
       addressNo: serializer.fromJson<String?>(json['addressNo']),
       addressVillage: serializer.fromJson<String?>(json['addressVillage']),
       addressSoi: serializer.fromJson<String?>(json['addressSoi']),
@@ -1036,10 +1062,11 @@ class ShopInfoTableData extends DataClass
       vatPercent: serializer.fromJson<double?>(json['vatPercent']),
       includeVat: serializer.fromJson<bool>(json['includeVat']),
       taxID: serializer.fromJson<String?>(json['taxID']),
+      logoImagePath: serializer.fromJson<String?>(json['logoImagePath']),
       dataStatus: $ShopInfoTableTable.$converterdataStatus.fromJson(
         serializer.fromJson<String>(json['dataStatus']),
       ),
-      createdTime: serializer.fromJson<DateTime?>(json['createdTime']),
+      createdTime: serializer.fromJson<DateTime>(json['createdTime']),
       updatedTime: serializer.fromJson<DateTime?>(json['updatedTime']),
       deviceID: serializer.fromJson<String?>(json['deviceID']),
       appVersion: serializer.fromJson<String?>(json['appVersion']),
@@ -1050,7 +1077,7 @@ class ShopInfoTableData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'name': serializer.toJson<String>(name),
+      'name': serializer.toJson<String?>(name),
       'addressNo': serializer.toJson<String?>(addressNo),
       'addressVillage': serializer.toJson<String?>(addressVillage),
       'addressSoi': serializer.toJson<String?>(addressSoi),
@@ -1078,10 +1105,11 @@ class ShopInfoTableData extends DataClass
       'vatPercent': serializer.toJson<double?>(vatPercent),
       'includeVat': serializer.toJson<bool>(includeVat),
       'taxID': serializer.toJson<String?>(taxID),
+      'logoImagePath': serializer.toJson<String?>(logoImagePath),
       'dataStatus': serializer.toJson<String>(
         $ShopInfoTableTable.$converterdataStatus.toJson(dataStatus),
       ),
-      'createdTime': serializer.toJson<DateTime?>(createdTime),
+      'createdTime': serializer.toJson<DateTime>(createdTime),
       'updatedTime': serializer.toJson<DateTime?>(updatedTime),
       'deviceID': serializer.toJson<String?>(deviceID),
       'appVersion': serializer.toJson<String?>(appVersion),
@@ -1090,7 +1118,7 @@ class ShopInfoTableData extends DataClass
 
   ShopInfoTableData copyWith({
     int? id,
-    String? name,
+    Value<String?> name = const Value.absent(),
     Value<String?> addressNo = const Value.absent(),
     Value<String?> addressVillage = const Value.absent(),
     Value<String?> addressSoi = const Value.absent(),
@@ -1114,14 +1142,15 @@ class ShopInfoTableData extends DataClass
     Value<double?> vatPercent = const Value.absent(),
     bool? includeVat,
     Value<String?> taxID = const Value.absent(),
+    Value<String?> logoImagePath = const Value.absent(),
     DataStatus? dataStatus,
-    Value<DateTime?> createdTime = const Value.absent(),
+    DateTime? createdTime,
     Value<DateTime?> updatedTime = const Value.absent(),
     Value<String?> deviceID = const Value.absent(),
     Value<String?> appVersion = const Value.absent(),
   }) => ShopInfoTableData(
     id: id ?? this.id,
-    name: name ?? this.name,
+    name: name.present ? name.value : this.name,
     addressNo: addressNo.present ? addressNo.value : this.addressNo,
     addressVillage: addressVillage.present
         ? addressVillage.value
@@ -1163,8 +1192,11 @@ class ShopInfoTableData extends DataClass
     vatPercent: vatPercent.present ? vatPercent.value : this.vatPercent,
     includeVat: includeVat ?? this.includeVat,
     taxID: taxID.present ? taxID.value : this.taxID,
+    logoImagePath: logoImagePath.present
+        ? logoImagePath.value
+        : this.logoImagePath,
     dataStatus: dataStatus ?? this.dataStatus,
-    createdTime: createdTime.present ? createdTime.value : this.createdTime,
+    createdTime: createdTime ?? this.createdTime,
     updatedTime: updatedTime.present ? updatedTime.value : this.updatedTime,
     deviceID: deviceID.present ? deviceID.value : this.deviceID,
     appVersion: appVersion.present ? appVersion.value : this.appVersion,
@@ -1232,6 +1264,9 @@ class ShopInfoTableData extends DataClass
           ? data.includeVat.value
           : this.includeVat,
       taxID: data.taxID.present ? data.taxID.value : this.taxID,
+      logoImagePath: data.logoImagePath.present
+          ? data.logoImagePath.value
+          : this.logoImagePath,
       dataStatus: data.dataStatus.present
           ? data.dataStatus.value
           : this.dataStatus,
@@ -1276,6 +1311,7 @@ class ShopInfoTableData extends DataClass
           ..write('vatPercent: $vatPercent, ')
           ..write('includeVat: $includeVat, ')
           ..write('taxID: $taxID, ')
+          ..write('logoImagePath: $logoImagePath, ')
           ..write('dataStatus: $dataStatus, ')
           ..write('createdTime: $createdTime, ')
           ..write('updatedTime: $updatedTime, ')
@@ -1312,6 +1348,7 @@ class ShopInfoTableData extends DataClass
     vatPercent,
     includeVat,
     taxID,
+    logoImagePath,
     dataStatus,
     createdTime,
     updatedTime,
@@ -1347,6 +1384,7 @@ class ShopInfoTableData extends DataClass
           other.vatPercent == this.vatPercent &&
           other.includeVat == this.includeVat &&
           other.taxID == this.taxID &&
+          other.logoImagePath == this.logoImagePath &&
           other.dataStatus == this.dataStatus &&
           other.createdTime == this.createdTime &&
           other.updatedTime == this.updatedTime &&
@@ -1356,7 +1394,7 @@ class ShopInfoTableData extends DataClass
 
 class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
   final Value<int> id;
-  final Value<String> name;
+  final Value<String?> name;
   final Value<String?> addressNo;
   final Value<String?> addressVillage;
   final Value<String?> addressSoi;
@@ -1380,8 +1418,9 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
   final Value<double?> vatPercent;
   final Value<bool> includeVat;
   final Value<String?> taxID;
+  final Value<String?> logoImagePath;
   final Value<DataStatus> dataStatus;
-  final Value<DateTime?> createdTime;
+  final Value<DateTime> createdTime;
   final Value<DateTime?> updatedTime;
   final Value<String?> deviceID;
   final Value<String?> appVersion;
@@ -1411,6 +1450,7 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
     this.vatPercent = const Value.absent(),
     this.includeVat = const Value.absent(),
     this.taxID = const Value.absent(),
+    this.logoImagePath = const Value.absent(),
     this.dataStatus = const Value.absent(),
     this.createdTime = const Value.absent(),
     this.updatedTime = const Value.absent(),
@@ -1419,7 +1459,7 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
   });
   ShopInfoTableCompanion.insert({
     this.id = const Value.absent(),
-    required String name,
+    this.name = const Value.absent(),
     this.addressNo = const Value.absent(),
     this.addressVillage = const Value.absent(),
     this.addressSoi = const Value.absent(),
@@ -1443,12 +1483,13 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
     this.vatPercent = const Value.absent(),
     this.includeVat = const Value.absent(),
     this.taxID = const Value.absent(),
+    this.logoImagePath = const Value.absent(),
     this.dataStatus = const Value.absent(),
     this.createdTime = const Value.absent(),
     this.updatedTime = const Value.absent(),
     this.deviceID = const Value.absent(),
     this.appVersion = const Value.absent(),
-  }) : name = Value(name);
+  });
   static Insertable<ShopInfoTableData> custom({
     Expression<int>? id,
     Expression<String>? name,
@@ -1475,6 +1516,7 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
     Expression<double>? vatPercent,
     Expression<bool>? includeVat,
     Expression<String>? taxID,
+    Expression<String>? logoImagePath,
     Expression<String>? dataStatus,
     Expression<DateTime>? createdTime,
     Expression<DateTime>? updatedTime,
@@ -1511,6 +1553,7 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
       if (vatPercent != null) 'vat_percent': vatPercent,
       if (includeVat != null) 'include_vat': includeVat,
       if (taxID != null) 'tax_i_d': taxID,
+      if (logoImagePath != null) 'logo_image_path': logoImagePath,
       if (dataStatus != null) 'data_status': dataStatus,
       if (createdTime != null) 'created_time': createdTime,
       if (updatedTime != null) 'updated_time': updatedTime,
@@ -1521,7 +1564,7 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
 
   ShopInfoTableCompanion copyWith({
     Value<int>? id,
-    Value<String>? name,
+    Value<String?>? name,
     Value<String?>? addressNo,
     Value<String?>? addressVillage,
     Value<String?>? addressSoi,
@@ -1545,8 +1588,9 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
     Value<double?>? vatPercent,
     Value<bool>? includeVat,
     Value<String?>? taxID,
+    Value<String?>? logoImagePath,
     Value<DataStatus>? dataStatus,
-    Value<DateTime?>? createdTime,
+    Value<DateTime>? createdTime,
     Value<DateTime?>? updatedTime,
     Value<String?>? deviceID,
     Value<String?>? appVersion,
@@ -1577,6 +1621,7 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
       vatPercent: vatPercent ?? this.vatPercent,
       includeVat: includeVat ?? this.includeVat,
       taxID: taxID ?? this.taxID,
+      logoImagePath: logoImagePath ?? this.logoImagePath,
       dataStatus: dataStatus ?? this.dataStatus,
       createdTime: createdTime ?? this.createdTime,
       updatedTime: updatedTime ?? this.updatedTime,
@@ -1671,6 +1716,9 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
     if (taxID.present) {
       map['tax_i_d'] = Variable<String>(taxID.value);
     }
+    if (logoImagePath.present) {
+      map['logo_image_path'] = Variable<String>(logoImagePath.value);
+    }
     if (dataStatus.present) {
       map['data_status'] = Variable<String>(
         $ShopInfoTableTable.$converterdataStatus.toSql(dataStatus.value),
@@ -1719,6 +1767,7 @@ class ShopInfoTableCompanion extends UpdateCompanion<ShopInfoTableData> {
           ..write('vatPercent: $vatPercent, ')
           ..write('includeVat: $includeVat, ')
           ..write('taxID: $taxID, ')
+          ..write('logoImagePath: $logoImagePath, ')
           ..write('dataStatus: $dataStatus, ')
           ..write('createdTime: $createdTime, ')
           ..write('updatedTime: $updatedTime, ')
@@ -1767,9 +1816,9 @@ class $ShopPhoneTableTable extends ShopPhoneTable
   late final GeneratedColumn<String> phoneNo = GeneratedColumn<String>(
     'phone_no',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _noteMeta = const VerificationMeta('note');
   @override
@@ -1797,9 +1846,10 @@ class $ShopPhoneTableTable extends ShopPhoneTable
   late final GeneratedColumn<DateTime> createdTime = GeneratedColumn<DateTime>(
     'created_time',
     aliasedName,
-    true,
+    false,
     type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
   );
   static const VerificationMeta _updatedTimeMeta = const VerificationMeta(
     'updatedTime',
@@ -1874,8 +1924,6 @@ class $ShopPhoneTableTable extends ShopPhoneTable
         _phoneNoMeta,
         phoneNo.isAcceptableOrUnknown(data['phone_no']!, _phoneNoMeta),
       );
-    } else if (isInserting) {
-      context.missing(_phoneNoMeta);
     }
     if (data.containsKey('note')) {
       context.handle(
@@ -1933,7 +1981,7 @@ class $ShopPhoneTableTable extends ShopPhoneTable
       phoneNo: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}phone_no'],
-      )!,
+      ),
       note: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}note'],
@@ -1947,7 +1995,7 @@ class $ShopPhoneTableTable extends ShopPhoneTable
       createdTime: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_time'],
-      ),
+      )!,
       updatedTime: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}updated_time'],
@@ -1976,20 +2024,20 @@ class ShopPhoneTableData extends DataClass
     implements Insertable<ShopPhoneTableData> {
   final int id;
   final int shopID;
-  final String phoneNo;
+  final String? phoneNo;
   final String? note;
   final DataStatus dataStatus;
-  final DateTime? createdTime;
+  final DateTime createdTime;
   final DateTime? updatedTime;
   final String? deviceID;
   final String? appVersion;
   const ShopPhoneTableData({
     required this.id,
     required this.shopID,
-    required this.phoneNo,
+    this.phoneNo,
     this.note,
     required this.dataStatus,
-    this.createdTime,
+    required this.createdTime,
     this.updatedTime,
     this.deviceID,
     this.appVersion,
@@ -1999,7 +2047,9 @@ class ShopPhoneTableData extends DataClass
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['shop_i_d'] = Variable<int>(shopID);
-    map['phone_no'] = Variable<String>(phoneNo);
+    if (!nullToAbsent || phoneNo != null) {
+      map['phone_no'] = Variable<String>(phoneNo);
+    }
     if (!nullToAbsent || note != null) {
       map['note'] = Variable<String>(note);
     }
@@ -2008,9 +2058,7 @@ class ShopPhoneTableData extends DataClass
         $ShopPhoneTableTable.$converterdataStatus.toSql(dataStatus),
       );
     }
-    if (!nullToAbsent || createdTime != null) {
-      map['created_time'] = Variable<DateTime>(createdTime);
-    }
+    map['created_time'] = Variable<DateTime>(createdTime);
     if (!nullToAbsent || updatedTime != null) {
       map['updated_time'] = Variable<DateTime>(updatedTime);
     }
@@ -2027,12 +2075,12 @@ class ShopPhoneTableData extends DataClass
     return ShopPhoneTableCompanion(
       id: Value(id),
       shopID: Value(shopID),
-      phoneNo: Value(phoneNo),
+      phoneNo: phoneNo == null && nullToAbsent
+          ? const Value.absent()
+          : Value(phoneNo),
       note: note == null && nullToAbsent ? const Value.absent() : Value(note),
       dataStatus: Value(dataStatus),
-      createdTime: createdTime == null && nullToAbsent
-          ? const Value.absent()
-          : Value(createdTime),
+      createdTime: Value(createdTime),
       updatedTime: updatedTime == null && nullToAbsent
           ? const Value.absent()
           : Value(updatedTime),
@@ -2053,12 +2101,12 @@ class ShopPhoneTableData extends DataClass
     return ShopPhoneTableData(
       id: serializer.fromJson<int>(json['id']),
       shopID: serializer.fromJson<int>(json['shopID']),
-      phoneNo: serializer.fromJson<String>(json['phoneNo']),
+      phoneNo: serializer.fromJson<String?>(json['phoneNo']),
       note: serializer.fromJson<String?>(json['note']),
       dataStatus: $ShopPhoneTableTable.$converterdataStatus.fromJson(
         serializer.fromJson<String>(json['dataStatus']),
       ),
-      createdTime: serializer.fromJson<DateTime?>(json['createdTime']),
+      createdTime: serializer.fromJson<DateTime>(json['createdTime']),
       updatedTime: serializer.fromJson<DateTime?>(json['updatedTime']),
       deviceID: serializer.fromJson<String?>(json['deviceID']),
       appVersion: serializer.fromJson<String?>(json['appVersion']),
@@ -2070,12 +2118,12 @@ class ShopPhoneTableData extends DataClass
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'shopID': serializer.toJson<int>(shopID),
-      'phoneNo': serializer.toJson<String>(phoneNo),
+      'phoneNo': serializer.toJson<String?>(phoneNo),
       'note': serializer.toJson<String?>(note),
       'dataStatus': serializer.toJson<String>(
         $ShopPhoneTableTable.$converterdataStatus.toJson(dataStatus),
       ),
-      'createdTime': serializer.toJson<DateTime?>(createdTime),
+      'createdTime': serializer.toJson<DateTime>(createdTime),
       'updatedTime': serializer.toJson<DateTime?>(updatedTime),
       'deviceID': serializer.toJson<String?>(deviceID),
       'appVersion': serializer.toJson<String?>(appVersion),
@@ -2085,20 +2133,20 @@ class ShopPhoneTableData extends DataClass
   ShopPhoneTableData copyWith({
     int? id,
     int? shopID,
-    String? phoneNo,
+    Value<String?> phoneNo = const Value.absent(),
     Value<String?> note = const Value.absent(),
     DataStatus? dataStatus,
-    Value<DateTime?> createdTime = const Value.absent(),
+    DateTime? createdTime,
     Value<DateTime?> updatedTime = const Value.absent(),
     Value<String?> deviceID = const Value.absent(),
     Value<String?> appVersion = const Value.absent(),
   }) => ShopPhoneTableData(
     id: id ?? this.id,
     shopID: shopID ?? this.shopID,
-    phoneNo: phoneNo ?? this.phoneNo,
+    phoneNo: phoneNo.present ? phoneNo.value : this.phoneNo,
     note: note.present ? note.value : this.note,
     dataStatus: dataStatus ?? this.dataStatus,
-    createdTime: createdTime.present ? createdTime.value : this.createdTime,
+    createdTime: createdTime ?? this.createdTime,
     updatedTime: updatedTime.present ? updatedTime.value : this.updatedTime,
     deviceID: deviceID.present ? deviceID.value : this.deviceID,
     appVersion: appVersion.present ? appVersion.value : this.appVersion,
@@ -2171,10 +2219,10 @@ class ShopPhoneTableData extends DataClass
 class ShopPhoneTableCompanion extends UpdateCompanion<ShopPhoneTableData> {
   final Value<int> id;
   final Value<int> shopID;
-  final Value<String> phoneNo;
+  final Value<String?> phoneNo;
   final Value<String?> note;
   final Value<DataStatus> dataStatus;
-  final Value<DateTime?> createdTime;
+  final Value<DateTime> createdTime;
   final Value<DateTime?> updatedTime;
   final Value<String?> deviceID;
   final Value<String?> appVersion;
@@ -2192,15 +2240,14 @@ class ShopPhoneTableCompanion extends UpdateCompanion<ShopPhoneTableData> {
   ShopPhoneTableCompanion.insert({
     this.id = const Value.absent(),
     required int shopID,
-    required String phoneNo,
+    this.phoneNo = const Value.absent(),
     this.note = const Value.absent(),
     this.dataStatus = const Value.absent(),
     this.createdTime = const Value.absent(),
     this.updatedTime = const Value.absent(),
     this.deviceID = const Value.absent(),
     this.appVersion = const Value.absent(),
-  }) : shopID = Value(shopID),
-       phoneNo = Value(phoneNo);
+  }) : shopID = Value(shopID);
   static Insertable<ShopPhoneTableData> custom({
     Expression<int>? id,
     Expression<int>? shopID,
@@ -2228,10 +2275,10 @@ class ShopPhoneTableCompanion extends UpdateCompanion<ShopPhoneTableData> {
   ShopPhoneTableCompanion copyWith({
     Value<int>? id,
     Value<int>? shopID,
-    Value<String>? phoneNo,
+    Value<String?>? phoneNo,
     Value<String?>? note,
     Value<DataStatus>? dataStatus,
-    Value<DateTime?>? createdTime,
+    Value<DateTime>? createdTime,
     Value<DateTime?>? updatedTime,
     Value<String?>? deviceID,
     Value<String?>? appVersion,
@@ -2319,7 +2366,7 @@ abstract class _$Database extends GeneratedDatabase {
 typedef $$ShopInfoTableTableCreateCompanionBuilder =
     ShopInfoTableCompanion Function({
       Value<int> id,
-      required String name,
+      Value<String?> name,
       Value<String?> addressNo,
       Value<String?> addressVillage,
       Value<String?> addressSoi,
@@ -2343,8 +2390,9 @@ typedef $$ShopInfoTableTableCreateCompanionBuilder =
       Value<double?> vatPercent,
       Value<bool> includeVat,
       Value<String?> taxID,
+      Value<String?> logoImagePath,
       Value<DataStatus> dataStatus,
-      Value<DateTime?> createdTime,
+      Value<DateTime> createdTime,
       Value<DateTime?> updatedTime,
       Value<String?> deviceID,
       Value<String?> appVersion,
@@ -2352,7 +2400,7 @@ typedef $$ShopInfoTableTableCreateCompanionBuilder =
 typedef $$ShopInfoTableTableUpdateCompanionBuilder =
     ShopInfoTableCompanion Function({
       Value<int> id,
-      Value<String> name,
+      Value<String?> name,
       Value<String?> addressNo,
       Value<String?> addressVillage,
       Value<String?> addressSoi,
@@ -2376,8 +2424,9 @@ typedef $$ShopInfoTableTableUpdateCompanionBuilder =
       Value<double?> vatPercent,
       Value<bool> includeVat,
       Value<String?> taxID,
+      Value<String?> logoImagePath,
       Value<DataStatus> dataStatus,
-      Value<DateTime?> createdTime,
+      Value<DateTime> createdTime,
       Value<DateTime?> updatedTime,
       Value<String?> deviceID,
       Value<String?> appVersion,
@@ -2549,6 +2598,11 @@ class $$ShopInfoTableTableFilterComposer
 
   ColumnFilters<String> get taxID => $composableBuilder(
     column: $table.taxID,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get logoImagePath => $composableBuilder(
+    column: $table.logoImagePath,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2738,6 +2792,11 @@ class $$ShopInfoTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get logoImagePath => $composableBuilder(
+    column: $table.logoImagePath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get dataStatus => $composableBuilder(
     column: $table.dataStatus,
     builder: (column) => ColumnOrderings(column),
@@ -2885,6 +2944,11 @@ class $$ShopInfoTableTableAnnotationComposer
   GeneratedColumn<String> get taxID =>
       $composableBuilder(column: $table.taxID, builder: (column) => column);
 
+  GeneratedColumn<String> get logoImagePath => $composableBuilder(
+    column: $table.logoImagePath,
+    builder: (column) => column,
+  );
+
   GeneratedColumnWithTypeConverter<DataStatus, String> get dataStatus =>
       $composableBuilder(
         column: $table.dataStatus,
@@ -2964,7 +3028,7 @@ class $$ShopInfoTableTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                Value<String> name = const Value.absent(),
+                Value<String?> name = const Value.absent(),
                 Value<String?> addressNo = const Value.absent(),
                 Value<String?> addressVillage = const Value.absent(),
                 Value<String?> addressSoi = const Value.absent(),
@@ -2989,8 +3053,9 @@ class $$ShopInfoTableTableTableManager
                 Value<double?> vatPercent = const Value.absent(),
                 Value<bool> includeVat = const Value.absent(),
                 Value<String?> taxID = const Value.absent(),
+                Value<String?> logoImagePath = const Value.absent(),
                 Value<DataStatus> dataStatus = const Value.absent(),
-                Value<DateTime?> createdTime = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
                 Value<DateTime?> updatedTime = const Value.absent(),
                 Value<String?> deviceID = const Value.absent(),
                 Value<String?> appVersion = const Value.absent(),
@@ -3020,6 +3085,7 @@ class $$ShopInfoTableTableTableManager
                 vatPercent: vatPercent,
                 includeVat: includeVat,
                 taxID: taxID,
+                logoImagePath: logoImagePath,
                 dataStatus: dataStatus,
                 createdTime: createdTime,
                 updatedTime: updatedTime,
@@ -3029,7 +3095,7 @@ class $$ShopInfoTableTableTableManager
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                required String name,
+                Value<String?> name = const Value.absent(),
                 Value<String?> addressNo = const Value.absent(),
                 Value<String?> addressVillage = const Value.absent(),
                 Value<String?> addressSoi = const Value.absent(),
@@ -3054,8 +3120,9 @@ class $$ShopInfoTableTableTableManager
                 Value<double?> vatPercent = const Value.absent(),
                 Value<bool> includeVat = const Value.absent(),
                 Value<String?> taxID = const Value.absent(),
+                Value<String?> logoImagePath = const Value.absent(),
                 Value<DataStatus> dataStatus = const Value.absent(),
-                Value<DateTime?> createdTime = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
                 Value<DateTime?> updatedTime = const Value.absent(),
                 Value<String?> deviceID = const Value.absent(),
                 Value<String?> appVersion = const Value.absent(),
@@ -3085,6 +3152,7 @@ class $$ShopInfoTableTableTableManager
                 vatPercent: vatPercent,
                 includeVat: includeVat,
                 taxID: taxID,
+                logoImagePath: logoImagePath,
                 dataStatus: dataStatus,
                 createdTime: createdTime,
                 updatedTime: updatedTime,
@@ -3153,10 +3221,10 @@ typedef $$ShopPhoneTableTableCreateCompanionBuilder =
     ShopPhoneTableCompanion Function({
       Value<int> id,
       required int shopID,
-      required String phoneNo,
+      Value<String?> phoneNo,
       Value<String?> note,
       Value<DataStatus> dataStatus,
-      Value<DateTime?> createdTime,
+      Value<DateTime> createdTime,
       Value<DateTime?> updatedTime,
       Value<String?> deviceID,
       Value<String?> appVersion,
@@ -3165,10 +3233,10 @@ typedef $$ShopPhoneTableTableUpdateCompanionBuilder =
     ShopPhoneTableCompanion Function({
       Value<int> id,
       Value<int> shopID,
-      Value<String> phoneNo,
+      Value<String?> phoneNo,
       Value<String?> note,
       Value<DataStatus> dataStatus,
-      Value<DateTime?> createdTime,
+      Value<DateTime> createdTime,
       Value<DateTime?> updatedTime,
       Value<String?> deviceID,
       Value<String?> appVersion,
@@ -3446,10 +3514,10 @@ class $$ShopPhoneTableTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<int> shopID = const Value.absent(),
-                Value<String> phoneNo = const Value.absent(),
+                Value<String?> phoneNo = const Value.absent(),
                 Value<String?> note = const Value.absent(),
                 Value<DataStatus> dataStatus = const Value.absent(),
-                Value<DateTime?> createdTime = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
                 Value<DateTime?> updatedTime = const Value.absent(),
                 Value<String?> deviceID = const Value.absent(),
                 Value<String?> appVersion = const Value.absent(),
@@ -3468,10 +3536,10 @@ class $$ShopPhoneTableTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 required int shopID,
-                required String phoneNo,
+                Value<String?> phoneNo = const Value.absent(),
                 Value<String?> note = const Value.absent(),
                 Value<DataStatus> dataStatus = const Value.absent(),
-                Value<DateTime?> createdTime = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
                 Value<DateTime?> updatedTime = const Value.absent(),
                 Value<String?> deviceID = const Value.absent(),
                 Value<String?> appVersion = const Value.absent(),

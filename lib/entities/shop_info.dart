@@ -21,6 +21,7 @@ class ShopInfo extends BaseClass {
   final double? vatPercent;
   final bool includeVat;
   final String? taxID;
+  final String? logoImagePath;
   ShopInfo({
     this.id,
     this.name,
@@ -39,6 +40,7 @@ class ShopInfo extends BaseClass {
     this.vatPercent,
     this.includeVat = false,
     this.taxID,
+    this.logoImagePath,
     super.dataStatus,
     super.createdTime,
     super.updatedTime,
@@ -64,6 +66,7 @@ class ShopInfo extends BaseClass {
     double? vatPercent,
     bool? includeVat,
     String? taxID,
+    String? logoImagePath,
     DataStatus? dataStatus,
     DateTime? createdTime,
     DateTime? updatedTime,
@@ -88,6 +91,7 @@ class ShopInfo extends BaseClass {
       vatPercent: vatPercent ?? this.vatPercent,
       includeVat: includeVat ?? this.includeVat,
       taxID: taxID ?? this.taxID,
+      logoImagePath: logoImagePath ?? this.logoImagePath,
       dataStatus: dataStatus ?? this.dataStatus,
       createdTime: createdTime ?? this.createdTime,
       updatedTime: updatedTime ?? this.updatedTime,
@@ -117,7 +121,8 @@ class ShopInfo extends BaseClass {
         other.vatInside == vatInside &&
         other.vatPercent == vatPercent &&
         other.includeVat == includeVat &&
-        other.taxID == taxID;
+        other.taxID == taxID &&
+        other.logoImagePath == logoImagePath;
   }
 
   @override
@@ -138,7 +143,8 @@ class ShopInfo extends BaseClass {
         vatInside.hashCode ^
         vatPercent.hashCode ^
         includeVat.hashCode ^
-        taxID.hashCode;
+        taxID.hashCode ^
+        logoImagePath.hashCode;
   }
 
   @override
