@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:justorder/core/utilities/func_utils.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
@@ -40,7 +39,7 @@ class ImageStorageLocalRepository {
                 ? path.basename(saveImage.path)
                 : path.join(subFolder, path.basename(saveImage.path)))
           : saveImage.path;
-      print('returnPath : $returnPath');
+      // print('returnPath : $returnPath');
       return Result<String>(success: returnPath);
     } catch (e) {
       return Result<String>(
@@ -50,13 +49,13 @@ class ImageStorageLocalRepository {
   }
 
   Future<Result<ImageBase>> loadImageLocal(String filePath, {bool useRelativePath = true}) async {
-    print('filePath : $filePath');
+    // print('filePath : $filePath');
     String imgPath = filePath;
     if (useRelativePath && filePath.isNotEmpty) {
       final dir = await _getDefaultDirectory();
       imgPath = path.join(dir.path, filePath);
     }
-    print('imgPath : $imgPath');
+    // print('imgPath : $imgPath');
     return _loadImageFromPath(imgPath);
   }
 
@@ -64,11 +63,11 @@ class ImageStorageLocalRepository {
     File? imageFile;
     String imageStr;
     try {
-      debugPrint('filePath : $filePath');
+      // debugPrint('filePath : $filePath');
       imageFile = File(filePath);
       imageStr = ImageConverter.fileToBase64String(imageFile);
     } catch (e) {
-      debugPrint('Error : ${e.toString()}');
+      // debugPrint('Error : ${e.toString()}');
       return Result<ImageBase>(
         error: Failure(message: e.toString(), stackTrace: StackTrace.current),
       );

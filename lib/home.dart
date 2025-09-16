@@ -36,7 +36,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   final _pageController = PageController();
   final _editModeNotifier = ValueNotifier<bool>(false);
   final _textEditController = TextEditingController();
-  final _focusNode = FocusNode();
   final List<double> _scales = ScalesValue.toList();
 
   int _scaleToIndex(double scaleFactor) {

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path/path.dart' as path;
 
 import '../core/data/repositories/image_storage_local_repo.dart';
 import '../core/providers/image_local_storage_provider.dart';
@@ -32,15 +33,19 @@ class ShopInfoViewModel extends StateNotifier<ShopInfo?> {
     return result;
   }
 
+  String _getLogoPath(int shopID) => path.join('$shopID', 'logo');
+
   Future<Result<bool>> createShop(ShopInfo shop, {File? logoFile}) async {
     int? newID;
     String? logoPath;
     if (logoFile != null) {
       final idResult = await repo.getLastShopID();
       newID = (idResult.success ?? 0) + 1;
-      final result = await imageRepo.saveImageLocal(logoFile, subFolder: newID.toString());
+      final subLogoPath = _getLogoPath(newID);
+      print('subLogoPath : $subLogoPath');
+      final result = await imageRepo.saveImageLocal(logoFile, subFolder: subLogoPath);
       if (result.hasError) {
-        print('Error : ${result.error?.message}');
+        // print('Error : ${result.error?.message}');
         return Result<bool>(
           success: false,
           error: Failure(message: 'เกิดข้อผิดพลาด ไม่สามารถบันทึกไฟล์ภาพได้'),
@@ -48,10 +53,10 @@ class ShopInfoViewModel extends StateNotifier<ShopInfo?> {
       }
       logoPath = result.success;
     }
-    print('logoPath : $logoPath');
+    // print('logoPath : $logoPath');
     final shopInfo = shop.copyWith(id: newID, logoImagePath: logoPath);
     final result = await repo.createShop(shopInfo);
-    print('createShop Error : ${result.error?.message}');
+    // print('createShop Error : ${result.error?.message}');
     if (result.hasError) return Result<bool>(success: false, error: result.error);
     state = result.success;
     return const Result<bool>(success: true);
@@ -60,7 +65,9 @@ class ShopInfoViewModel extends StateNotifier<ShopInfo?> {
   Future<Result<bool>> updateShop(ShopInfo shop, {File? logoFile}) async {
     String? logoPath;
     if (logoFile != null) {
-      final result = await imageRepo.saveImageLocal(logoFile, subFolder: '${shop.id}');
+      final subLogoPath = _getLogoPath(shop.id ?? 0);
+      print('subLogoPath : $subLogoPath');
+      final result = await imageRepo.saveImageLocal(logoFile, subFolder: subLogoPath);
       if (result.hasError) {
         return Result<bool>(
           success: false,

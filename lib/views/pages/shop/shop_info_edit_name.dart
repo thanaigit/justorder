@@ -51,7 +51,6 @@ class _ShopInfoEditNamePageState extends ConsumerState<ShopInfoEditNamePage> {
 
   @override
   Widget build(BuildContext context) {
-    final shop = ref.watch(shopInfoViewModelProvider);
     final headerStyle = AppTextStyles.headerMediumStyle(
       context,
       color: AppColors.criticalHighlight,
