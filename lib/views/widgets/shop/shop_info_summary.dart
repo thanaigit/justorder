@@ -153,13 +153,14 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
                       suffixIcon: nameButtons(),
                       onFieldSubmitted: (value) => saveShopName(),
                     )
-                  : Padding(
-                      padding: const EdgeInsets.only(bottom: 0.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
+                  : Stack(
+                      // mainAxisSize: MainAxisSize.min,
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      alignment: AlignmentDirectional.centerEnd,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                          child: Text(
                             shop?.name ?? 'กำหนดชื่อร้าน',
                             overflow: TextOverflow.ellipsis,
                             style: AppTextStyles.headerStyle(
@@ -169,21 +170,21 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
                               color: nameExists ? AppColors.infoEmphasize : AppColors.titlePale,
                             ),
                           ),
-                          const Gap.width(GapSize.dense),
-                          GestureDetector(
-                            onTap: () {
-                              _editNameController.text = shop?.name ?? '';
-                              _editNameNotifier.value = true;
-                              _focusNode.requestFocus();
-                            },
-                            child: Icon(
-                              Icons.edit,
-                              color: AppColors.titlePale,
-                              size: AppSize.iconSmall,
-                            ),
+                        ),
+                        // const Gap.width(GapSize.dense),
+                        GestureDetector(
+                          onTap: () {
+                            _editNameController.text = shop?.name ?? '';
+                            _editNameNotifier.value = true;
+                            _focusNode.requestFocus();
+                          },
+                          child: Icon(
+                            Icons.edit,
+                            color: AppColors.titlePale,
+                            size: AppSize.iconSmall,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     );
             },
           ),
