@@ -2348,11 +2348,718 @@ class ShopPhoneTableCompanion extends UpdateCompanion<ShopPhoneTableData> {
   }
 }
 
+class $ShopTableTableTable extends ShopTableTable
+    with TableInfo<$ShopTableTableTable, ShopTableTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ShopTableTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _shopIDMeta = const VerificationMeta('shopID');
+  @override
+  late final GeneratedColumn<int> shopID = GeneratedColumn<int>(
+    'shop_i_d',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES shop_info_table (id)',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noMeta = const VerificationMeta('no');
+  @override
+  late final GeneratedColumn<int> no = GeneratedColumn<int>(
+    'no',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _zoneMeta = const VerificationMeta('zone');
+  @override
+  late final GeneratedColumn<String> zone = GeneratedColumn<String>(
+    'zone',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _seatNumberMeta = const VerificationMeta(
+    'seatNumber',
+  );
+  @override
+  late final GeneratedColumn<int> seatNumber = GeneratedColumn<int>(
+    'seat_number',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _closedMeta = const VerificationMeta('closed');
+  @override
+  late final GeneratedColumn<bool> closed = GeneratedColumn<bool>(
+    'closed',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("closed" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DataStatus, String> dataStatus =
+      GeneratedColumn<String>(
+        'data_status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: Constant(DataStatus.active.text),
+      ).withConverter<DataStatus>($ShopTableTableTable.$converterdataStatus);
+  static const VerificationMeta _createdTimeMeta = const VerificationMeta(
+    'createdTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdTime = GeneratedColumn<DateTime>(
+    'created_time',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedTimeMeta = const VerificationMeta(
+    'updatedTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedTime = GeneratedColumn<DateTime>(
+    'updated_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _deviceIDMeta = const VerificationMeta(
+    'deviceID',
+  );
+  @override
+  late final GeneratedColumn<String> deviceID = GeneratedColumn<String>(
+    'device_i_d',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _appVersionMeta = const VerificationMeta(
+    'appVersion',
+  );
+  @override
+  late final GeneratedColumn<String> appVersion = GeneratedColumn<String>(
+    'app_version',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    shopID,
+    name,
+    no,
+    zone,
+    seatNumber,
+    closed,
+    dataStatus,
+    createdTime,
+    updatedTime,
+    deviceID,
+    appVersion,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'shop_table_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ShopTableTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('shop_i_d')) {
+      context.handle(
+        _shopIDMeta,
+        shopID.isAcceptableOrUnknown(data['shop_i_d']!, _shopIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_shopIDMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    }
+    if (data.containsKey('no')) {
+      context.handle(_noMeta, no.isAcceptableOrUnknown(data['no']!, _noMeta));
+    }
+    if (data.containsKey('zone')) {
+      context.handle(
+        _zoneMeta,
+        zone.isAcceptableOrUnknown(data['zone']!, _zoneMeta),
+      );
+    }
+    if (data.containsKey('seat_number')) {
+      context.handle(
+        _seatNumberMeta,
+        seatNumber.isAcceptableOrUnknown(data['seat_number']!, _seatNumberMeta),
+      );
+    }
+    if (data.containsKey('closed')) {
+      context.handle(
+        _closedMeta,
+        closed.isAcceptableOrUnknown(data['closed']!, _closedMeta),
+      );
+    }
+    if (data.containsKey('created_time')) {
+      context.handle(
+        _createdTimeMeta,
+        createdTime.isAcceptableOrUnknown(
+          data['created_time']!,
+          _createdTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('updated_time')) {
+      context.handle(
+        _updatedTimeMeta,
+        updatedTime.isAcceptableOrUnknown(
+          data['updated_time']!,
+          _updatedTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('device_i_d')) {
+      context.handle(
+        _deviceIDMeta,
+        deviceID.isAcceptableOrUnknown(data['device_i_d']!, _deviceIDMeta),
+      );
+    }
+    if (data.containsKey('app_version')) {
+      context.handle(
+        _appVersionMeta,
+        appVersion.isAcceptableOrUnknown(data['app_version']!, _appVersionMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ShopTableTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ShopTableTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      shopID: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}shop_i_d'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      ),
+      no: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}no'],
+      ),
+      zone: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}zone'],
+      ),
+      seatNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}seat_number'],
+      ),
+      closed: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}closed'],
+      )!,
+      dataStatus: $ShopTableTableTable.$converterdataStatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}data_status'],
+        )!,
+      ),
+      createdTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_time'],
+      )!,
+      updatedTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_time'],
+      ),
+      deviceID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}device_i_d'],
+      ),
+      appVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}app_version'],
+      ),
+    );
+  }
+
+  @override
+  $ShopTableTableTable createAlias(String alias) {
+    return $ShopTableTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<DataStatus, String, String> $converterdataStatus =
+      const EnumNameConverter<DataStatus>(DataStatus.values);
+}
+
+class ShopTableTableData extends DataClass
+    implements Insertable<ShopTableTableData> {
+  final int id;
+  final int shopID;
+  final String? name;
+  final int? no;
+  final String? zone;
+  final int? seatNumber;
+  final bool closed;
+  final DataStatus dataStatus;
+  final DateTime createdTime;
+  final DateTime? updatedTime;
+  final String? deviceID;
+  final String? appVersion;
+  const ShopTableTableData({
+    required this.id,
+    required this.shopID,
+    this.name,
+    this.no,
+    this.zone,
+    this.seatNumber,
+    required this.closed,
+    required this.dataStatus,
+    required this.createdTime,
+    this.updatedTime,
+    this.deviceID,
+    this.appVersion,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['shop_i_d'] = Variable<int>(shopID);
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    if (!nullToAbsent || no != null) {
+      map['no'] = Variable<int>(no);
+    }
+    if (!nullToAbsent || zone != null) {
+      map['zone'] = Variable<String>(zone);
+    }
+    if (!nullToAbsent || seatNumber != null) {
+      map['seat_number'] = Variable<int>(seatNumber);
+    }
+    map['closed'] = Variable<bool>(closed);
+    {
+      map['data_status'] = Variable<String>(
+        $ShopTableTableTable.$converterdataStatus.toSql(dataStatus),
+      );
+    }
+    map['created_time'] = Variable<DateTime>(createdTime);
+    if (!nullToAbsent || updatedTime != null) {
+      map['updated_time'] = Variable<DateTime>(updatedTime);
+    }
+    if (!nullToAbsent || deviceID != null) {
+      map['device_i_d'] = Variable<String>(deviceID);
+    }
+    if (!nullToAbsent || appVersion != null) {
+      map['app_version'] = Variable<String>(appVersion);
+    }
+    return map;
+  }
+
+  ShopTableTableCompanion toCompanion(bool nullToAbsent) {
+    return ShopTableTableCompanion(
+      id: Value(id),
+      shopID: Value(shopID),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      no: no == null && nullToAbsent ? const Value.absent() : Value(no),
+      zone: zone == null && nullToAbsent ? const Value.absent() : Value(zone),
+      seatNumber: seatNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(seatNumber),
+      closed: Value(closed),
+      dataStatus: Value(dataStatus),
+      createdTime: Value(createdTime),
+      updatedTime: updatedTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedTime),
+      deviceID: deviceID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deviceID),
+      appVersion: appVersion == null && nullToAbsent
+          ? const Value.absent()
+          : Value(appVersion),
+    );
+  }
+
+  factory ShopTableTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ShopTableTableData(
+      id: serializer.fromJson<int>(json['id']),
+      shopID: serializer.fromJson<int>(json['shopID']),
+      name: serializer.fromJson<String?>(json['name']),
+      no: serializer.fromJson<int?>(json['no']),
+      zone: serializer.fromJson<String?>(json['zone']),
+      seatNumber: serializer.fromJson<int?>(json['seatNumber']),
+      closed: serializer.fromJson<bool>(json['closed']),
+      dataStatus: $ShopTableTableTable.$converterdataStatus.fromJson(
+        serializer.fromJson<String>(json['dataStatus']),
+      ),
+      createdTime: serializer.fromJson<DateTime>(json['createdTime']),
+      updatedTime: serializer.fromJson<DateTime?>(json['updatedTime']),
+      deviceID: serializer.fromJson<String?>(json['deviceID']),
+      appVersion: serializer.fromJson<String?>(json['appVersion']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'shopID': serializer.toJson<int>(shopID),
+      'name': serializer.toJson<String?>(name),
+      'no': serializer.toJson<int?>(no),
+      'zone': serializer.toJson<String?>(zone),
+      'seatNumber': serializer.toJson<int?>(seatNumber),
+      'closed': serializer.toJson<bool>(closed),
+      'dataStatus': serializer.toJson<String>(
+        $ShopTableTableTable.$converterdataStatus.toJson(dataStatus),
+      ),
+      'createdTime': serializer.toJson<DateTime>(createdTime),
+      'updatedTime': serializer.toJson<DateTime?>(updatedTime),
+      'deviceID': serializer.toJson<String?>(deviceID),
+      'appVersion': serializer.toJson<String?>(appVersion),
+    };
+  }
+
+  ShopTableTableData copyWith({
+    int? id,
+    int? shopID,
+    Value<String?> name = const Value.absent(),
+    Value<int?> no = const Value.absent(),
+    Value<String?> zone = const Value.absent(),
+    Value<int?> seatNumber = const Value.absent(),
+    bool? closed,
+    DataStatus? dataStatus,
+    DateTime? createdTime,
+    Value<DateTime?> updatedTime = const Value.absent(),
+    Value<String?> deviceID = const Value.absent(),
+    Value<String?> appVersion = const Value.absent(),
+  }) => ShopTableTableData(
+    id: id ?? this.id,
+    shopID: shopID ?? this.shopID,
+    name: name.present ? name.value : this.name,
+    no: no.present ? no.value : this.no,
+    zone: zone.present ? zone.value : this.zone,
+    seatNumber: seatNumber.present ? seatNumber.value : this.seatNumber,
+    closed: closed ?? this.closed,
+    dataStatus: dataStatus ?? this.dataStatus,
+    createdTime: createdTime ?? this.createdTime,
+    updatedTime: updatedTime.present ? updatedTime.value : this.updatedTime,
+    deviceID: deviceID.present ? deviceID.value : this.deviceID,
+    appVersion: appVersion.present ? appVersion.value : this.appVersion,
+  );
+  ShopTableTableData copyWithCompanion(ShopTableTableCompanion data) {
+    return ShopTableTableData(
+      id: data.id.present ? data.id.value : this.id,
+      shopID: data.shopID.present ? data.shopID.value : this.shopID,
+      name: data.name.present ? data.name.value : this.name,
+      no: data.no.present ? data.no.value : this.no,
+      zone: data.zone.present ? data.zone.value : this.zone,
+      seatNumber: data.seatNumber.present
+          ? data.seatNumber.value
+          : this.seatNumber,
+      closed: data.closed.present ? data.closed.value : this.closed,
+      dataStatus: data.dataStatus.present
+          ? data.dataStatus.value
+          : this.dataStatus,
+      createdTime: data.createdTime.present
+          ? data.createdTime.value
+          : this.createdTime,
+      updatedTime: data.updatedTime.present
+          ? data.updatedTime.value
+          : this.updatedTime,
+      deviceID: data.deviceID.present ? data.deviceID.value : this.deviceID,
+      appVersion: data.appVersion.present
+          ? data.appVersion.value
+          : this.appVersion,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShopTableTableData(')
+          ..write('id: $id, ')
+          ..write('shopID: $shopID, ')
+          ..write('name: $name, ')
+          ..write('no: $no, ')
+          ..write('zone: $zone, ')
+          ..write('seatNumber: $seatNumber, ')
+          ..write('closed: $closed, ')
+          ..write('dataStatus: $dataStatus, ')
+          ..write('createdTime: $createdTime, ')
+          ..write('updatedTime: $updatedTime, ')
+          ..write('deviceID: $deviceID, ')
+          ..write('appVersion: $appVersion')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    shopID,
+    name,
+    no,
+    zone,
+    seatNumber,
+    closed,
+    dataStatus,
+    createdTime,
+    updatedTime,
+    deviceID,
+    appVersion,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ShopTableTableData &&
+          other.id == this.id &&
+          other.shopID == this.shopID &&
+          other.name == this.name &&
+          other.no == this.no &&
+          other.zone == this.zone &&
+          other.seatNumber == this.seatNumber &&
+          other.closed == this.closed &&
+          other.dataStatus == this.dataStatus &&
+          other.createdTime == this.createdTime &&
+          other.updatedTime == this.updatedTime &&
+          other.deviceID == this.deviceID &&
+          other.appVersion == this.appVersion);
+}
+
+class ShopTableTableCompanion extends UpdateCompanion<ShopTableTableData> {
+  final Value<int> id;
+  final Value<int> shopID;
+  final Value<String?> name;
+  final Value<int?> no;
+  final Value<String?> zone;
+  final Value<int?> seatNumber;
+  final Value<bool> closed;
+  final Value<DataStatus> dataStatus;
+  final Value<DateTime> createdTime;
+  final Value<DateTime?> updatedTime;
+  final Value<String?> deviceID;
+  final Value<String?> appVersion;
+  const ShopTableTableCompanion({
+    this.id = const Value.absent(),
+    this.shopID = const Value.absent(),
+    this.name = const Value.absent(),
+    this.no = const Value.absent(),
+    this.zone = const Value.absent(),
+    this.seatNumber = const Value.absent(),
+    this.closed = const Value.absent(),
+    this.dataStatus = const Value.absent(),
+    this.createdTime = const Value.absent(),
+    this.updatedTime = const Value.absent(),
+    this.deviceID = const Value.absent(),
+    this.appVersion = const Value.absent(),
+  });
+  ShopTableTableCompanion.insert({
+    this.id = const Value.absent(),
+    required int shopID,
+    this.name = const Value.absent(),
+    this.no = const Value.absent(),
+    this.zone = const Value.absent(),
+    this.seatNumber = const Value.absent(),
+    this.closed = const Value.absent(),
+    this.dataStatus = const Value.absent(),
+    this.createdTime = const Value.absent(),
+    this.updatedTime = const Value.absent(),
+    this.deviceID = const Value.absent(),
+    this.appVersion = const Value.absent(),
+  }) : shopID = Value(shopID);
+  static Insertable<ShopTableTableData> custom({
+    Expression<int>? id,
+    Expression<int>? shopID,
+    Expression<String>? name,
+    Expression<int>? no,
+    Expression<String>? zone,
+    Expression<int>? seatNumber,
+    Expression<bool>? closed,
+    Expression<String>? dataStatus,
+    Expression<DateTime>? createdTime,
+    Expression<DateTime>? updatedTime,
+    Expression<String>? deviceID,
+    Expression<String>? appVersion,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (shopID != null) 'shop_i_d': shopID,
+      if (name != null) 'name': name,
+      if (no != null) 'no': no,
+      if (zone != null) 'zone': zone,
+      if (seatNumber != null) 'seat_number': seatNumber,
+      if (closed != null) 'closed': closed,
+      if (dataStatus != null) 'data_status': dataStatus,
+      if (createdTime != null) 'created_time': createdTime,
+      if (updatedTime != null) 'updated_time': updatedTime,
+      if (deviceID != null) 'device_i_d': deviceID,
+      if (appVersion != null) 'app_version': appVersion,
+    });
+  }
+
+  ShopTableTableCompanion copyWith({
+    Value<int>? id,
+    Value<int>? shopID,
+    Value<String?>? name,
+    Value<int?>? no,
+    Value<String?>? zone,
+    Value<int?>? seatNumber,
+    Value<bool>? closed,
+    Value<DataStatus>? dataStatus,
+    Value<DateTime>? createdTime,
+    Value<DateTime?>? updatedTime,
+    Value<String?>? deviceID,
+    Value<String?>? appVersion,
+  }) {
+    return ShopTableTableCompanion(
+      id: id ?? this.id,
+      shopID: shopID ?? this.shopID,
+      name: name ?? this.name,
+      no: no ?? this.no,
+      zone: zone ?? this.zone,
+      seatNumber: seatNumber ?? this.seatNumber,
+      closed: closed ?? this.closed,
+      dataStatus: dataStatus ?? this.dataStatus,
+      createdTime: createdTime ?? this.createdTime,
+      updatedTime: updatedTime ?? this.updatedTime,
+      deviceID: deviceID ?? this.deviceID,
+      appVersion: appVersion ?? this.appVersion,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (shopID.present) {
+      map['shop_i_d'] = Variable<int>(shopID.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (no.present) {
+      map['no'] = Variable<int>(no.value);
+    }
+    if (zone.present) {
+      map['zone'] = Variable<String>(zone.value);
+    }
+    if (seatNumber.present) {
+      map['seat_number'] = Variable<int>(seatNumber.value);
+    }
+    if (closed.present) {
+      map['closed'] = Variable<bool>(closed.value);
+    }
+    if (dataStatus.present) {
+      map['data_status'] = Variable<String>(
+        $ShopTableTableTable.$converterdataStatus.toSql(dataStatus.value),
+      );
+    }
+    if (createdTime.present) {
+      map['created_time'] = Variable<DateTime>(createdTime.value);
+    }
+    if (updatedTime.present) {
+      map['updated_time'] = Variable<DateTime>(updatedTime.value);
+    }
+    if (deviceID.present) {
+      map['device_i_d'] = Variable<String>(deviceID.value);
+    }
+    if (appVersion.present) {
+      map['app_version'] = Variable<String>(appVersion.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShopTableTableCompanion(')
+          ..write('id: $id, ')
+          ..write('shopID: $shopID, ')
+          ..write('name: $name, ')
+          ..write('no: $no, ')
+          ..write('zone: $zone, ')
+          ..write('seatNumber: $seatNumber, ')
+          ..write('closed: $closed, ')
+          ..write('dataStatus: $dataStatus, ')
+          ..write('createdTime: $createdTime, ')
+          ..write('updatedTime: $updatedTime, ')
+          ..write('deviceID: $deviceID, ')
+          ..write('appVersion: $appVersion')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(e);
   $DatabaseManager get managers => $DatabaseManager(this);
   late final $ShopInfoTableTable shopInfoTable = $ShopInfoTableTable(this);
   late final $ShopPhoneTableTable shopPhoneTable = $ShopPhoneTableTable(this);
+  late final $ShopTableTableTable shopTableTable = $ShopTableTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2360,6 +3067,7 @@ abstract class _$Database extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     shopInfoTable,
     shopPhoneTable,
+    shopTableTable,
   ];
 }
 
@@ -2456,6 +3164,27 @@ final class $$ShopInfoTableTableReferences
     ).filter((f) => f.shopID.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_shopPhoneTableRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$ShopTableTableTable, List<ShopTableTableData>>
+  _shopTableTableRefsTable(_$Database db) => MultiTypedResultKey.fromTable(
+    db.shopTableTable,
+    aliasName: $_aliasNameGenerator(
+      db.shopInfoTable.id,
+      db.shopTableTable.shopID,
+    ),
+  );
+
+  $$ShopTableTableTableProcessedTableManager get shopTableTableRefs {
+    final manager = $$ShopTableTableTableTableManager(
+      $_db,
+      $_db.shopTableTable,
+    ).filter((f) => f.shopID.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_shopTableTableRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -2648,6 +3377,31 @@ class $$ShopInfoTableTableFilterComposer
           }) => $$ShopPhoneTableTableFilterComposer(
             $db: $db,
             $table: $db.shopPhoneTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> shopTableTableRefs(
+    Expression<bool> Function($$ShopTableTableTableFilterComposer f) f,
+  ) {
+    final $$ShopTableTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.shopTableTable,
+      getReferencedColumn: (t) => t.shopID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopTableTableTableFilterComposer(
+            $db: $db,
+            $table: $db.shopTableTable,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -2997,6 +3751,31 @@ class $$ShopInfoTableTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> shopTableTableRefs<T extends Object>(
+    Expression<T> Function($$ShopTableTableTableAnnotationComposer a) f,
+  ) {
+    final $$ShopTableTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.shopTableTable,
+      getReferencedColumn: (t) => t.shopID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopTableTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.shopTableTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$ShopInfoTableTableTableManager
@@ -3012,7 +3791,10 @@ class $$ShopInfoTableTableTableManager
           $$ShopInfoTableTableUpdateCompanionBuilder,
           (ShopInfoTableData, $$ShopInfoTableTableReferences),
           ShopInfoTableData,
-          PrefetchHooks Function({bool shopPhoneTableRefs})
+          PrefetchHooks Function({
+            bool shopPhoneTableRefs,
+            bool shopTableTableRefs,
+          })
         > {
   $$ShopInfoTableTableTableManager(_$Database db, $ShopInfoTableTable table)
     : super(
@@ -3167,38 +3949,63 @@ class $$ShopInfoTableTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({shopPhoneTableRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (shopPhoneTableRefs) db.shopPhoneTable,
-              ],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (shopPhoneTableRefs)
-                    await $_getPrefetchedData<
-                      ShopInfoTableData,
-                      $ShopInfoTableTable,
-                      ShopPhoneTableData
-                    >(
-                      currentTable: table,
-                      referencedTable: $$ShopInfoTableTableReferences
-                          ._shopPhoneTableRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$ShopInfoTableTableReferences(
-                            db,
-                            table,
-                            p0,
-                          ).shopPhoneTableRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.shopID == item.id),
-                      typedResults: items,
-                    ),
-                ];
+          prefetchHooksCallback:
+              ({shopPhoneTableRefs = false, shopTableTableRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (shopPhoneTableRefs) db.shopPhoneTable,
+                    if (shopTableTableRefs) db.shopTableTable,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (shopPhoneTableRefs)
+                        await $_getPrefetchedData<
+                          ShopInfoTableData,
+                          $ShopInfoTableTable,
+                          ShopPhoneTableData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ShopInfoTableTableReferences
+                              ._shopPhoneTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ShopInfoTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).shopPhoneTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.shopID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (shopTableTableRefs)
+                        await $_getPrefetchedData<
+                          ShopInfoTableData,
+                          $ShopInfoTableTable,
+                          ShopTableTableData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ShopInfoTableTableReferences
+                              ._shopTableTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ShopInfoTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).shopTableTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.shopID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -3215,7 +4022,7 @@ typedef $$ShopInfoTableTableProcessedTableManager =
       $$ShopInfoTableTableUpdateCompanionBuilder,
       (ShopInfoTableData, $$ShopInfoTableTableReferences),
       ShopInfoTableData,
-      PrefetchHooks Function({bool shopPhoneTableRefs})
+      PrefetchHooks Function({bool shopPhoneTableRefs, bool shopTableTableRefs})
     >;
 typedef $$ShopPhoneTableTableCreateCompanionBuilder =
     ShopPhoneTableCompanion Function({
@@ -3622,6 +4429,470 @@ typedef $$ShopPhoneTableTableProcessedTableManager =
       ShopPhoneTableData,
       PrefetchHooks Function({bool shopID})
     >;
+typedef $$ShopTableTableTableCreateCompanionBuilder =
+    ShopTableTableCompanion Function({
+      Value<int> id,
+      required int shopID,
+      Value<String?> name,
+      Value<int?> no,
+      Value<String?> zone,
+      Value<int?> seatNumber,
+      Value<bool> closed,
+      Value<DataStatus> dataStatus,
+      Value<DateTime> createdTime,
+      Value<DateTime?> updatedTime,
+      Value<String?> deviceID,
+      Value<String?> appVersion,
+    });
+typedef $$ShopTableTableTableUpdateCompanionBuilder =
+    ShopTableTableCompanion Function({
+      Value<int> id,
+      Value<int> shopID,
+      Value<String?> name,
+      Value<int?> no,
+      Value<String?> zone,
+      Value<int?> seatNumber,
+      Value<bool> closed,
+      Value<DataStatus> dataStatus,
+      Value<DateTime> createdTime,
+      Value<DateTime?> updatedTime,
+      Value<String?> deviceID,
+      Value<String?> appVersion,
+    });
+
+final class $$ShopTableTableTableReferences
+    extends
+        BaseReferences<_$Database, $ShopTableTableTable, ShopTableTableData> {
+  $$ShopTableTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ShopInfoTableTable _shopIDTable(_$Database db) =>
+      db.shopInfoTable.createAlias(
+        $_aliasNameGenerator(db.shopTableTable.shopID, db.shopInfoTable.id),
+      );
+
+  $$ShopInfoTableTableProcessedTableManager get shopID {
+    final $_column = $_itemColumn<int>('shop_i_d')!;
+
+    final manager = $$ShopInfoTableTableTableManager(
+      $_db,
+      $_db.shopInfoTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_shopIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$ShopTableTableTableFilterComposer
+    extends Composer<_$Database, $ShopTableTableTable> {
+  $$ShopTableTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get no => $composableBuilder(
+    column: $table.no,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get zone => $composableBuilder(
+    column: $table.zone,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get seatNumber => $composableBuilder(
+    column: $table.seatNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get closed => $composableBuilder(
+    column: $table.closed,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DataStatus, DataStatus, String>
+  get dataStatus => $composableBuilder(
+    column: $table.dataStatus,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$ShopInfoTableTableFilterComposer get shopID {
+    final $$ShopInfoTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.shopID,
+      referencedTable: $db.shopInfoTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopInfoTableTableFilterComposer(
+            $db: $db,
+            $table: $db.shopInfoTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ShopTableTableTableOrderingComposer
+    extends Composer<_$Database, $ShopTableTableTable> {
+  $$ShopTableTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get no => $composableBuilder(
+    column: $table.no,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get zone => $composableBuilder(
+    column: $table.zone,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get seatNumber => $composableBuilder(
+    column: $table.seatNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get closed => $composableBuilder(
+    column: $table.closed,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get dataStatus => $composableBuilder(
+    column: $table.dataStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$ShopInfoTableTableOrderingComposer get shopID {
+    final $$ShopInfoTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.shopID,
+      referencedTable: $db.shopInfoTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopInfoTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.shopInfoTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ShopTableTableTableAnnotationComposer
+    extends Composer<_$Database, $ShopTableTableTable> {
+  $$ShopTableTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<int> get no =>
+      $composableBuilder(column: $table.no, builder: (column) => column);
+
+  GeneratedColumn<String> get zone =>
+      $composableBuilder(column: $table.zone, builder: (column) => column);
+
+  GeneratedColumn<int> get seatNumber => $composableBuilder(
+    column: $table.seatNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get closed =>
+      $composableBuilder(column: $table.closed, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DataStatus, String> get dataStatus =>
+      $composableBuilder(
+        column: $table.dataStatus,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get deviceID =>
+      $composableBuilder(column: $table.deviceID, builder: (column) => column);
+
+  GeneratedColumn<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => column,
+  );
+
+  $$ShopInfoTableTableAnnotationComposer get shopID {
+    final $$ShopInfoTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.shopID,
+      referencedTable: $db.shopInfoTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopInfoTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.shopInfoTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ShopTableTableTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $ShopTableTableTable,
+          ShopTableTableData,
+          $$ShopTableTableTableFilterComposer,
+          $$ShopTableTableTableOrderingComposer,
+          $$ShopTableTableTableAnnotationComposer,
+          $$ShopTableTableTableCreateCompanionBuilder,
+          $$ShopTableTableTableUpdateCompanionBuilder,
+          (ShopTableTableData, $$ShopTableTableTableReferences),
+          ShopTableTableData,
+          PrefetchHooks Function({bool shopID})
+        > {
+  $$ShopTableTableTableTableManager(_$Database db, $ShopTableTableTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ShopTableTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ShopTableTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ShopTableTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> shopID = const Value.absent(),
+                Value<String?> name = const Value.absent(),
+                Value<int?> no = const Value.absent(),
+                Value<String?> zone = const Value.absent(),
+                Value<int?> seatNumber = const Value.absent(),
+                Value<bool> closed = const Value.absent(),
+                Value<DataStatus> dataStatus = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
+                Value<DateTime?> updatedTime = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
+                Value<String?> appVersion = const Value.absent(),
+              }) => ShopTableTableCompanion(
+                id: id,
+                shopID: shopID,
+                name: name,
+                no: no,
+                zone: zone,
+                seatNumber: seatNumber,
+                closed: closed,
+                dataStatus: dataStatus,
+                createdTime: createdTime,
+                updatedTime: updatedTime,
+                deviceID: deviceID,
+                appVersion: appVersion,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int shopID,
+                Value<String?> name = const Value.absent(),
+                Value<int?> no = const Value.absent(),
+                Value<String?> zone = const Value.absent(),
+                Value<int?> seatNumber = const Value.absent(),
+                Value<bool> closed = const Value.absent(),
+                Value<DataStatus> dataStatus = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
+                Value<DateTime?> updatedTime = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
+                Value<String?> appVersion = const Value.absent(),
+              }) => ShopTableTableCompanion.insert(
+                id: id,
+                shopID: shopID,
+                name: name,
+                no: no,
+                zone: zone,
+                seatNumber: seatNumber,
+                closed: closed,
+                dataStatus: dataStatus,
+                createdTime: createdTime,
+                updatedTime: updatedTime,
+                deviceID: deviceID,
+                appVersion: appVersion,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ShopTableTableTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({shopID = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (shopID) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.shopID,
+                                referencedTable: $$ShopTableTableTableReferences
+                                    ._shopIDTable(db),
+                                referencedColumn:
+                                    $$ShopTableTableTableReferences
+                                        ._shopIDTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$ShopTableTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $ShopTableTableTable,
+      ShopTableTableData,
+      $$ShopTableTableTableFilterComposer,
+      $$ShopTableTableTableOrderingComposer,
+      $$ShopTableTableTableAnnotationComposer,
+      $$ShopTableTableTableCreateCompanionBuilder,
+      $$ShopTableTableTableUpdateCompanionBuilder,
+      (ShopTableTableData, $$ShopTableTableTableReferences),
+      ShopTableTableData,
+      PrefetchHooks Function({bool shopID})
+    >;
 
 class $DatabaseManager {
   final _$Database _db;
@@ -3630,4 +4901,6 @@ class $DatabaseManager {
       $$ShopInfoTableTableTableManager(_db, _db.shopInfoTable);
   $$ShopPhoneTableTableTableManager get shopPhoneTable =>
       $$ShopPhoneTableTableTableManager(_db, _db.shopPhoneTable);
+  $$ShopTableTableTableTableManager get shopTableTable =>
+      $$ShopTableTableTableTableManager(_db, _db.shopTableTable);
 }

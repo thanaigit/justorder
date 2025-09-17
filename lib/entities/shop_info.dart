@@ -151,4 +151,39 @@ class ShopInfo extends BaseClass {
   String toString() {
     return 'ShopInfo(id: $id, name: $name, takeHomeOnly: $takeHomeOnly, allDay: $allDay, address: $address, urlMap: $urlMap, hasServiceCharge: $hasServiceCharge, servicePercent: $servicePercent, serviceChargeMethod: $serviceChargeMethod, serviceCalcAll: $serviceCalcAll, serviceCalcTakehome: $serviceCalcTakehome, recommendedGroupAuto: $recommendedGroupAuto, recommendedGroupName: $recommendedGroupName, vatInside: $vatInside, vatPercent: $vatPercent, includeVat: $includeVat, taxID: $taxID)';
   }
+
+  @override
+  ShopInfo copyBaseData({
+    DateTime? createdTime,
+    DateTime? updatedTime,
+    DataStatus? dataStatus,
+    String? deviceID,
+    String? appVersion,
+  }) {
+    return ShopInfo(
+      id: id,
+      name: name,
+      takeHomeOnly: takeHomeOnly,
+      allDay: allDay,
+      address: address,
+      urlMap: urlMap,
+      hasServiceCharge: hasServiceCharge,
+      servicePercent: servicePercent,
+      serviceChargeMethod: serviceChargeMethod,
+      serviceCalcAll: serviceCalcAll,
+      serviceCalcTakehome: serviceCalcTakehome,
+      recommendedGroupAuto: recommendedGroupAuto,
+      recommendedGroupName: recommendedGroupName,
+      vatInside: vatInside,
+      vatPercent: vatPercent,
+      includeVat: includeVat,
+      taxID: taxID,
+      logoImagePath: logoImagePath,
+      dataStatus: dataStatus ?? this.dataStatus,
+      createdTime: createdTime ?? this.createdTime,
+      updatedTime: updatedTime ?? this.updatedTime,
+      deviceID: deviceID ?? this.deviceID,
+      appVersion: appVersion ?? this.appVersion,
+    );
+  }
 }

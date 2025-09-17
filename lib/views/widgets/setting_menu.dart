@@ -71,15 +71,15 @@ class _SettingMenuState extends State<SettingMenu> {
     );
     return Column(
       children: [
-        const Gap.height(spaceHgt),
-        _menuButtonText(
-          header: 'ห้องครัว',
-          headerStyle: menuStyle,
-          enabled: widget.enabled,
-          description:
-              'กำหนดห้องครัว สำหรับใช้เมื่อลูกค้าสั่งอาหาร ข้อมูลอาหารที่สั่งจะปรากฏไปยังห้องครัวตามที่กำหนดไว้ '
-              'เช่น ครัวอาหารทะเล, ครัวไทย, บาร์น้ำ เป็นต้น',
-        ),
+        // const Gap.height(spaceHgt),
+        // _menuButtonText(
+        //   header: 'ห้องครัว',
+        //   headerStyle: menuStyle,
+        //   enabled: widget.enabled,
+        //   description:
+        //       'กำหนดห้องครัว สำหรับใช้เมื่อลูกค้าสั่งอาหาร ข้อมูลอาหารที่สั่งจะปรากฏไปยังห้องครัวตามที่กำหนดไว้ '
+        //       'เช่น ครัวอาหารทะเล, ครัวไทย, บาร์น้ำ เป็นต้น',
+        // ),
         const Gap.height(spaceHgt),
         _menuButtonText(
           header: 'ข้อมูลโต๊ะ',

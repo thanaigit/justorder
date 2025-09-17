@@ -22,14 +22,11 @@ abstract class BaseClass {
   // List<String> toFields();
   // List<String>? primaryKeyFields();
 
-  // BaseClass copyBaseData({
-  //   String? createdBy,
-  //   DateTime? createdTime,
-  //   String? updatedBy,
-  //   DateTime? updatedTime,
-  //   DataStatus? dataStatus,
-  //   String? deviceId,
-  //   String? appName,
-  //   String? appVersion,
-  // });
+  BaseClass copyBaseData({
+    DateTime? createdTime,
+    DateTime? updatedTime,
+    DataStatus? dataStatus,
+    String? deviceID,
+    String? appVersion,
+  });
 }
