@@ -14,12 +14,17 @@ final shopPhoneRepositoryProvider = Provider<ShopPhoneRepository>((ref) {
 });
 
 class ShopPhoneRepository
-    extends BaseRepository<ShopPhone, ShopPhoneTableData, ShopPhoneTableCompanion> {
+    extends
+        BaseRepository<
+          ShopPhone,
+          ShopPhoneTableData,
+          ShopPhoneTableCompanion,
+          $ShopPhoneTableTable
+        > {
   ShopPhoneRepository(super.ref, {required super.db, required super.table, required super.mapper});
 
-  Future<Result<List<ShopPhone>?>> getShopPhones(int shopID) {
-    return getWhere(where: (tbl) => (tbl as $ShopPhoneTableTable).shopID.equals(shopID));
-  }
+  Future<Result<List<ShopPhone>?>> getShopPhones(int shopID) =>
+      getWhere((tbl) => tbl.shopID.equals(shopID));
 
   Future<Result<ShopPhone>> createShopPhone(ShopPhone phone, {required int shopID}) {
     final newPhone = phone.copyWith(shopID: shopID);
@@ -27,17 +32,13 @@ class ShopPhoneRepository
   }
 
   Future<Result<ShopPhone>> updateShopPhone(ShopPhone phone) async {
-    final result = await updateWhereReturnSingle(
-      phone,
-      where: (tbl) => (tbl as $ShopPhoneTableTable).id.equals(phone.id!),
-    );
+    final result = await updateWhereReturnSingle(phone, where: (tbl) => tbl.id.equals(phone.id!));
     if (result.hasError) return Result<ShopPhone>(error: result.error);
     return Result<ShopPhone>(success: result.success ?? phone);
   }
 
-  Future<Result<bool>> deleteShopPhone(ShopPhone phone) {
-    return deleteWhere(where: (tbl) => (tbl as $ShopPhoneTableTable).id.equals(phone.id!));
-  }
+  Future<Result<bool>> deleteShopPhone(ShopPhone phone) =>
+      deleteWhere((tbl) => tbl.id.equals(phone.id!));
 }
 
 // class ShopPhoneRepository {

@@ -92,7 +92,6 @@ class ShopAvatar extends ConsumerWidget {
       );
     }
 
-    debugPrint('Shop logoPath : ${shop?.logoImagePath}');
     final loadAsync = ref.watch(imageLocalLoadProvider(shop?.logoImagePath ?? ''));
     return loadAsync.when(
       data: (data) {

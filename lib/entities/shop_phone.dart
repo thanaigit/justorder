@@ -79,4 +79,9 @@ class ShopPhone extends BaseClass {
       appVersion: appVersion ?? this.appVersion,
     );
   }
+
+  @override
+  String toString() {
+    return 'ShopPhone(id: $id, shopID: $shopID, phoneNo: $phoneNo, note: $note)';
+  }
 }

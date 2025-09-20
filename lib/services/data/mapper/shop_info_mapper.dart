@@ -14,7 +14,7 @@ class ShopInfoMapper extends DriftMapper<ShopInfo, ShopInfoTableData, ShopInfoTa
   @override
   ShopInfoTableCompanion toCompanion(ShopInfo entity) {
     return ShopInfoTableCompanion.insert(
-      id: Value<int>(entity.id!),
+      id: Value<int>(entity.id ?? 1),
       name: Value<String?>(entity.name),
       takeHomeOnly: Value<bool>(entity.takeHomeOnly),
       allDay: Value<bool>(entity.allDay),
@@ -86,7 +86,4 @@ class ShopInfoMapper extends DriftMapper<ShopInfo, ShopInfoTableData, ShopInfoTa
       appVersion: driftData.appVersion,
     );
   }
-
-  @override
-  List<ShopInfo> toEntities(List<ShopInfoTableData> data) => toEntities(data);
 }

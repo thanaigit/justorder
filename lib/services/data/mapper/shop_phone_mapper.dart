@@ -63,7 +63,4 @@ class ShopPhoneMapper extends DriftMapper<ShopPhone, ShopPhoneTableData, ShopPho
       appVersion: driftData.appVersion,
     );
   }
-
-  @override
-  List<ShopPhone> toEntities(List<ShopPhoneTableData> data) => toEntities(data);
 }

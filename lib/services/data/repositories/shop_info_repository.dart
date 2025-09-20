@@ -14,7 +14,8 @@ final shopInfoRepositoryProvider = Provider<ShopInfoRepository>((ref) {
 });
 
 class ShopInfoRepository
-    extends BaseRepository<ShopInfo, ShopInfoTableData, ShopInfoTableCompanion> {
+    extends
+        BaseRepository<ShopInfo, ShopInfoTableData, ShopInfoTableCompanion, $ShopInfoTableTable> {
   ShopInfoRepository(super.ref, {required super.db, required super.table, required super.mapper});
 
   Future<Result<ShopInfo?>> getShopInfo() => getSingle();
@@ -41,10 +42,7 @@ class ShopInfoRepository
         error: Failure(message: 'Shop ID is required', stackTrace: StackTrace.current),
       );
     }
-    final result = await updateWhereReturnSingle(
-      shop,
-      where: (tbl) => (tbl as $ShopInfoTableTable).id.equals(shop.id!),
-    );
+    final result = await updateWhereReturnSingle(shop, where: (tbl) => tbl.id.equals(shop.id!));
     if (result.hasError) return Result<ShopInfo>(error: result.error);
     return Result<ShopInfo>(success: result.success ?? shop);
   }

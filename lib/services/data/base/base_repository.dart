@@ -8,10 +8,15 @@ import '../../../core/utilities/result_handle.dart';
 import '../../database.dart';
 import 'drift_mapper.dart';
 
-class BaseRepository<E extends BaseClass, D extends DataClass, C extends UpdateCompanion<D>> {
+class BaseRepository<
+  E extends BaseClass,
+  D extends DataClass,
+  C extends UpdateCompanion<D>,
+  T extends TableInfo<T, D>
+> {
   final Ref ref;
   final Database db;
-  final TableInfo<Table, D> table;
+  final T table;
   final DriftMapper<E, D, C> mapper;
 
   BaseRepository(this.ref, {required this.db, required this.table, required this.mapper});
@@ -27,7 +32,7 @@ class BaseRepository<E extends BaseClass, D extends DataClass, C extends UpdateC
     }
   }
 
-  Future<Result<List<E>?>> getWhere({required Expression<bool> Function(Table tbl) where}) async {
+  Future<Result<List<E>?>> getWhere(Expression<bool> Function(T tbl) where) async {
     try {
       final data = await (db.select(table)..where(where)).get();
       return Result<List<E>?>(success: mapper.toEntities(data));
@@ -38,7 +43,7 @@ class BaseRepository<E extends BaseClass, D extends DataClass, C extends UpdateC
     }
   }
 
-  Future<Result<E?>> getSingleWhere({required Expression<bool> Function(Table tbl) where}) async {
+  Future<Result<E?>> getSingleWhere({required Expression<bool> Function(T tbl) where}) async {
     try {
       final data = await (db.select(table)..where(where)).getSingleOrNull();
       return Result<E?>(success: data != null ? mapper.toEntity(data) : null);
@@ -73,7 +78,7 @@ class BaseRepository<E extends BaseClass, D extends DataClass, C extends UpdateC
     }
   }
 
-  Future<Result<int>> countDataWhere({required Expression<bool> Function(Table tbl) where}) async {
+  Future<Result<int>> countDataWhere({required Expression<bool> Function(T tbl) where}) async {
     try {
       final query = (db.select(table)..where(where)).addColumns([countAll()]);
       final qryResult = await query.getSingle();
@@ -138,7 +143,7 @@ class BaseRepository<E extends BaseClass, D extends DataClass, C extends UpdateC
 
   Future<Result<E?>> updateWhereReturnSingle(
     E entity, {
-    required Expression<bool> Function(Table tbl) where,
+    required Expression<bool> Function(T tbl) where,
   }) async {
     final appRepo = ref.read(appInfoProvider);
     final deviceRepo = ref.read(deviceDataProvider);
@@ -147,8 +152,10 @@ class BaseRepository<E extends BaseClass, D extends DataClass, C extends UpdateC
       deviceID: deviceRepo.info.serial,
       appVersion: appRepo.data.fullVerion,
     );
+    print('updateEntity : ${updateEntity.toString()}');
     try {
       final companion = mapper.toCompanion(updateEntity as E);
+      print('companion : ${companion.toString()}');
       final data = await (db.update(table)..where(where)).writeReturning(companion);
       return Result<E>(success: data.isEmpty ? null : mapper.toEntity(data.first));
     } catch (e) {
@@ -160,7 +167,7 @@ class BaseRepository<E extends BaseClass, D extends DataClass, C extends UpdateC
 
   Future<Result<List<E>?>> updateWhereReturns(
     E entity, {
-    required Expression<bool> Function(Table tbl) where,
+    required Expression<bool> Function(T tbl) where,
   }) async {
     final appRepo = ref.read(appInfoProvider);
     final deviceRepo = ref.read(deviceDataProvider);
@@ -180,7 +187,7 @@ class BaseRepository<E extends BaseClass, D extends DataClass, C extends UpdateC
     }
   }
 
-  Future<Result<bool>> deleteWhere({required Expression<bool> Function(Table tbl) where}) async {
+  Future<Result<bool>> deleteWhere(Expression<bool> Function(T tbl) where) async {
     try {
       await (db.delete(table)..where(where)).go();
       return Result<bool>(success: true);

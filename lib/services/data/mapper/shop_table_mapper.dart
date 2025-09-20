@@ -77,9 +77,4 @@ class ShopTableMapper extends DriftMapper<ShopTable, ShopTableTableData, ShopTab
       appVersion: driftData.appVersion,
     );
   }
-
-  @override
-  List<ShopTable> toEntities(List<ShopTableTableData> data) {
-    return data.map((e) => toEntity(e)).toList();
-  }
 }

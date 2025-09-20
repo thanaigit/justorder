@@ -16,6 +16,7 @@ import 'core/presentation/widgets/gap.dart';
 import 'core/providers/app_common_data_provider.dart';
 import 'core/utilities/func_utils.dart';
 import 'view_model/shop_info_view_model.dart';
+import 'view_model/shop_table_view_model.dart';
 import 'views/pages/shop/shop_info_edit_addr.dart';
 import 'views/pages/shop/shop_info_edit_phone.dart';
 import 'views/pages/shop/shop_info_tax_service.dart';
@@ -33,7 +34,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   bool _firstBuild = true;
   late AppCommonDataRepository _appDataRepo;
   final _pageIndexNotifier = ValueNotifier<int>(2);
-  final _pageController = PageController();
+  final _pageController = PageController(initialPage: 2);
   final _editModeNotifier = ValueNotifier<bool>(false);
   final _textEditController = TextEditingController();
   final List<double> _scales = ScalesValue.toList();
@@ -56,29 +57,31 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
   }
 
-  void _loadShop() {
-    ref.read(shopInfoViewModelProvider.notifier).loadShop();
+  void _loadInitialData() {
+    ref.read(shopInfoViewModelProvider.notifier).loadShop().then((result) {
+      final shop = result.success;
+      if (shop == null) return;
+      ref.read(shopTableViewModelProvider(shop.id ?? 0).notifier).loadShopTables();
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    _loadShop();
+    _loadInitialData();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _appDataRepo = ref.read(appCommonDataProvider);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_firstBuild) {
-        _firstBuild = false;
-        Future.delayed(const Duration(milliseconds: 50), () {
-          _setAppCommonData();
-          _pageController.jumpToPage(_pageIndexNotifier.value);
-        });
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (_firstBuild) {
+    //     _firstBuild = false;
+    //     _setAppCommonData();
+    //     _pageController.jumpToPage(_pageIndexNotifier.value);
+    //   }
+    // });
   }
 
   @override

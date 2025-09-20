@@ -20,11 +20,11 @@ class ShopInfoViewModel extends StateNotifier<ShopInfo?> {
   final ImageStorageLocalRepository imageRepo;
   ShopInfoViewModel(super.state, {required this.repo, required this.imageRepo});
 
-  Future<Result<bool>> loadShop() async {
+  Future<Result<ShopInfo?>> loadShop() async {
     final result = await repo.getShopInfo();
-    if (result.hasError) return Result<bool>(success: false, error: result.error);
+    if (result.hasError) return Result<ShopInfo?>(success: result.success, error: result.error);
     state = result.success;
-    return const Result<bool>(success: true);
+    return Result<ShopInfo?>(success: result.success);
   }
 
   Future<Result<int>> countShops() async {

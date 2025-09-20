@@ -48,7 +48,7 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
   void initState() {
     super.initState();
     final shop = ref.read(shopInfoViewModelProvider);
-    ref.refresh(shopPhoneViewModelProvider(shop?.id ?? 0).notifier).loadShopPhone();
+    ref.refresh(shopPhoneViewModelProvider(shop?.id ?? 0).notifier).loadShopPhones();
   }
 
   @override
@@ -79,7 +79,10 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
       color: shopExists ? AppColors.infoHighlight : AppColors.disableMajorInfoColor,
     );
     final headerStyle = AppTextStyles.headerMediumStyle(context, color: fontHeaderColor);
-    final subInfoStyle = TextStyle(color: shopExists ? null : AppColors.disableMinorInfoColor);
+    final subInfoStyle = TextStyle(
+      color: shopExists ? AppColors.descriptionInfo : AppColors.disableMinorInfoColor,
+    );
+    final subInfoDataStyle = TextStyle(color: shopExists ? null : AppColors.disableMinorInfoColor);
 
     void saveShopName() async {
       final name = _editNameController.text;
@@ -282,7 +285,7 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
                   const Gap.height(GapSize.normal),
                   Text(
                     addr.isEmpty ? 'กำหนดที่อยู่ร้านสำหรับการพิมพ์ในใบเสร็จรับเงิน' : addr,
-                    style: subInfoStyle,
+                    style: addr.isEmpty ? subInfoStyle : subInfoDataStyle,
                   ),
                 ],
               ),
@@ -307,7 +310,7 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
               ? Text.rich(
                   TextSpan(
                     text: 'มีภาษีมูลค่าเพิ่ม  ',
-                    style: subInfoStyle,
+                    style: subInfoDataStyle,
                     children: [TextSpan(text: strVat, style: infoStyle)],
                   ),
                 )
@@ -323,7 +326,7 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
             Text.rich(
               TextSpan(
                 text: 'เลขประจำตัวผู้เสียภาษี : ',
-                style: subInfoStyle,
+                style: subInfoDataStyle,
                 children: [TextSpan(text: shop?.taxID ?? '', style: infoStyle)],
               ),
             ),
@@ -331,7 +334,7 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
             Text.rich(
               TextSpan(
                 text: 'วิธีการคำนวณภาษี : ',
-                style: subInfoStyle,
+                style: subInfoDataStyle,
                 children: [
                   TextSpan(
                     text: shop?.vatInside ?? false
@@ -361,7 +364,7 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
           Text.rich(
             TextSpan(
               text: 'มีค่าบริการ (Service charge)  ',
-              style: subInfoStyle,
+              style: subInfoDataStyle,
               children: [TextSpan(text: strServ, style: infoStyle)],
             ),
           ),
@@ -377,7 +380,7 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
                       : Colors.red.shade700,
                 ),
                 const Gap.width(GapSize.dense),
-                Expanded(child: Text('คิดค่าบริการจากทุกรายการอาหาร', style: subInfoStyle)),
+                Expanded(child: Text('คิดค่าบริการจากทุกรายการอาหาร', style: subInfoDataStyle)),
               ],
             ),
           if (!widget.forPublicInfo)
@@ -393,7 +396,7 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
                 ),
                 const Gap.width(GapSize.dense),
                 Expanded(
-                  child: Text('คิดค่าบริการรายการอาหารที่สั่งกลับบ้าน', style: subInfoStyle),
+                  child: Text('คิดค่าบริการรายการอาหารที่สั่งกลับบ้าน', style: subInfoDataStyle),
                 ),
               ],
             ),
@@ -401,7 +404,7 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
             Text.rich(
               TextSpan(
                 text: 'วิธีการคำนวณค่าบริการและส่วนลด : ',
-                style: subInfoStyle,
+                style: subInfoDataStyle,
                 children: [TextSpan(text: strMethod, style: infoStyle)],
               ),
             ),

@@ -14,30 +14,38 @@ final shopTableRepositoryProvider = Provider<ShopTableRepository>((ref) {
 });
 
 class ShopTableRepository
-    extends BaseRepository<ShopTable, ShopTableTableData, ShopTableTableCompanion> {
+    extends
+        BaseRepository<
+          ShopTable,
+          ShopTableTableData,
+          ShopTableTableCompanion,
+          $ShopTableTableTable
+        > {
   ShopTableRepository(super.ref, {required super.db, required super.table, required super.mapper});
 
-  Future<Result<List<ShopTable>?>> getShopTables(int shopID) {
-    return getWhere(where: (tbl) => (tbl as $ShopTableTableTable).shopID.equals(shopID));
-  }
+  Future<Result<List<ShopTable>?>> getShopTables(int shopID) =>
+      getWhere((tbl) => tbl.shopID.equals(shopID));
 
-  Future<Result<ShopTable>> createShopTable(ShopTable shopTable, {required int shopID}) {
-    final newTable = shopTable.copyWith(shopID: shopID);
+  Future<Result<ShopTable>> createShopTable(ShopTable shopTable, {required int shopID}) async {
+    int lastNo = 0;
+    final result = await getMaxInt(db.shopTableTable.no);
+    if (!result.hasError) lastNo = result.success ?? 0;
+    final newNo = lastNo + 1;
+    final newTable = shopTable.copyWith(shopID: shopID, no: newNo);
     return createReturn(newTable);
   }
 
   Future<Result<ShopTable>> updateShopTable(ShopTable shopTable) async {
     final result = await updateWhereReturnSingle(
       shopTable,
-      where: (tbl) => (tbl as $ShopTableTableTable).id.equals(shopTable.id!),
+      where: (tbl) => tbl.id.equals(shopTable.id!),
     );
     if (result.hasError) return Result<ShopTable>(error: result.error);
     return Result<ShopTable>(success: result.success ?? shopTable);
   }
 
-  Future<Result<bool>> deleteShopPhone(ShopTable shopTable) {
-    return deleteWhere(where: (tbl) => (tbl as $ShopTableTableTable).id.equals(shopTable.id!));
-  }
+  Future<Result<bool>> deleteShopTable(ShopTable shopTable) =>
+      deleteWhere((tbl) => tbl.id.equals(shopTable.id!));
 }
 
 // class ShopTableRepository {

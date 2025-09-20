@@ -75,4 +75,5 @@ class AppColors {
   static Color maleDeep = Colors.blue.shade900;
   static Color female = Colors.pink.shade600;
   static Color femaleDeep = Colors.pink.shade900;
+  static Color descriptionInfo = Colors.blueGrey.shade700;
 }

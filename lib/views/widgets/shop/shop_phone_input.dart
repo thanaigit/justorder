@@ -60,9 +60,9 @@ class _ShopPhoneState extends ConsumerState<ShopPhoneInput> {
 
   void _initPhoneData(int shopID, {bool refreshed = false}) async {
     if (refreshed) {
-      await ref.refresh(shopPhoneViewModelProvider(shopID).notifier).loadShopPhone();
+      await ref.refresh(shopPhoneViewModelProvider(shopID).notifier).loadShopPhones();
     } else {
-      await ref.read(shopPhoneViewModelProvider(shopID).notifier).loadShopPhone();
+      await ref.read(shopPhoneViewModelProvider(shopID).notifier).loadShopPhones();
       _loadingNotifier.value = false;
     }
   }
@@ -128,26 +128,26 @@ class _ShopPhoneState extends ConsumerState<ShopPhoneInput> {
     ShopPhone? phone;
     final phoneNo = _numController.text.trim();
     final isAppend = index > (_phoneList?.length ?? 0) - 1;
-    if (isAppend) {
-      if (StringValidator(phoneNo).isBlank) {
-        msg = 'กรุณาระบุเบอร์โทรศัพท์';
-        await _showErrorDialog(msg);
-        return;
-      }
-      final idx = _phoneList?.indexWhere((e) => e.phoneNo == phoneNo);
-      if (idx != null && idx != -1) {
-        msg = 'เบอร์ $phoneNo มีอยู่ในรายการแล้ว';
-        await _showErrorDialog(msg);
-        return;
-      }
-    } else {
-      final idx = _phoneList?.indexWhere((e) => e.phoneNo == phoneNo);
-      if (idx != null && idx != index) {
-        msg = 'เบอร์ $phoneNo มีอยู่ในรายการแล้ว';
-        await _showErrorDialog(msg);
-        return;
-      }
-    }
+    // if (isAppend) {
+    //   if (StringValidator(phoneNo).isBlank) {
+    //     msg = 'กรุณาระบุเบอร์โทรศัพท์';
+    //     await _showErrorDialog(msg);
+    //     return;
+    //   }
+    //   final idx = _phoneList?.indexWhere((e) => e.phoneNo == phoneNo);
+    //   if (idx != null && idx != -1) {
+    //     msg = 'เบอร์ $phoneNo มีอยู่ในรายการแล้ว';
+    //     await _showErrorDialog(msg);
+    //     return;
+    //   }
+    // } else {
+    //   final idx = _phoneList?.indexWhere((e) => e.phoneNo == phoneNo);
+    //   if (idx != null && idx != index) {
+    //     msg = 'เบอร์ $phoneNo มีอยู่ในรายการแล้ว';
+    //     await _showErrorDialog(msg);
+    //     return;
+    //   }
+    // }
     final stateObj = ref.read(shopPhoneViewModelProvider(shopID).notifier);
     if (!isAppend) {
       if (phoneNo == _phoneList?[index].phoneNo) {
@@ -162,23 +162,19 @@ class _ShopPhoneState extends ConsumerState<ShopPhoneInput> {
     _saveNotifier.value = true;
     try {
       if (isAppend) {
-        phone = ShopPhone(shopID: shopID, phoneNo: phoneNo, note: _extController.text.trim());
+        phone = ShopPhone(shopID: shopID, phoneNo: phoneNo);
         final result = await stateObj.createShopPhone(phone);
         if (result.hasError) {
           msg = 'มีข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่อีกครั้งหนึ่ง';
-          await _showErrorDialog(msg);
+          await _showErrorDialog(result.error?.message ?? msg);
           return;
         }
       } else {
-        phone = _phoneList?[index].copyWith(
-          shopID: shopID,
-          phoneNo: phoneNo,
-          note: _extController.text.trim(),
-        );
+        phone = _phoneList?[index].copyWith(shopID: shopID, phoneNo: phoneNo);
         final result = await stateObj.updateShopPhone(phone!);
         if (result.hasError) {
           msg = 'มีข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่อีกครั้งหนึ่ง';
-          await _showErrorDialog(msg);
+          await _showErrorDialog(result.error?.message ?? msg);
           return;
         }
       }
@@ -203,38 +199,49 @@ class _ShopPhoneState extends ConsumerState<ShopPhoneInput> {
             child: ValueListenableBuilder<bool>(
               valueListenable: _saveNotifier,
               builder: (context, bool onSaving, _) {
-                return Row(
-                  children: [
-                    Flexible(
-                      flex: 7,
-                      child: TextInputBox(
-                        maxLines: 1,
-                        required: true,
-                        hintText: 'ระบุหมายเลขโทรศัพท์',
-                        controller: _numController,
-                        focusNode: _focusNode,
-                        keyboardType: TextInputType.phone,
-                        textInputAction: TextInputAction.next,
-                        verifyState: onSaving ? VerifyState.busy : VerifyState.none,
-                        onFieldSubmitted: (value) => _extFocusNode.requestFocus(),
-                      ),
-                    ),
-                    Flexible(
-                      flex: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 5.0),
-                        child: TextInputBox(
-                          maxLines: 1,
-                          hintText: 'ต่อ',
-                          controller: _extController,
-                          focusNode: _extFocusNode,
-                          textInputAction: TextInputAction.done,
-                          onFieldSubmitted: (onSave != null) ? (value) => onSave.call() : null,
-                        ),
-                      ),
-                    ),
-                  ],
+                return TextInputBox(
+                  maxLines: 1,
+                  required: true,
+                  hintText: 'ระบุหมายเลขโทรศัพท์',
+                  controller: _numController,
+                  focusNode: _focusNode,
+                  keyboardType: TextInputType.phone,
+                  textInputAction: TextInputAction.next,
+                  verifyState: onSaving ? VerifyState.busy : VerifyState.none,
+                  onFieldSubmitted: (onSave != null) ? (value) => onSave.call() : null,
                 );
+                // Row(
+                //   children: [
+                //     Flexible(
+                //       flex: 7,
+                //       child: TextInputBox(
+                //         maxLines: 1,
+                //         required: true,
+                //         hintText: 'ระบุหมายเลขโทรศัพท์',
+                //         controller: _numController,
+                //         focusNode: _focusNode,
+                //         keyboardType: TextInputType.phone,
+                //         textInputAction: TextInputAction.next,
+                //         verifyState: onSaving ? VerifyState.busy : VerifyState.none,
+                //         onFieldSubmitted: (value) => _extFocusNode.requestFocus(),
+                //       ),
+                //     ),
+                //     Flexible(
+                //       flex: 3,
+                //       child: Padding(
+                //         padding: const EdgeInsets.only(left: 5.0),
+                //         child: TextInputBox(
+                //           maxLines: 1,
+                //           hintText: 'ต่อ',
+                //           controller: _extController,
+                //           focusNode: _extFocusNode,
+                //           textInputAction: TextInputAction.done,
+                //           onFieldSubmitted: (onSave != null) ? (value) => onSave.call() : null,
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // );
               },
             ),
           ),
