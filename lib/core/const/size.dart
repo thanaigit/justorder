@@ -22,6 +22,7 @@ class AppSize {
   static const double standardButtonHeight = 48.0;
   static const double fontButtonSize = 16.0;
   static const double fontButtonSmall = 13.0;
+  static const double fontButtonSmaller = 10.0;
   static const double fontButtonLarge = 18.0;
   static const double headIconSize = 44.0;
   static const double headIconLarge = 58.0;

@@ -62,11 +62,12 @@ class SettingMenu extends ConsumerWidget {
                               child: Badge.count(
                                 count: count,
                                 backgroundColor: Colors.green.shade700,
+                                padding: const EdgeInsets.all(4.0),
                                 textColor: Colors.white,
                                 textStyle: TextStyle(
                                   fontFamily: AppFonts.uiFontName,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: AppSize.fontButtonSmall,
+                                  fontSize: AppSize.fontButtonSmaller,
                                 ),
                               ),
                             ),

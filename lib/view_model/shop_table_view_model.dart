@@ -52,6 +52,24 @@ class ShopTableViewModel extends StateNotifier<List<ShopTable>?> {
     return const Result<bool>(success: true);
   }
 
+  Future<Result<bool>> createShopTables(List<ShopTable> shopTables, {required int shopID}) async {
+    var createTables = List.of(shopTables);
+    var tables = state != null ? List.of(state!) : null;
+    if (tables != null && tables.isNotEmpty) {
+      final tableNames = tables.map((e) => e.name?.trim()).toSet();
+      // เอาชื่อที่ซ้ำออก
+      createTables = createTables.where((e) => !tableNames.contains(e.name?.trim())).toList();
+    }
+    final result = await repo.createShopTables(createTables, shopID: shopID);
+    if (result.hasError) return Result<bool>(success: false, error: result.error);
+    final newTables = result.success;
+    tables = (tables != null)
+        ? ((newTables != null) ? [...tables, ...newTables] : tables)
+        : newTables;
+    state = (tables != null) ? List.of(tables) : null;
+    return const Result<bool>(success: true);
+  }
+
   Future<Result<bool>> updateShopTable(ShopTable table) async {
     var tables = state != null ? List.of(state!) : null;
     if (tables == null || tables.isEmpty) return Result<bool>(success: true);

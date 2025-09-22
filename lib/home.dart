@@ -31,7 +31,7 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  bool _firstBuild = true;
+  // bool _firstBuild = true;
   late AppCommonDataRepository _appDataRepo;
   final _pageIndexNotifier = ValueNotifier<int>(2);
   final _pageController = PageController(initialPage: 2);
@@ -75,6 +75,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _appDataRepo = ref.read(appCommonDataProvider);
+    _setAppCommonData();
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   if (_firstBuild) {
     //     _firstBuild = false;

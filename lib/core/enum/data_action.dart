@@ -2,7 +2,8 @@ enum DataAction {
   inserted('inserted'),
   updated('updated'),
   deleted('deleted'),
-  view('view');
+  view('view'),
+  bulkInsert('bulkInsert');
 
   final String text;
   const DataAction(this.text);

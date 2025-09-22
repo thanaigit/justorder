@@ -121,6 +121,28 @@ class BaseRepository<
     }
   }
 
+  Future<Result<List<E>>> createBatchReturn(List<E> entities) async {
+    final appRepo = ref.read(appInfoProvider);
+    final deviceRepo = ref.read(deviceDataProvider);
+    final newEntities = entities.map(
+      (e) => e.copyBaseData(deviceID: deviceRepo.info.serial, appVersion: appRepo.data.fullVerion),
+    );
+    var entityList = <E>[];
+    try {
+      await db.transaction(() async {
+        for (final newEntity in newEntities) {
+          final data = await db.into(table).insertReturning(mapper.toCompanion(newEntity as E));
+          entityList.add(mapper.toEntity(data));
+        }
+      });
+      return Result<List<E>>(success: entityList);
+    } catch (e) {
+      return Result<List<E>>(
+        error: Failure(message: e.toString(), stackTrace: StackTrace.current),
+      );
+    }
+  }
+
   Future<Result<bool>> update(E entity) async {
     try {
       final appRepo = ref.read(appInfoProvider);

@@ -13,6 +13,8 @@ import '../../../core/presentation/dialogs/message_dialog.dart';
 import '../../../core/presentation/styles/text_styles.dart';
 import '../../../core/presentation/widgets/buttons/standard_button.dart';
 import '../../../core/presentation/widgets/gap.dart';
+import '../../../core/utilities/func_utils.dart';
+import '../../../core/utilities/range_generator.dart';
 import '../../../core/utilities/result_handle.dart';
 import '../../../entities/shop_info.dart';
 import '../../../entities/shop_table.dart';
@@ -93,52 +95,96 @@ class _ShopInfoEditTablePageState extends ConsumerState<ShopInfoEditTablePage> {
     _busyNotifier.value = false;
   }
 
-  void _addNew() {
+  void _addNew({bool multiple = false}) {
     _editController.clear();
     _seatController.clear();
-    _dataActionNotifier.value = DataAction.inserted;
+    _dataActionNotifier.value = !multiple ? DataAction.inserted : DataAction.bulkInsert;
     _focusNode.requestFocus();
   }
 
   void _saveData({int? index, List<ShopTable>? tables}) async {
     final action = _dataActionNotifier.value;
+    final multiTables = action == DataAction.bulkInsert;
     final shopID = widget.shop.id!;
     final tableName = _editController.text.trim();
     if (tableName.isEmpty) {
-      await _errorMessageDialog('กรุณากำหนดชื่อโต๊ะ');
+      await _errorMessageDialog(multiTables ? 'กรุณากำหนดชื่อโต๊ะเริ่มต้น' : 'กรุณากำหนดชื่อโต๊ะ');
       return;
     }
-    final seatNum = _seatController.text.isEmpty ? 0 : int.parse(_seatController.text);
-    var table = (action == DataAction.inserted)
-        ? ShopTable(shopID: shopID, name: tableName, seatNumber: seatNum)
-        : tables![index!].copyWith(name: tableName, seatNumber: seatNum);
-    if (tables != null && tables.isNotEmpty) {
-      if (tables.indexWhere(
-            (e) => (e.name?.toUpperCase() == tableName.toUpperCase() && e.id != (table.id ?? '')),
-          ) >=
-          0) {
-        await _errorMessageDialog('ชื่อซ้ำ กรุณาตั้งชื่อโต๊ะใหม่\nชื่อโต๊ะจะต้องไม่ซ้ำ');
-        return;
-      }
-    }
-    _saveNotifier.value = true;
     final stateNotifier = ref.read(shopTableViewModelProvider(shopID).notifier);
     Result<bool> result;
-    if (action == DataAction.inserted) {
-      result = await stateNotifier.createShopTable(table);
-    } else {
-      result = await stateNotifier.updateShopTable(table);
-    }
-    _saveNotifier.value = false;
-    String? msg;
-    if (!(result.success ?? false)) {
-      if (result.hasError) {
-        msg = result.error?.message ?? '';
-      } else {
-        msg = 'เกิดข้อผิดพลาดบางอย่างในระหว่างการบันทึกข้อมูล';
+    if (!multiTables) {
+      final seatNum = _seatController.text.isEmpty ? null : int.parse(_seatController.text);
+      var table = (action == DataAction.inserted)
+          ? ShopTable(shopID: shopID, name: tableName, seatNumber: seatNum)
+          : tables![index!].copyWith(name: tableName, seatNumber: seatNum);
+      if (tables != null && tables.isNotEmpty) {
+        if (tables.indexWhere(
+              (e) => (e.name?.toUpperCase() == tableName.toUpperCase() && e.id != (table.id ?? '')),
+            ) >=
+            0) {
+          await _errorMessageDialog('ชื่อซ้ำ กรุณาตั้งชื่อโต๊ะใหม่\nชื่อโต๊ะจะต้องไม่ซ้ำ');
+          return;
+        }
       }
-      await _errorMessageDialog(msg);
-      return;
+      _saveNotifier.value = true;
+      if (action == DataAction.inserted) {
+        result = await stateNotifier.createShopTable(table);
+      } else {
+        result = await stateNotifier.updateShopTable(table);
+      }
+      _saveNotifier.value = false;
+      String? msg;
+      if (!(result.success ?? false)) {
+        if (result.hasError) {
+          msg = result.error?.message ?? '';
+        } else {
+          msg = 'เกิดข้อผิดพลาดบางอย่างในระหว่างการบันทึกข้อมูล';
+        }
+        await _errorMessageDialog(msg);
+        return;
+      }
+    } else {
+      final endTableName = _seatController.text.trim();
+      if (endTableName.isEmpty) {
+        await _errorMessageDialog('กรุณากำหนดชื่อโต๊ะสุดท้าย');
+        return;
+      }
+      final resultList = RangeGenerator.create(tableName, endTableName);
+      if (resultList.hasError) {
+        final conditions = {
+          'RANGE_GEN_INPUT_EMPTY': 'กรุณากำหนดชื่อโต๊ะเริ่มต้นและสุดท้าย',
+          'RANGE_GEN_TYPE_MISMATCH':
+              'รูปแบบชื่อโต๊ะเริ่มต้นและสุดท้ายไม่ตรงกัน เช่น 1 - Z ไม่ถูกต้อง',
+          'RANGE_GEN_INVALID_ALPHANUM_RANGE':
+              'รูปแบบชื่อโต๊ะเริ่มต้นและสุดท้ายไม่ตรงกัน เช่น 1A - 5Z, A1 - 5A ไม่ถูกต้อง',
+          'RANGE_GEN_INVALID_ALPHANUM_FORMAT':
+              'รูปแบบชื่อโต๊ะเริ่มต้นและสุดท้ายไม่ตรงกัน เช่น A1 - 5A ไม่ถูกต้อง',
+          'RANGE_GEN_INVALID_ALPHANUM_CONST':
+              'รูปแบบชื่อโต๊ะผสมระหว่างตัวเลขและตัวอักษร ต้องมีอย่างใดอย่างหนึ่งคงที่ เช่น 1A - 5A, B5 - M5 เป็นต้น',
+          'RANGE_GEN_INVALID_RANGE_FORMAT': '',
+          'RANGE_GEN_INVALID_INPUT_FORMAT': 'รูปแบบชื่อโต๊ะไม่ถูกต้อง ไม่สามารถสร้างลำดับโต๊ะได้',
+        };
+        final msg = ifCase<String>(resultList.error?.code ?? '', matchConditions: conditions);
+
+        await _errorMessageDialog(msg ?? 'ข้อมูลบางอย่างผิดพลาด ไม่สามารถสร้างลำดับโต๊ะได้');
+        return;
+      }
+      final rangeName = resultList.success ?? <String>[];
+      final rangeTables = rangeName.map((e) => ShopTable(shopID: shopID, name: e)).toList();
+      _saveNotifier.value = true;
+      final result = await stateNotifier.createShopTables(rangeTables, shopID: shopID);
+      _saveNotifier.value = false;
+      String? msg;
+      if (!(result.success ?? false)) {
+        if (result.hasError) {
+          msg = result.error?.message ?? '';
+        } else {
+          msg = 'เกิดข้อผิดพลาดบางอย่างในระหว่างการบันทึกข้อมูล';
+        }
+        await _errorMessageDialog(msg);
+        return;
+      }
     }
     _editIndex = -1;
     _dataActionNotifier.value = DataAction.view;
@@ -160,7 +206,7 @@ class _ShopInfoEditTablePageState extends ConsumerState<ShopInfoEditTablePage> {
     const hozPadding = EdgeInsets.symmetric(horizontal: AppSize.pageHorizontalSpace);
     final headerStyle = AppTextStyles.headerStyle(context, color: AppColors.criticalHighlight);
 
-    Widget textInputWithButtons({void Function()? onSave}) {
+    Widget textInputWithButtons({void Function()? onSave, bool multiCreate = false}) {
       return Row(
         children: [
           ValueListenableBuilder(
@@ -171,11 +217,11 @@ class _ShopInfoEditTablePageState extends ConsumerState<ShopInfoEditTablePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Flexible(
-                      flex: 2,
+                      flex: multiCreate ? 1 : 2,
                       child: TextInputBox(
                         maxLines: 1,
                         maxLength: 30,
-                        hintText: 'ระบุชื่อโต๊ะหรือหมายเลขโต๊ะ',
+                        hintText: multiCreate ? 'ชื่อโต๊ะเริ่มต้น' : 'ระบุชื่อโต๊ะหรือหมายเลขโต๊ะ',
                         controller: _editController,
                         focusNode: _focusNode,
                         counterText: '',
@@ -189,16 +235,18 @@ class _ShopInfoEditTablePageState extends ConsumerState<ShopInfoEditTablePage> {
                       flex: 1,
                       child: TextInputBox(
                         maxLines: 1,
-                        maxLength: 5,
-                        hintText: 'จำนวนที่นั่ง',
+                        maxLength: multiCreate ? 30 : 5,
+                        hintText: multiCreate ? 'ชื่อโต๊ะสุดท้าย' : 'จำนวนที่นั่ง',
                         controller: _seatController,
                         focusNode: _seatFocus,
                         counterText: '',
                         showClearButton: true,
-                        textAlign: TextAlign.end,
+                        textAlign: multiCreate ? TextAlign.start : TextAlign.end,
                         textInputAction: TextInputAction.done,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        keyboardType: multiCreate ? TextInputType.text : TextInputType.number,
+                        inputFormatters: multiCreate
+                            ? null
+                            : [FilteringTextInputFormatter.digitsOnly],
                         verifyState: onSaving ? VerifyState.busy : VerifyState.none,
                         onFieldSubmitted: (onSave != null) ? (value) => onSave.call() : null,
                       ),
@@ -237,12 +285,36 @@ class _ShopInfoEditTablePageState extends ConsumerState<ShopInfoEditTablePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text('คุณยังไม่มีข้อมูลโต๊ะ'),
-              const Text('กด + เพื่อเพิ่มโต๊ะใหม่'),
-              const Gap.height(GapSize.loose),
+              // const Text('กด + เพื่อเพิ่มโต๊ะใหม่'),
+              const Text.rich(
+                TextSpan(
+                  text: 'กด ',
+                  children: [
+                    WidgetSpan(child: Icon(AppIcons.add, size: AppSize.iconSmall)),
+                    TextSpan(text: ' เพื่อเพิ่มโต๊ะใหม่ทีละโต๊ะ'),
+                  ],
+                ),
+              ),
+              const Text.rich(
+                TextSpan(
+                  text: 'หรือกด ',
+                  children: [
+                    WidgetSpan(child: Icon(Icons.add_to_photos_outlined, size: AppSize.iconSmall)),
+                    TextSpan(text: ' เพื่อเพิ่มหลายโต๊ะในครั้งเดียว'),
+                  ],
+                ),
+              ),
+              const Gap.height(GapSize.veryLoose),
               StandardButton(
                 icon: const Icon(AppIcons.add),
-                caption: 'เพิ่มโต๊ะใหม่',
+                caption: 'เพิ่มโต๊ะใหม่ทีละโต๊ะ',
                 onPressed: () => _addNew(),
+              ),
+              const Gap.height(GapSize.normal),
+              StandardButton(
+                icon: const Icon(Icons.add_to_photos_outlined),
+                caption: 'เพิ่มโต๊ะใหม่หลายโต๊ะ',
+                onPressed: () => _addNew(multiple: true),
               ),
             ],
           ),
@@ -303,12 +375,17 @@ class _ShopInfoEditTablePageState extends ConsumerState<ShopInfoEditTablePage> {
     Widget editableListView(DataAction action) {
       return ListView.builder(
         padding: const EdgeInsets.only(left: AppSize.indentDense),
-        itemCount: (action == DataAction.inserted) ? tableCount + 1 : tableCount,
+        itemCount: (action == DataAction.inserted || action == DataAction.bulkInsert)
+            ? tableCount + 1
+            : tableCount,
         itemBuilder: (context, index) {
           final edited =
-              (action == DataAction.inserted && (tableCount == 0 || index == tableCount)) ||
+              ((action == DataAction.inserted || action == DataAction.bulkInsert) &&
+                  (tableCount == 0 || index == tableCount)) ||
               (action == DataAction.updated && index == _editIndex);
-          final table = (action == DataAction.inserted && index == tableCount)
+          final table =
+              ((action == DataAction.inserted || action == DataAction.bulkInsert) &&
+                  index == tableCount)
               ? null
               : tables?[index];
 
@@ -318,7 +395,7 @@ class _ShopInfoEditTablePageState extends ConsumerState<ShopInfoEditTablePage> {
               children: [
                 Expanded(child: Text(table?.name ?? '')),
                 Text(
-                  table?.seatNumber == null ? '' : '${table?.seatNumber} ที่',
+                  (table?.seatNumber ?? 0) == 0 ? '' : '${table?.seatNumber} ที่',
                   style: TextStyle(color: AppColors.infoEmphasize),
                 ),
               ],
@@ -326,9 +403,12 @@ class _ShopInfoEditTablePageState extends ConsumerState<ShopInfoEditTablePage> {
           }
 
           return ListTile(
-            title: (action == DataAction.inserted)
+            title: (action == DataAction.inserted || action == DataAction.bulkInsert)
                 ? ((tableCount == 0 || index == tableCount)
-                      ? textInputWithButtons(onSave: () => _saveData())
+                      ? textInputWithButtons(
+                          onSave: () => _saveData(),
+                          multiCreate: action == DataAction.bulkInsert,
+                        )
                       : tableDesc())
                 : ((index == _editIndex)
                       ? textInputWithButtons(
@@ -368,7 +448,7 @@ class _ShopInfoEditTablePageState extends ConsumerState<ShopInfoEditTablePage> {
                 children: [
                   Expanded(child: Text(table?.name ?? '')),
                   Text(
-                    table?.seatNumber == null ? '' : '${table?.seatNumber} ที่',
+                    (table?.seatNumber ?? 0) == 0 ? '' : '${table?.seatNumber} ที่',
                     style: TextStyle(color: AppColors.infoEmphasize),
                   ),
                 ],
@@ -378,7 +458,7 @@ class _ShopInfoEditTablePageState extends ConsumerState<ShopInfoEditTablePage> {
                 onPressedEdit: () {
                   _editIndex = index;
                   _editController.text = table?.name ?? '';
-                  _seatController.text = table?.seatNumber == null
+                  _seatController.text = (table?.seatNumber ?? 0) == 0
                       ? ''
                       : table!.seatNumber.toString();
                   _dataActionNotifier.value = DataAction.updated;
@@ -395,7 +475,13 @@ class _ShopInfoEditTablePageState extends ConsumerState<ShopInfoEditTablePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.shop.name ?? ''),
-        actions: [IconButton(onPressed: () => _addNew(), icon: const Icon(AppIcons.add))],
+        actions: [
+          IconButton(
+            onPressed: () => _addNew(multiple: true),
+            icon: const Icon(Icons.add_to_photos_outlined),
+          ),
+          IconButton(onPressed: () => _addNew(), icon: const Icon(AppIcons.add)),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -427,8 +513,9 @@ class _ShopInfoEditTablePageState extends ConsumerState<ShopInfoEditTablePage> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'กำหนดชื่อหรือหมายเลขโต๊ะในร้านของคุณ คุณสามารถกำหนดจำนวนที่นั่งในโต๊ะ '
-                            'เพื่อให้พนักงานของคุณใช้เป็นข้อมูลในการให้บริการลูกค้าได้',
+                            'กำหนดชื่อหรือหมายเลขโต๊ะในร้านของคุณ กรณีเพิ่มทีละโต๊ะจะสามารถกำหนดจำนวนที่นั่งในโต๊ะนั้นได้ '
+                            'กรณีที่เพิ่มโต๊ะใหม่หลายโต๊ะ จะต้องกำหนดชื่อโต๊ะเริ่มต้น และชื่อโต๊ะสุดท้ายที่สามารถสร้างลำดับได้ เช่น '
+                            '1 - 10, A - K, ก - ฉ หรือ 1B - 10B, A1 - A10, A5 - K5 เป็นต้น ',
                             style: AppTextStyles.dataSmall(context, color: AppColors.title),
                           ),
                         ),
@@ -449,7 +536,9 @@ class _ShopInfoEditTablePageState extends ConsumerState<ShopInfoEditTablePage> {
                     child: ValueListenableBuilder<DataAction>(
                       valueListenable: _dataActionNotifier,
                       builder: (context, action, child) {
-                        return (action == DataAction.inserted || action == DataAction.updated)
+                        return (action == DataAction.inserted ||
+                                action == DataAction.bulkInsert ||
+                                action == DataAction.updated)
                             ? editableListView(action)
                             : (!_firstLoad && tableCount == 0)
                             ? emptyDataWidget()

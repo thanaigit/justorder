@@ -12,3 +12,7 @@ void ifNull(dynamic value, void Function() fn, {void Function()? elseFn}) {
   if (value == null) fn();
   if (elseFn != null && value != null) elseFn();
 }
+
+T? ifCase<T>(T value, {required Map<dynamic, T> matchConditions}) {
+  return matchConditions[value];
+}

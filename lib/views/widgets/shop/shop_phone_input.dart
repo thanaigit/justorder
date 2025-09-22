@@ -56,7 +56,7 @@ class _ShopPhoneState extends ConsumerState<ShopPhoneInput> {
   final _numController = TextEditingController();
   final _extController = TextEditingController();
   final _focusNode = FocusNode();
-  final _extFocusNode = FocusNode();
+  // final _extFocusNode = FocusNode();
 
   void _initPhoneData(int shopID, {bool refreshed = false}) async {
     if (refreshed) {

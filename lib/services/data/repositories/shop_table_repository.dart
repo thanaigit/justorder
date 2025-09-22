@@ -35,6 +35,22 @@ class ShopTableRepository
     return createReturn(newTable);
   }
 
+  Future<Result<List<ShopTable>>> createShopTables(
+    List<ShopTable> shopTables, {
+    required int shopID,
+  }) async {
+    int lastNo = 0;
+    final result = await getMaxInt(db.shopTableTable.no);
+    if (!result.hasError) lastNo = result.success ?? 0;
+    final newNo = lastNo + 1;
+    var newTables = <ShopTable>[];
+    for (var i = 0; i < shopTables.length; i++) {
+      final newTable = shopTables[i].copyWith(shopID: shopID, no: newNo + i);
+      newTables.add(newTable);
+    }
+    return createBatchReturn(newTables);
+  }
+
   Future<Result<ShopTable>> updateShopTable(ShopTable shopTable) async {
     final result = await updateWhereReturnSingle(
       shopTable,
