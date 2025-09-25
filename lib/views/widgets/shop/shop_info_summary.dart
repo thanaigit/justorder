@@ -48,7 +48,7 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
   void initState() {
     super.initState();
     final shop = ref.read(shopInfoViewModelProvider);
-    ref.refresh(shopPhoneViewModelProvider(shop?.id ?? 0).notifier).loadShopPhones();
+    ref.read(shopPhoneViewModelProvider(shop?.id ?? 0).notifier).loadShopPhones();
   }
 
   @override

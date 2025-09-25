@@ -174,10 +174,10 @@ class BaseRepository<
       deviceID: deviceRepo.info.serial,
       appVersion: appRepo.data.fullVerion,
     );
-    print('updateEntity : ${updateEntity.toString()}');
+    // print('updateEntity : ${updateEntity.toString()}');
     try {
       final companion = mapper.toCompanion(updateEntity as E);
-      print('companion : ${companion.toString()}');
+      // print('companion : ${companion.toString()}');
       final data = await (db.update(table)..where(where)).writeReturning(companion);
       return Result<E>(success: data.isEmpty ? null : mapper.toEntity(data.first));
     } catch (e) {

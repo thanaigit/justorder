@@ -10,17 +10,11 @@ import '../../database.dart';
 final shopPhoneRepositoryProvider = Provider<ShopPhoneRepository>((ref) {
   final db = ref.watch(databaseProvider);
   final mapper = ref.watch(shopPhoneMapperProvider);
-  return ShopPhoneRepository(ref, db: db, table: db.shopPhoneTable, mapper: mapper);
+  return ShopPhoneRepository(ref, db: db, table: db.shopPhoneTbl, mapper: mapper);
 });
 
 class ShopPhoneRepository
-    extends
-        BaseRepository<
-          ShopPhone,
-          ShopPhoneTableData,
-          ShopPhoneTableCompanion,
-          $ShopPhoneTableTable
-        > {
+    extends BaseRepository<ShopPhone, ShopPhoneTblData, ShopPhoneTblCompanion, $ShopPhoneTblTable> {
   ShopPhoneRepository(super.ref, {required super.db, required super.table, required super.mapper});
 
   Future<Result<List<ShopPhone>?>> getShopPhones(int shopID) =>

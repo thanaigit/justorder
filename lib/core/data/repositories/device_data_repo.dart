@@ -39,10 +39,7 @@ class DeviceDataRepository {
       deviceType = info.device;
       deviceName = info.brand;
       deviceModel = info.model;
-      deviceSerial =
-          (info.serialNumber.trim() == '' || info.serialNumber.toLowerCase() == 'unknown')
-              ? info.id
-              : info.serialNumber;
+      deviceSerial = info.id;
       deviceOSVersion = info.version.release;
       deviceOSBuild = info.version.sdkInt.toString();
       deviceOSInfo = Platform.operatingSystemVersion;

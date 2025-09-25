@@ -43,10 +43,10 @@ import '../base/drift_mapper.dart';
 
 final shopTableMapperProvider = Provider<ShopTableMapper>((ref) => ShopTableMapper());
 
-class ShopTableMapper extends DriftMapper<ShopTable, ShopTableTableData, ShopTableTableCompanion> {
+class ShopTableMapper extends DriftMapper<ShopTable, ShopTableTblData, ShopTableTblCompanion> {
   @override
-  ShopTableTableCompanion toCompanion(ShopTable entity) {
-    return ShopTableTableCompanion.insert(
+  ShopTableTblCompanion toCompanion(ShopTable entity) {
+    return ShopTableTblCompanion.insert(
       shopID: entity.shopID ?? 0,
       name: Value(entity.name),
       no: Value(entity.no),
@@ -61,7 +61,7 @@ class ShopTableMapper extends DriftMapper<ShopTable, ShopTableTableData, ShopTab
   }
 
   @override
-  ShopTable toEntity(ShopTableTableData driftData) {
+  ShopTable toEntity(ShopTableTblData driftData) {
     return ShopTable(
       id: driftData.id,
       shopID: driftData.shopID,

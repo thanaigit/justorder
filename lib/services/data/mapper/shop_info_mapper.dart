@@ -10,10 +10,10 @@ import '../base/drift_mapper.dart';
 
 final shopInfoMapperProvider = Provider<ShopInfoMapper>((ref) => ShopInfoMapper());
 
-class ShopInfoMapper extends DriftMapper<ShopInfo, ShopInfoTableData, ShopInfoTableCompanion> {
+class ShopInfoMapper extends DriftMapper<ShopInfo, ShopInfoTblData, ShopInfoTblCompanion> {
   @override
-  ShopInfoTableCompanion toCompanion(ShopInfo entity) {
-    return ShopInfoTableCompanion.insert(
+  ShopInfoTblCompanion toCompanion(ShopInfo entity) {
+    return ShopInfoTblCompanion.insert(
       id: Value<int>(entity.id ?? 1),
       name: Value<String?>(entity.name),
       takeHomeOnly: Value<bool>(entity.takeHomeOnly),
@@ -48,7 +48,7 @@ class ShopInfoMapper extends DriftMapper<ShopInfo, ShopInfoTableData, ShopInfoTa
   }
 
   @override
-  ShopInfo toEntity(ShopInfoTableData driftData) {
+  ShopInfo toEntity(ShopInfoTblData driftData) {
     final address = Address(
       no: driftData.addressNo,
       village: driftData.addressVillage,

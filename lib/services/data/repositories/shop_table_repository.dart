@@ -10,17 +10,11 @@ import '../../database.dart';
 final shopTableRepositoryProvider = Provider<ShopTableRepository>((ref) {
   final db = ref.watch(databaseProvider);
   final mapper = ref.watch(shopTableMapperProvider);
-  return ShopTableRepository(ref, db: db, table: db.shopTableTable, mapper: mapper);
+  return ShopTableRepository(ref, db: db, table: db.shopTableTbl, mapper: mapper);
 });
 
 class ShopTableRepository
-    extends
-        BaseRepository<
-          ShopTable,
-          ShopTableTableData,
-          ShopTableTableCompanion,
-          $ShopTableTableTable
-        > {
+    extends BaseRepository<ShopTable, ShopTableTblData, ShopTableTblCompanion, $ShopTableTblTable> {
   ShopTableRepository(super.ref, {required super.db, required super.table, required super.mapper});
 
   Future<Result<List<ShopTable>?>> getShopTables(int shopID) =>
@@ -28,7 +22,7 @@ class ShopTableRepository
 
   Future<Result<ShopTable>> createShopTable(ShopTable shopTable, {required int shopID}) async {
     int lastNo = 0;
-    final result = await getMaxInt(db.shopTableTable.no);
+    final result = await getMaxInt(db.shopTableTbl.no);
     if (!result.hasError) lastNo = result.success ?? 0;
     final newNo = lastNo + 1;
     final newTable = shopTable.copyWith(shopID: shopID, no: newNo);
@@ -40,7 +34,7 @@ class ShopTableRepository
     required int shopID,
   }) async {
     int lastNo = 0;
-    final result = await getMaxInt(db.shopTableTable.no);
+    final result = await getMaxInt(db.shopTableTbl.no);
     if (!result.hasError) lastNo = result.success ?? 0;
     final newNo = lastNo + 1;
     var newTables = <ShopTable>[];

@@ -322,7 +322,7 @@ class _ShopTaxServiceWidgetState extends State<ShopTaxServiceWidget> {
       bool selected = false,
       bool enabled = true,
       required void Function()? onTap,
-      required void Function(T? value)? onValueChanged,
+      required void Function(T? value) onValueChanged,
     }) {
       Widget radioLabel() {
         return GestureDetector(
@@ -330,15 +330,27 @@ class _ShopTaxServiceWidgetState extends State<ShopTaxServiceWidget> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Radio<T>(
-                value: value,
+              RadioGroup<T>(
                 groupValue: groupValue,
-                visualDensity: VisualDensity.compact,
-                fillColor: !enabled
-                    ? WidgetStateColor.resolveWith((states) => AppColors.disableObjectColor)
-                    : null,
-                onChanged: enabled ? onValueChanged : null,
+                onChanged: onValueChanged,
+                child: Radio<T>(
+                  enabled: enabled,
+                  value: value,
+                  visualDensity: VisualDensity.compact,
+                  fillColor: !enabled
+                      ? WidgetStateColor.resolveWith((states) => AppColors.disableObjectColor)
+                      : null,
+                ),
               ),
+              // Radio<T>(
+              //   value: value,
+              //   groupValue: groupValue,
+              //   visualDensity: VisualDensity.compact,
+              //   fillColor: !enabled
+              //       ? WidgetStateColor.resolveWith((states) => AppColors.disableObjectColor)
+              //       : null,
+              //   onChanged: enabled ? onValueChanged : null,
+              // ),
               const Gap.width(GapSize.veryDense),
               Expanded(
                 child: Text(

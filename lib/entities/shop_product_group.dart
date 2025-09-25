@@ -1,22 +1,16 @@
-import '../../../core/domain/entities/base_class.dart';
-import '../../../core/enum/data_status.dart';
+import '../core/domain/entities/base_class.dart';
+import '../core/enum/data_status.dart';
 
-class ShopTable extends BaseClass {
+class ShopProductGroup extends BaseClass {
   final int? id;
   final int? shopID;
   final String? name;
-  final int? no;
-  final String? zone;
-  final int? seatNumber;
-  final bool closed;
-  ShopTable({
+  final int? order;
+  ShopProductGroup({
     this.id,
     this.shopID,
     this.name,
-    this.no,
-    this.zone,
-    this.seatNumber,
-    this.closed = false,
+    this.order,
     super.dataStatus,
     super.createdTime,
     super.updatedTime,
@@ -24,28 +18,22 @@ class ShopTable extends BaseClass {
     super.appVersion,
   });
 
-  ShopTable copyWith({
+  ShopProductGroup copyWith({
     int? id,
     int? shopID,
     String? name,
-    int? no,
-    String? zone,
-    int? seatNumber,
-    bool? closed,
+    int? order,
     DataStatus? dataStatus,
     DateTime? createdTime,
     DateTime? updatedTime,
     String? deviceID,
     String? appVersion,
   }) {
-    return ShopTable(
+    return ShopProductGroup(
       id: id ?? this.id,
       shopID: shopID ?? this.shopID,
       name: name ?? this.name,
-      no: no ?? this.no,
-      zone: zone ?? this.zone,
-      seatNumber: seatNumber ?? this.seatNumber,
-      closed: closed ?? this.closed,
+      order: order ?? this.order,
       dataStatus: dataStatus ?? this.dataStatus,
       createdTime: createdTime ?? this.createdTime,
       updatedTime: updatedTime ?? this.updatedTime,
@@ -55,46 +43,39 @@ class ShopTable extends BaseClass {
   }
 
   @override
+  String toString() {
+    return 'ShopProductGroup(id: $id, shopID: $shopID, name: $name, order: $order)';
+  }
+
+  @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is ShopTable &&
+    return other is ShopProductGroup &&
         other.id == id &&
         other.shopID == shopID &&
         other.name == name &&
-        other.no == no &&
-        other.zone == zone &&
-        other.seatNumber == seatNumber &&
-        other.closed == closed;
+        other.order == order;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        shopID.hashCode ^
-        name.hashCode ^
-        no.hashCode ^
-        zone.hashCode ^
-        seatNumber.hashCode ^
-        closed.hashCode;
+    return id.hashCode ^ shopID.hashCode ^ name.hashCode ^ order.hashCode;
   }
 
   @override
-  ShopTable copyBaseData({
+  ShopProductGroup copyBaseData({
     DateTime? createdTime,
     DateTime? updatedTime,
     DataStatus? dataStatus,
     String? deviceID,
     String? appVersion,
   }) {
-    return ShopTable(
+    return ShopProductGroup(
       id: id,
       shopID: shopID,
       name: name,
-      no: no,
-      zone: zone,
-      seatNumber: seatNumber,
-      closed: closed,
+      order: order,
       dataStatus: dataStatus ?? this.dataStatus,
       createdTime: createdTime ?? this.createdTime,
       updatedTime: updatedTime ?? this.updatedTime,

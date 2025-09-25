@@ -131,6 +131,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     Widget settingPane() {
       return SingleChildScrollView(
+        key: const PageStorageKey('settingPane'),
         padding: const EdgeInsets.fromLTRB(
           AppSize.pageHorizontalSpace,
           5.0,

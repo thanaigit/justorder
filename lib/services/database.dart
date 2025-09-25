@@ -9,11 +9,12 @@ import '../core/enum/data_status.dart';
 import '../enum/service_charge_method.dart';
 import 'data/tables/shop_info_table.dart';
 import 'data/tables/shop_phone_table.dart';
+import 'data/tables/shop_product_group_table.dart';
 import 'data/tables/shop_table_table.dart';
 
 part 'database.g.dart';
 
-@DriftDatabase(tables: [ShopInfoTable, ShopPhoneTable, ShopTableTable])
+@DriftDatabase(tables: [ShopInfoTbl, ShopPhoneTbl, ShopTableTbl, ShopProductGroupTbl])
 class Database extends _$Database {
   Database() : super(_openConnection());
 

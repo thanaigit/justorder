@@ -10,19 +10,18 @@ import '../mapper/shop_info_mapper.dart';
 final shopInfoRepositoryProvider = Provider<ShopInfoRepository>((ref) {
   final db = ref.watch(databaseProvider);
   final mapper = ref.watch(shopInfoMapperProvider);
-  return ShopInfoRepository(ref, db: db, table: db.shopInfoTable, mapper: mapper);
+  return ShopInfoRepository(ref, db: db, table: db.shopInfoTbl, mapper: mapper);
 });
 
 class ShopInfoRepository
-    extends
-        BaseRepository<ShopInfo, ShopInfoTableData, ShopInfoTableCompanion, $ShopInfoTableTable> {
+    extends BaseRepository<ShopInfo, ShopInfoTblData, ShopInfoTblCompanion, $ShopInfoTblTable> {
   ShopInfoRepository(super.ref, {required super.db, required super.table, required super.mapper});
 
   Future<Result<ShopInfo?>> getShopInfo() => getSingle();
 
   Future<Result<int>> countShops() => countDataAll();
 
-  Future<Result<int>> getLastShopID() => getMaxInt(db.shopInfoTable.id);
+  Future<Result<int>> getLastShopID() => getMaxInt(db.shopInfoTbl.id);
 
   Future<Result<ShopInfo>> createShop(ShopInfo shop) async {
     ShopInfo shopInfo = shop;

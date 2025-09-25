@@ -3,9 +3,9 @@ import 'package:drift/drift.dart';
 import '../../../core/enum/data_status.dart';
 import 'shop_info_table.dart';
 
-class ShopPhoneTable extends Table {
+class ShopPhoneTbl extends Table {
   late final id = integer().autoIncrement()();
-  late final shopID = integer().references(ShopInfoTable, #id)();
+  late final shopID = integer().references(ShopInfoTbl, #id)();
   late final phoneNo = text().nullable()();
   late final note = text().nullable()();
   late final dataStatus = textEnum<DataStatus>().withDefault(Constant(DataStatus.active.text))();

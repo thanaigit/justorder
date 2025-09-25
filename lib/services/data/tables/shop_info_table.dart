@@ -3,7 +3,7 @@ import 'package:drift/drift.dart';
 import '../../../core/enum/data_status.dart';
 import '../../../enum/service_charge_method.dart';
 
-class ShopInfoTable extends Table {
+class ShopInfoTbl extends Table {
   IntColumn get id => integer()();
   TextColumn get name => text().nullable()();
   TextColumn get addressNo => text().nullable()();
