@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:encrypt/encrypt.dart';
 
+import '../../../config/env.scr.dart';
+
 class EncryptManager {
-  static String get secureKey => 'Zihmw2yJR6jFLIh4QcX1svYzSQJ2QA3B'; // AppConsts.secureEncryptKey;
-  static String get secureIV => 'SwEsnQ/4IDM4S7t26NJZ/Q==';
+  static String get secureKey => EnvScr.secretKey;
+  static String get secureIV => EnvScr.secretIV;
 
   static String encryptAES(String plainText) {
     final key = Key.fromUtf8(secureKey);

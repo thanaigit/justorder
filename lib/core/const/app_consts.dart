@@ -1,6 +1,8 @@
+import '../config/app_env.dart';
+
 class AppConsts {
   AppConsts._();
-  static String get appToken => '';
+  static String get appToken => AppEnv.clientKey;
   static String get localDeviceStorage => '$appToken.LOCAL_DEVICE_STORAGE';
   static String userToken(String userID) => '$appToken.${userID.toUpperCase()}';
   static String sessionToken(String userID, String sessionID) =>

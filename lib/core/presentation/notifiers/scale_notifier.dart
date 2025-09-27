@@ -6,12 +6,10 @@ import '../styles/responsive_scale.dart';
 class ScaleNotifier extends ChangeNotifier {
   ScalesValue? appScale;
   ResponsiveScale? responsiveScale;
-  ScaleNotifier({
-    this.appScale = ScalesValue.normal,
-    this.responsiveScale,
-  });
+  ScaleNotifier({this.appScale = ScalesValue.normal, this.responsiveScale});
 
   set scale(ScalesValue value) {
+    if (appScale?.value == value.value) return;
     appScale = value;
     notifyListeners();
   }
@@ -21,11 +19,8 @@ class ScaleNotifier extends ChangeNotifier {
 }
 
 class AppScales extends InheritedNotifier<ScaleNotifier> {
-  const AppScales({
-    super.key,
-    ScaleNotifier? scaleNotifier,
-    required super.child,
-  }) : super(notifier: scaleNotifier);
+  const AppScales({super.key, ScaleNotifier? scaleNotifier, required super.child})
+    : super(notifier: scaleNotifier);
 
   static ScaleNotifier? of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<AppScales>()?.notifier;

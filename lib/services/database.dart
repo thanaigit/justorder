@@ -10,16 +10,19 @@ import '../enum/service_charge_method.dart';
 import 'data/tables/shop_info_table.dart';
 import 'data/tables/shop_phone_table.dart';
 import 'data/tables/shop_product_group_table.dart';
+import 'data/tables/shop_product_unit_table.dart';
 import 'data/tables/shop_table_table.dart';
 
 part 'database.g.dart';
 
-@DriftDatabase(tables: [ShopInfoTbl, ShopPhoneTbl, ShopTableTbl, ShopProductGroupTbl])
+@DriftDatabase(
+  tables: [ShopInfoTbl, ShopPhoneTbl, ShopTableTbl, ShopProductGroupTbl, ShopProductUnitTbl],
+)
 class Database extends _$Database {
   Database() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration {
@@ -27,11 +30,12 @@ class Database extends _$Database {
       onCreate: (m) async {
         await m.createAll();
       },
-      // onUpgrade: (m, from, to) async {
-      //   if (from == 1 && to == 2) {
-      //     await m.addColumn(shopInfoTable, shopInfoTable.logoImagePath);
-      //   }
-      // },
+      onUpgrade: (m, from, to) async {
+        if (from == 1 && to == 2) {
+          // await m.addColumn(shopInfoTable, shopInfoTable.logoImagePath);
+          await m.createTable(shopProductUnitTbl);
+        }
+      },
     );
   }
 }

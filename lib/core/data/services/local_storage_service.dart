@@ -31,10 +31,7 @@ class LocalStorageService {
       return Result<T>(error: AppErrors.invalidDataTypeForLocalStorage);
     } catch (e) {
       return Result<T>(
-        error: Failure(
-          message: e.toString(),
-          stackTrace: StackTrace.current,
-        ),
+        error: Failure(message: e.toString(), stackTrace: StackTrace.current),
       );
     }
   }
@@ -50,10 +47,7 @@ class LocalStorageService {
     } catch (e) {
       return Result<bool>(
         success: false,
-        error: Failure(
-          message: e.toString(),
-          stackTrace: StackTrace.current,
-        ),
+        error: Failure(message: e.toString(), stackTrace: StackTrace.current),
       );
     }
   }
@@ -65,10 +59,7 @@ class LocalStorageService {
     } catch (e) {
       return Result<bool>(
         success: false,
-        error: Failure(
-          message: e.toString(),
-          stackTrace: StackTrace.current,
-        ),
+        error: Failure(message: e.toString(), stackTrace: StackTrace.current),
       );
     }
   }
@@ -79,10 +70,7 @@ class LocalStorageService {
       return Result<Set<String>>(success: keys);
     } catch (e) {
       return Result<Set<String>>(
-        error: Failure(
-          message: e.toString(),
-          stackTrace: StackTrace.current,
-        ),
+        error: Failure(message: e.toString(), stackTrace: StackTrace.current),
       );
     }
   }

@@ -4,7 +4,7 @@ import '../core/utilities/result_handle.dart';
 import '../entities/shop_product_group.dart';
 import '../services/data/repositories/shop_product_group_repository.dart';
 
-final shopProductGroupViewModel =
+final shopProductGroupViewModelProvider =
     NotifierProvider.family<ShopProductGroupViewModel, List<ShopProductGroup>?, int>(
       (shopID) => ShopProductGroupViewModel(shopID),
     );
@@ -80,6 +80,24 @@ class ShopProductGroupViewModel extends Notifier<List<ShopProductGroup>?> {
     var groups = state != null ? List.of(state!) : null;
     if (groups != null) groups.removeWhere((e) => e.id == group.id);
     state = (groups != null) ? List.of(groups) : null;
+    return const Result<bool>(success: true);
+  }
+
+  Future<Result<bool>> reorderGroup(List<ShopProductGroup> groups) async {
+    if (state == null) return const Result<bool>(success: false);
+    var oldList = List.of(state!);
+    for (var i = 0; i < groups.length; i++) {
+      final grp = groups[i];
+      final idx = oldList.indexWhere((element) => element.id == grp.id);
+      if (idx == -1) continue;
+      if (oldList[idx].order != grp.order) {
+        final result = await _repo.updateProductGroup(grp);
+        if (result.hasError) return Result<bool>(success: false, error: result.error);
+        oldList[idx] = oldList[idx].copyWith(order: grp.order);
+      }
+    }
+    oldList.sort((a, b) => (a.order ?? 0).compareTo((b.order ?? 0)));
+    state = List.of(oldList);
     return const Result<bool>(success: true);
   }
 }

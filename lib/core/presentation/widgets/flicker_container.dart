@@ -79,13 +79,14 @@ class _FlickerContainerState extends State<FlickerContainer> with SingleTickerPr
       reverseDuration: widget.reverseDuration,
       animationBehavior: AnimationBehavior.preserve,
     );
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: widget.animationCurve ?? Curves.fastEaseInToSlowEaseOut,
-      reverseCurve: widget.animationReverseCurve,
-    )..addListener(() {
-        if (mounted) setState(() {});
-      });
+    _animation =
+        CurvedAnimation(
+          parent: _controller,
+          curve: widget.animationCurve ?? Curves.fastEaseInToSlowEaseOut,
+          reverseCurve: widget.animationReverseCurve,
+        )..addListener(() {
+          if (mounted) setState(() {});
+        });
 
     if (widget.animated) _startAnimation();
     if (widget.alertSoundEnabled) _startAlertSound();
@@ -107,7 +108,6 @@ class _FlickerContainerState extends State<FlickerContainer> with SingleTickerPr
 
   void _startAlertSound() {
     if (_soundPlaying) return;
-    debugPrint('_startAlertSound');
     final interval = widget.alertSoundInterval ?? const Duration(milliseconds: 1500);
     _soundTimer = Timer.periodic(interval, (timer) => _playAlertSound());
     _soundPlaying = true;

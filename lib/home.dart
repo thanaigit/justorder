@@ -16,6 +16,8 @@ import 'core/presentation/widgets/gap.dart';
 import 'core/providers/app_common_data_provider.dart';
 import 'core/utilities/func_utils.dart';
 import 'view_model/shop_info_view_model.dart';
+import 'view_model/shop_product_group_view_model.dart';
+import 'view_model/shop_product_unit_view_model.dart';
 import 'view_model/shop_table_view_model.dart';
 import 'views/pages/shop/shop_info_edit_addr.dart';
 import 'views/pages/shop/shop_info_edit_phone.dart';
@@ -31,7 +33,7 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  // bool _firstBuild = true;
+  bool _firstBuild = true;
   late AppCommonDataRepository _appDataRepo;
   final _pageIndexNotifier = ValueNotifier<int>(2);
   final _pageController = PageController(initialPage: 2);
@@ -52,7 +54,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (appLang != AppLang.of(context)!.language) {
       AppLang.of(context)!.language = appLang;
     }
-    if (appScale != AppScales.of(context)!.scale) {
+    if (appScale.value != AppScales.of(context)!.scale.value) {
       AppScales.of(context)!.scale = appScale;
     }
   }
@@ -61,28 +63,30 @@ class _HomePageState extends ConsumerState<HomePage> {
     ref.read(shopInfoViewModelProvider.notifier).loadShop().then((result) {
       final shop = result.success;
       if (shop == null) return;
-      ref.read(shopTableViewModelProvider(shop.id ?? 0).notifier).loadShopTables();
+      final shopID = shop.id ?? 0;
+      ref.read(shopTableViewModelProvider(shopID).notifier).loadShopTables();
+      ref.read(shopProductGroupViewModelProvider(shopID).notifier).loadProductGroups();
+      ref.read(shopProductUnitViewModelProvider(shopID).notifier).loadProductUnits();
     });
   }
 
   @override
   void initState() {
     super.initState();
+    _appDataRepo = ref.read(appCommonDataProvider);
     _loadInitialData();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _appDataRepo = ref.read(appCommonDataProvider);
-    _setAppCommonData();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (_firstBuild) {
-    //     _firstBuild = false;
-    //     _setAppCommonData();
-    //     _pageController.jumpToPage(_pageIndexNotifier.value);
-    //   }
-    // });
+    WidgetsBinding.instance.addPostFrameCallback(
+      // Delay for initialize localStorage
+      (_) => Future.delayed(const Duration(milliseconds: 50), () {
+        _firstBuild = false;
+        _setAppCommonData();
+      }),
+    );
   }
 
   @override
@@ -127,7 +131,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     // debugPrint('shop = ${shop.toString()}');
     // debugPrint('shopExists = $shopExists');
 
-    void setScale(ScalesValue scale) => AppScales.of(context)!.scale = scale;
+    void setScale(ScalesValue value) => AppScales.of(context)!.scale = value;
 
     Widget settingPane() {
       return SingleChildScrollView(

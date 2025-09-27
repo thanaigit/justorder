@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:justorder/core/const/fonts.dart';
 
 import '../../core/const/colors.dart';
+import '../../core/const/fonts.dart';
 import '../../core/const/icon_data.dart';
 import '../../core/const/size.dart';
 import '../../core/presentation/styles/text_styles.dart';
 import '../../core/presentation/widgets/gap.dart';
 import '../../view_model/shop_info_view_model.dart';
+import '../../view_model/shop_product_group_view_model.dart';
+import '../../view_model/shop_product_unit_view_model.dart';
 import '../../view_model/shop_table_view_model.dart';
+import '../pages/products/shop_product_group_entry.dart';
+import '../pages/products/shop_product_unit_entry.dart';
 import '../pages/shop/shop_info_edit_table.dart';
 
 class SettingMenu extends ConsumerWidget {
@@ -100,6 +104,8 @@ class SettingMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final shop = ref.watch(shopInfoViewModelProvider);
     final table = ref.watch(shopTableViewModelProvider(shop?.id ?? 0));
+    final prodgroups = ref.watch(shopProductGroupViewModelProvider(shop?.id ?? 0));
+    final prodUnits = ref.watch(shopProductUnitViewModelProvider(shop?.id ?? 0));
 
     const spaceHgt = AppSize.paragraphSpace;
     final menuStyle = AppTextStyles.headerMediumStyle(
@@ -109,15 +115,6 @@ class SettingMenu extends ConsumerWidget {
     );
     return Column(
       children: [
-        // const Gap.height(spaceHgt),
-        // _menuButtonText(
-        //   header: 'ห้องครัว',
-        //   headerStyle: menuStyle,
-        //   enabled: widget.enabled,
-        //   description:
-        //       'กำหนดห้องครัว สำหรับใช้เมื่อลูกค้าสั่งอาหาร ข้อมูลอาหารที่สั่งจะปรากฏไปยังห้องครัวตามที่กำหนดไว้ '
-        //       'เช่น ครัวอาหารทะเล, ครัวไทย, บาร์น้ำ เป็นต้น',
-        // ),
         const Gap.height(spaceHgt),
         _menuButtonText(
           header: 'ข้อมูลโต๊ะ',
@@ -138,19 +135,29 @@ class SettingMenu extends ConsumerWidget {
           header: 'ข้อมูลกลุ่มอาหาร',
           headerStyle: menuStyle,
           enabled: enabled,
+          count: prodgroups?.length,
           description:
               'ใช้สำหรับกำหนดกลุ่มอาหารเพื่อแสดงในเมนูอาหารของคุณ '
               'กลุ่มอาหารจะถูกนำไปใช้เมื่อคุณระบุรายการอาหารของคุณ',
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ShopProductGroupEntry()),
+          ),
         ),
         const Gap.height(spaceHgt),
         _menuButtonText(
           header: 'ข้อมูลหน่วยนับ',
           headerStyle: menuStyle,
           enabled: enabled,
+          count: prodUnits?.length,
           description:
               'ใช้กำหนดหน่วยในการสั่งอาหาร เช่น จาน, ชาม, กล่อง หรือถุง และยังสามารถ'
               'กำหนดหน่วยตามน้ำหนัก เช่น ขีด, กรัม หรือ กก. ตามที่คุณกำหนด เพื่อให้ระบบสามารถคำนวณ'
               'ราคาอาหารตามน้ำหนักได้',
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ShopProductUnitEntryPage()),
+          ),
         ),
         const Gap.height(spaceHgt),
         _menuButtonText(
