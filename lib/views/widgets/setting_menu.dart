@@ -168,13 +168,13 @@ class SettingMenu extends ConsumerWidget {
               'ใช้กำหนดตัวเลือกต่างๆ ในเมนูอาหารของคุณ เพื่อให้ลูกค้าเลือกตัวเลือกเพิ่มเติมได้อย่างง่ายๆ'
               ' เช่น ระดับความเผ็ด, ประเภทน้ำซุป หรือชนิดเส้น ฯลฯ เป็นต้น',
         ),
-        const Gap.height(spaceHgt),
-        _menuButtonText(
-          header: 'บัญชี Promptpay',
-          headerStyle: menuStyle,
-          enabled: enabled,
-          description: 'กำหนดบัญชี Promptpay สำหรับการรับชำระเงินผ่าน QR-Code',
-        ),
+        // const Gap.height(spaceHgt),
+        // _menuButtonText(
+        //   header: 'บัญชี Promptpay',
+        //   headerStyle: menuStyle,
+        //   enabled: enabled,
+        //   description: 'กำหนดบัญชี Promptpay สำหรับการรับชำระเงินผ่าน QR-Code',
+        // ),
       ],
     );
   }

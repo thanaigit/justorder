@@ -466,6 +466,37 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
       );
     }
 
+    Widget promptPay() {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppSize.paragraphSpaceLoose),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            circleIcon(Icons.qr_code_2, onTap: () {}, enabled: shopExists),
+            const Gap.width(GapSize.loose),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  headerMenuButton(
+                    text: 'บัญชี Promptpay',
+                    onTap: widget.onPressAddress,
+                    enabled: shopExists,
+                  ),
+                  const Gap.height(GapSize.normal),
+                  Text(
+                    'กำหนดบัญชี Promptpay สำหรับการรับชำระเงินผ่าน QR-Code',
+                    style: subInfoStyle,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -473,6 +504,7 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
         addressShop(),
         phoneContact(),
         taxServicePane(),
+        promptPay(),
       ],
     );
   }

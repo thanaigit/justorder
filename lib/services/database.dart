@@ -10,19 +10,29 @@ import '../enum/service_charge_method.dart';
 import 'data/tables/shop_info_table.dart';
 import 'data/tables/shop_phone_table.dart';
 import 'data/tables/shop_product_group_table.dart';
+import 'data/tables/shop_product_options_group_detail_table.dart';
+import 'data/tables/shop_product_options_group_table.dart';
 import 'data/tables/shop_product_unit_table.dart';
 import 'data/tables/shop_table_table.dart';
 
 part 'database.g.dart';
 
 @DriftDatabase(
-  tables: [ShopInfoTbl, ShopPhoneTbl, ShopTableTbl, ShopProductGroupTbl, ShopProductUnitTbl],
+  tables: [
+    ShopInfoTbl,
+    ShopPhoneTbl,
+    ShopTableTbl,
+    ShopProductGroupTbl,
+    ShopProductUnitTbl,
+    ShopProductOptionsGroupTbl,
+    ShopProductOptionsGroupDetailTbl,
+  ],
 )
 class Database extends _$Database {
   Database() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
@@ -31,9 +41,13 @@ class Database extends _$Database {
         await m.createAll();
       },
       onUpgrade: (m, from, to) async {
-        if (from == 1 && to == 2) {
+        if (from == 1) {
           // await m.addColumn(shopInfoTable, shopInfoTable.logoImagePath);
           await m.createTable(shopProductUnitTbl);
+        }
+        if (from == 2) {
+          await m.createTable(shopProductOptionsGroupTbl);
+          await m.createTable(shopProductOptionsGroupDetailTbl);
         }
       },
     );

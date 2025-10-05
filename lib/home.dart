@@ -82,10 +82,13 @@ class _HomePageState extends ConsumerState<HomePage> {
     super.didChangeDependencies();
     WidgetsBinding.instance.addPostFrameCallback(
       // Delay for initialize localStorage
-      (_) => Future.delayed(const Duration(milliseconds: 50), () {
-        _firstBuild = false;
-        _setAppCommonData();
-      }),
+      (_) => ifThen(
+        _firstBuild,
+        () => Future.delayed(const Duration(milliseconds: 50), () {
+          _firstBuild = false;
+          _setAppCommonData();
+        }),
+      ),
     );
   }
 
