@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:justorder/core/const/fonts.dart';
 import 'package:justorder/core/domain/entities/image_base.dart';
 import 'package:my_ui/widgets/common/input/text_input.dart';
 
@@ -13,6 +14,7 @@ import '../../../core/presentation/pages/images/image_viewer.dart';
 import '../../../core/presentation/widgets/null_box.dart';
 import '../../../entities/shop_info.dart';
 import '../../../enum/service_charge_method.dart';
+import '../../../view_model/shop_bank_account_view_model.dart';
 import '../../../view_model/shop_info_view_model.dart';
 import '../../../view_model/shop_phone_view_model.dart';
 import 'shop_avatar.dart';
@@ -25,6 +27,7 @@ class ShopInfoSummary extends ConsumerStatefulWidget {
   final void Function()? onPressAddress;
   final void Function()? onPressPhone;
   final void Function()? onPressTaxService;
+  final void Function()? onPressPromptpay;
   const ShopInfoSummary({
     super.key,
     this.forPublicInfo = false,
@@ -33,6 +36,7 @@ class ShopInfoSummary extends ConsumerStatefulWidget {
     this.onPressAddress,
     this.onPressPhone,
     this.onPressTaxService,
+    this.onPressPromptpay,
   });
 
   @override
@@ -49,6 +53,7 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
     super.initState();
     final shop = ref.read(shopInfoViewModelProvider);
     ref.read(shopPhoneViewModelProvider(shop?.id ?? 0).notifier).loadShopPhones();
+    ref.read(shopBankAccountViewModelProvider(shop?.id ?? 0).notifier).loadBankAccounts();
   }
 
   @override
@@ -65,6 +70,7 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
     final shop = ref.watch(shopInfoViewModelProvider);
     final shopExists = (shop != null) && (shop.id != null);
     final phones = ref.watch(shopPhoneViewModelProvider(shop?.id ?? 0));
+    final bankAccounts = ref.watch(shopBankAccountViewModelProvider(shop?.id ?? 0));
     // final dist = (shopInfo.address?.district ?? '').trim();
     // final provi = (shopInfo.address?.province ?? '').trim();
     // String addrAbrv = (dist.isNotEmpty && provi.isNotEmpty)
@@ -80,6 +86,7 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
     );
     final headerStyle = AppTextStyles.headerMediumStyle(context, color: fontHeaderColor);
     final subInfoStyle = TextStyle(
+      fontFamily: AppFonts.uiFontName,
       color: shopExists ? AppColors.descriptionInfo : AppColors.disableMinorInfoColor,
     );
     final subInfoDataStyle = TextStyle(color: shopExists ? null : AppColors.disableMinorInfoColor);
@@ -122,12 +129,13 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
             shop: shop,
             size: size.width / 4.5,
             showMenuIcon: false,
-            onTap: () async {
+            onTap: (image) async {
               final imageBase =
                   await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ImageViewer(pageTitle: 'โลโก้ร้าน'),
+                          builder: (context) =>
+                              ImageViewer(pageTitle: 'โลโก้ร้าน', imageObject: image),
                         ),
                       )
                       as ImageBase?;
@@ -466,6 +474,47 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
       );
     }
 
+    Widget singleColorCardLabel({
+      required String caption,
+      required Color color,
+      double? verticalGap,
+      TextStyle? style,
+    }) {
+      return Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(
+          vertical: verticalGap ?? 2.0,
+          horizontal: AppSize.insideSpace,
+        ),
+        decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(5.0)),
+        child: Text(
+          caption,
+          style:
+              style ??
+              AppTextStyles.labelSmaller(
+                context,
+                color: Colors.white,
+                sizeOffset: -2,
+              ).copyWith(fontWeight: FontWeight.bold),
+        ),
+      );
+    }
+
+    Widget closeCard({Color? color, double? verticalGap, TextStyle? style}) => singleColorCardLabel(
+      caption: 'ยกเลิก',
+      style: style,
+      verticalGap: verticalGap,
+      color: color ?? Colors.red.shade700,
+    );
+
+    Widget defaultCard({Color? color, double? verticalGap, TextStyle? style}) =>
+        singleColorCardLabel(
+          caption: 'บัญชีหลัก',
+          style: style,
+          verticalGap: verticalGap,
+          color: color ?? Colors.green.shade700,
+        );
+
     Widget promptPay() {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: AppSize.paragraphSpaceLoose),
@@ -481,14 +530,46 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
                 children: [
                   headerMenuButton(
                     text: 'บัญชี Promptpay',
-                    onTap: widget.onPressAddress,
+                    onTap: widget.onPressPromptpay,
                     enabled: shopExists,
                   ),
                   const Gap.height(GapSize.normal),
-                  Text(
-                    'กำหนดบัญชี Promptpay สำหรับการรับชำระเงินผ่าน QR-Code',
-                    style: subInfoStyle,
-                  ),
+                  bankAccounts == null || bankAccounts.isEmpty
+                      ? Text(
+                          'กำหนดบัญชี Promptpay สำหรับการรับชำระเงินผ่าน QR-Code',
+                          style: subInfoStyle,
+                        )
+                      : Column(
+                          children: [
+                            ...List.generate(bankAccounts.length, (index) {
+                              final account = bankAccounts[index];
+                              return ListTile(
+                                visualDensity: VisualDensity.compact,
+                                title:
+                                    (account.isPromptpay && account.defaultPromptpay ||
+                                        account.closed)
+                                    ? Text.rich(
+                                        TextSpan(
+                                          text: account.accountNo ?? '',
+                                          children: [
+                                            const WidgetSpan(child: Gap.width(GapSize.dense)),
+                                            WidgetSpan(
+                                              child: UnconstrainedBox(
+                                                child: account.closed ? closeCard() : defaultCard(),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : Text(account.accountNo ?? ''),
+                                subtitle: Text(
+                                  account.accountName ?? '',
+                                  style: AppTextStyles.titleDeepStyle(context, sizeOffset: 0.5),
+                                ),
+                              );
+                            }),
+                          ],
+                        ),
                 ],
               ),
             ),

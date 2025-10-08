@@ -1,8 +1,13 @@
 import 'package:drift/drift.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../entities/shop_product_options_group_detail.dart';
 import '../../database.dart';
 import '../base/drift_mapper.dart';
+
+final shopProductOptionsGroupDetailMapperProvider = Provider<ShopProductOptionsGroupDetailMapper>(
+  (ref) => ShopProductOptionsGroupDetailMapper(),
+);
 
 class ShopProductOptionsGroupDetailMapper
     extends

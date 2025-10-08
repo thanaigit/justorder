@@ -9,9 +9,11 @@ import '../../core/presentation/styles/text_styles.dart';
 import '../../core/presentation/widgets/gap.dart';
 import '../../view_model/shop_info_view_model.dart';
 import '../../view_model/shop_product_group_view_model.dart';
+import '../../view_model/shop_product_options_group_view_model.dart';
 import '../../view_model/shop_product_unit_view_model.dart';
 import '../../view_model/shop_table_view_model.dart';
 import '../pages/products/shop_product_group_entry.dart';
+import '../pages/products/shop_product_options_groups_entry.dart';
 import '../pages/products/shop_product_unit_entry.dart';
 import '../pages/shop/shop_info_edit_table.dart';
 
@@ -91,6 +93,7 @@ class SettingMenu extends ConsumerWidget {
             child: Text(
               description ?? '',
               style: TextStyle(
+                fontFamily: AppFonts.uiFontName,
                 color: enabled ? AppColors.descriptionInfo : AppColors.disableMinorInfoColor,
               ),
             ),
@@ -106,6 +109,7 @@ class SettingMenu extends ConsumerWidget {
     final table = ref.watch(shopTableViewModelProvider(shop?.id ?? 0));
     final prodgroups = ref.watch(shopProductGroupViewModelProvider(shop?.id ?? 0));
     final prodUnits = ref.watch(shopProductUnitViewModelProvider(shop?.id ?? 0));
+    final optionsGroups = ref.watch(shopProductOptionsGroupViewModelProvider(shop?.id ?? 0));
 
     const spaceHgt = AppSize.paragraphSpace;
     final menuStyle = AppTextStyles.headerMediumStyle(
@@ -164,9 +168,18 @@ class SettingMenu extends ConsumerWidget {
           header: 'ข้อมูลตัวเลือก',
           headerStyle: menuStyle,
           enabled: enabled,
+          count: optionsGroups?.length,
           description:
               'ใช้กำหนดตัวเลือกต่างๆ ในเมนูอาหารของคุณ เพื่อให้ลูกค้าเลือกตัวเลือกเพิ่มเติมได้อย่างง่ายๆ'
               ' เช่น ระดับความเผ็ด, ประเภทน้ำซุป หรือชนิดเส้น ฯลฯ เป็นต้น',
+          onTap: shop != null
+              ? () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShopProductOptionsGroupsEntry(shop: shop),
+                  ),
+                )
+              : null,
         ),
         // const Gap.height(spaceHgt),
         // _menuButtonText(

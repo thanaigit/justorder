@@ -7,11 +7,13 @@ import 'package:path/path.dart' as p;
 
 import '../core/enum/data_status.dart';
 import '../enum/service_charge_method.dart';
+import 'data/tables/shop_bank_account_table.dart';
 import 'data/tables/shop_info_table.dart';
 import 'data/tables/shop_phone_table.dart';
 import 'data/tables/shop_product_group_table.dart';
 import 'data/tables/shop_product_options_group_detail_table.dart';
 import 'data/tables/shop_product_options_group_table.dart';
+import 'data/tables/shop_product_table.dart';
 import 'data/tables/shop_product_unit_table.dart';
 import 'data/tables/shop_table_table.dart';
 
@@ -26,13 +28,15 @@ part 'database.g.dart';
     ShopProductUnitTbl,
     ShopProductOptionsGroupTbl,
     ShopProductOptionsGroupDetailTbl,
+    ShopBankAccountTbl,
+    ShopProductTbl,
   ],
 )
 class Database extends _$Database {
   Database() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration {
@@ -48,6 +52,10 @@ class Database extends _$Database {
         if (from == 2) {
           await m.createTable(shopProductOptionsGroupTbl);
           await m.createTable(shopProductOptionsGroupDetailTbl);
+        }
+        if (from == 3) {
+          await m.createTable(shopBankAccountTbl);
+          await m.createTable(shopProductTbl);
         }
       },
     );

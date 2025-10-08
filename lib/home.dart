@@ -17,8 +17,10 @@ import 'core/providers/app_common_data_provider.dart';
 import 'core/utilities/func_utils.dart';
 import 'view_model/shop_info_view_model.dart';
 import 'view_model/shop_product_group_view_model.dart';
+import 'view_model/shop_product_options_group_view_model.dart';
 import 'view_model/shop_product_unit_view_model.dart';
 import 'view_model/shop_table_view_model.dart';
+import 'views/pages/shop/shop_info_bank_account.dart';
 import 'views/pages/shop/shop_info_edit_addr.dart';
 import 'views/pages/shop/shop_info_edit_phone.dart';
 import 'views/pages/shop/shop_info_tax_service.dart';
@@ -67,6 +69,9 @@ class _HomePageState extends ConsumerState<HomePage> {
       ref.read(shopTableViewModelProvider(shopID).notifier).loadShopTables();
       ref.read(shopProductGroupViewModelProvider(shopID).notifier).loadProductGroups();
       ref.read(shopProductUnitViewModelProvider(shopID).notifier).loadProductUnits();
+      ref
+          .read(shopProductOptionsGroupViewModelProvider(shopID).notifier)
+          .loadProductOptionsGroups();
     });
   }
 
@@ -172,6 +177,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                 context,
                 MaterialPageRoute(builder: (context) => const ShopInfoTaxServicePage()),
               ),
+              onPressPromptpay: shop != null
+                  ? () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ShopInfoBankAccountPage(shop: shop)),
+                    )
+                  : null,
             ),
             const Gap.height(GapSize.mostLoose),
             Row(

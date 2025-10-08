@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../core/const/assets_manager.dart';
+import '../../../core/domain/entities/image_base.dart';
 import '../../../core/domain/entities/menu_item_value.dart';
 import '../../../core/presentation/widgets/profile_avatar.dart';
 import '../../../core/providers/image_local_storage_provider.dart';
@@ -31,7 +32,7 @@ class ShopAvatar extends ConsumerWidget {
   final Widget? menuIcon;
   final List<MenuItemValue>? menuItems;
   final void Function(dynamic)? onMenuSelected;
-  final VoidCallback? onTap;
+  final void Function(ImageBase? image)? onTap;
   const ShopAvatar({
     super.key,
     this.shop,
@@ -60,6 +61,7 @@ class ShopAvatar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ImageBase? imageBase;
     Widget profileAvatar({ImageProvider<Object>? image, bool isLoadning = false}) {
       return ProfileAvatar(
         image: image,
@@ -83,7 +85,7 @@ class ShopAvatar extends ConsumerWidget {
         menuIcon: menuIcon,
         menuItems: menuItems,
         onMenuSelected: onMenuSelected,
-        onTap: onTap,
+        onTap: onTap != null ? () => onTap!(imageBase) : null,
         defaultAvatarImage: SvgPicture.asset(
           AssetsManager.shopDefaultImage,
           fit: BoxFit.cover,
@@ -95,8 +97,8 @@ class ShopAvatar extends ConsumerWidget {
     final loadAsync = ref.watch(imageLocalLoadProvider(shop?.logoImagePath ?? ''));
     return loadAsync.when(
       data: (data) {
-        final image = data.success;
-        return profileAvatar(image: image?.imageProvider, isLoadning: false);
+        imageBase = data.success;
+        return profileAvatar(image: imageBase?.imageProvider, isLoadning: false);
       },
       error: (err, stack) => profileAvatar(isLoadning: false),
       loading: () => profileAvatar(isLoadning: true),

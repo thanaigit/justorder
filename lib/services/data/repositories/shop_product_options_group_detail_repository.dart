@@ -1,7 +1,23 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../core/utilities/result_handle.dart';
 import '../../../entities/shop_product_options_group_detail.dart';
 import '../../database.dart';
+import '../../database_provider.dart';
 import '../base/base_repository.dart';
+import '../mapper/shop_product_options_group_detail_mapper.dart';
+
+final shopProductOptionsGroupDetailRepositoryProvider =
+    Provider<ShopProductOptionsGroupDetailRepository>((ref) {
+      final db = ref.watch(databaseProvider);
+      final mapper = ref.watch(shopProductOptionsGroupDetailMapperProvider);
+      return ShopProductOptionsGroupDetailRepository(
+        ref,
+        db: db,
+        table: db.shopProductOptionsGroupDetailTbl,
+        mapper: mapper,
+      );
+    });
 
 class ShopProductOptionsGroupDetailRepository
     extends
