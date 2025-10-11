@@ -19,12 +19,18 @@ import '../../../core/utilities/result_handle.dart';
 import '../../../entities/shop_bank_account.dart';
 import '../../../entities/shop_info.dart';
 import '../../../view_model/shop_bank_account_view_model.dart';
-import 'shop_qr_promptpay.dart';
+import '../../widgets/shop_bank_account_display.dart';
 
 class ShopInfoBankAccountPage extends ConsumerStatefulWidget {
   final ShopInfo shop;
   final bool canEdit;
-  const ShopInfoBankAccountPage({super.key, required this.shop, this.canEdit = true});
+  final bool visibledEditor;
+  const ShopInfoBankAccountPage({
+    super.key,
+    required this.shop,
+    this.canEdit = true,
+    this.visibledEditor = true,
+  });
 
   @override
   ConsumerState<ShopInfoBankAccountPage> createState() => _ShopInfoBankAccountPageState();
@@ -33,9 +39,11 @@ class ShopInfoBankAccountPage extends ConsumerStatefulWidget {
 class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPage> {
   final _dataActionNotifier = ValueNotifier<DataAction>(DataAction.view);
   final _nameController = TextEditingController();
+  final _bankController = TextEditingController();
   final _noController = TextEditingController();
   final _noteController = TextEditingController();
   final _nameFocus = FocusNode();
+  final _bankFocus = FocusNode();
   final _noFocus = FocusNode();
   final _noteFocus = FocusNode();
   final _loadingNotifier = ValueNotifier<bool>(false);
@@ -44,6 +52,7 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
   final _closeAcctNotifier = ValueNotifier<bool>(false);
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _defaultAcct = false;
+  bool _isPromptpay = false;
 
   Future<void> _errorMessageDialog(String msg) async {
     await messageDialog(
@@ -90,23 +99,27 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
   }
 
   void _addNew(BuildContext context, {List<ShopBankAccount>? accounts}) {
+    _isPromptpay = false;
     _defaultAcct = accounts == null || accounts.isEmpty;
     if (accounts != null && accounts.isNotEmpty) {
-      final defExists = accounts.any((element) => element.isPromptpay && element.defaultPromptpay);
+      final defExists = accounts.any((e) => e.defaultPromptpay);
       _defaultAcct = !defExists;
     }
     _noController.clear();
     _nameController.clear();
     _noteController.clear();
+    _bankController.clear();
     _noFocus.requestFocus();
     _dataActionNotifier.value = DataAction.inserted;
     _showInputModal(context, onSave: () => _saveData(accounts: accounts));
   }
 
   void _editData(BuildContext context, ShopBankAccount account, {List<ShopBankAccount>? accounts}) {
-    _defaultAcct = account.isPromptpay && account.defaultPromptpay;
+    _defaultAcct = account.defaultPromptpay;
+    _isPromptpay = account.isPromptpay;
     _noController.text = account.accountNo ?? '';
     _nameController.text = account.accountName ?? '';
+    _bankController.text = account.bankName ?? '';
     _noteController.text = account.note ?? '';
     _dataActionNotifier.value = DataAction.updated;
     _showInputModal(
@@ -145,23 +158,14 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
       await _errorMessageDialog('กรุณากำหนดชื่อบัญชี');
       return false;
     }
+    final bank = _bankController.text.trim();
     final note = _noteController.text.trim();
     if (accounts != null) {
       int idx = accounts.indexWhere(
-        (element) =>
-            element.accountNo?.toLowerCase() == no.toLowerCase() && element.id != account?.id,
+        (e) => e.accountNo?.toLowerCase() == no.toLowerCase() && e.id != account?.id,
       );
       if (idx >= 0) {
         await _errorMessageDialog('เลขที่บัญชี $no มีอยู่แล้ว กรุณาตรวจสอบ');
-        return false;
-      }
-
-      idx = accounts.indexWhere(
-        (element) =>
-            element.accountName?.toLowerCase() == name.toLowerCase() && element.id != account?.id,
-      );
-      if (idx >= 0) {
-        await _errorMessageDialog('ชื่อบัญชี $name มีอยู่แล้ว กรุณาตรวจสอบ');
         return false;
       }
     }
@@ -171,8 +175,9 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
             shopID: shopID,
             accountNo: no,
             accountName: name,
+            bankName: bank,
             note: note,
-            isPromptpay: true,
+            isPromptpay: _isPromptpay,
             defaultPromptpay: _defaultAcct,
             closed: _closeAcctNotifier.value,
           )
@@ -180,8 +185,9 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
             shopID: shopID,
             accountNo: no,
             accountName: name,
+            bankName: bank,
             note: note,
-            isPromptpay: true,
+            isPromptpay: _isPromptpay,
             defaultPromptpay: _defaultAcct,
             closed: _closeAcctNotifier.value,
           );
@@ -237,6 +243,7 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
         _noController.clear();
         _nameController.clear();
         _noteController.clear();
+        _bankController.clear();
         // ignore: use_build_context_synchronously
         Navigator.pop(_scaffoldKey.currentContext ?? context);
       }
@@ -262,7 +269,7 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(child: Text('กำหนดบัญชีพร้อมเพย์', style: headerStyle)),
+                    Expanded(child: Text('กำหนดบัญชีธนาคาร', style: headerStyle)),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -289,20 +296,23 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
                 TextInputBox(
                   controller: _noController,
                   focusNode: _noFocus,
-                  hintText: 'ใส่เลขที่บัญชีพร้อมเพย์',
-                  labelText: 'เลขที่บัญชี',
+                  hintText: 'ใส่เลขที่บัญชีหรือเลขพร้อมเพย์',
+                  labelText: 'เลขที่บัญชีหรือพร้อมเพย์',
                   labelStyle: titleStyle,
+                  description:
+                      'ใส่เลขที่บัญชีหรือหมายเลขพร้อมเพย์ 10 หรือ 13 หลัก โดยไม่ต้องเว้นวรรคหรือใส่เครื่องหมายขีดคั่นใดๆ',
+                  descriptionStyle: descStyle,
                   showLabel: true,
                   showClearButton: true,
                   required: true,
                   maxLines: 1,
                   maxLength: 13,
-                  // counterText: '',
+                  counterText: '',
                   keyboardType: const TextInputType.numberWithOptions(signed: true),
                   onFieldSubmitted: (value) => _nameFocus.requestFocus(),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'กรุณาใส่เลขที่บัญชี';
+                      return 'กรุณาใส่เลขที่บัญชีธนาคารหรือหมายเลขพร้อมเพย์';
                     }
                     if (value.length < 10 || (value.length > 10 && value.length != 13)) {
                       return 'กรุณาใส่เลขที่บัญชี 10 หลักหรือ 13 หลัก';
@@ -310,16 +320,31 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
                     return null;
                   },
                 ),
-                const Gap.height(GapSize.dense),
+                const Gap.height(GapSize.normal),
                 TextInputBox(
                   controller: _nameController,
                   focusNode: _nameFocus,
-                  hintText: 'ใส่ชื่อบัญชีพร้อมเพย์',
+                  hintText: 'ใส่ชื่อบัญชีธนาคาร',
                   labelText: 'ชื่อบัญชี',
                   labelStyle: titleStyle,
                   showLabel: true,
                   showClearButton: true,
                   required: true,
+                  maxLines: 1,
+                  maxLength: 100,
+                  counterText: '',
+                  onFieldSubmitted: (value) => _bankFocus.requestFocus(),
+                ),
+                const Gap.height(GapSize.dense),
+                TextInputBox(
+                  controller: _bankController,
+                  focusNode: _bankFocus,
+                  hintText: 'ใส่ชื่อธนาคาร/สาขา',
+                  labelText: 'ธนาคาร',
+                  labelStyle: titleStyle,
+                  showLabel: true,
+                  showClearButton: true,
+                  required: false,
                   maxLines: 1,
                   maxLength: 100,
                   counterText: '',
@@ -350,6 +375,15 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
                   'กำหนดให้บัญชีนี้เป็นบัญชีหลักสำหรับการรับชำระเงิน เมื่อลูกค้าของคุณต้องการชำระเงิน จะแสดง Promptpay QR-Code ของบัญชีนี้ให้ลูกค้าสแกนโดยอัตโนมัติ',
                   style: descStyle,
                 ),
+                const Gap.height(GapSize.normal),
+                SwitchBox(
+                  labelText: 'เป็นหมายเลขพร้อมเพย์',
+                  labelStyle: titleStyle,
+                  decoration: switchStyle,
+                  value: _isPromptpay,
+                  onChanged: (value) => _isPromptpay = value,
+                ),
+                Text('ระบุว่าหมายเลขบัญชีนี้เป็นบัญชีพร้อมเพย์', style: descStyle),
                 const Gap.height(GapSize.normal),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -425,6 +459,24 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
   }
 
   @override
+  void dispose() {
+    _dataActionNotifier.dispose();
+    _nameController.dispose();
+    _bankController.dispose();
+    _noController.dispose();
+    _noteController.dispose();
+    _nameFocus.dispose();
+    _bankFocus.dispose();
+    _noFocus.dispose();
+    _noteFocus.dispose();
+    _loadingNotifier.dispose();
+    _saveNotifier.dispose();
+    _expandNotifier.dispose();
+    _closeAcctNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final shopID = widget.shop.id ?? 0;
     final accounts = ref.watch(shopBankAccountViewModelProvider(shopID));
@@ -434,47 +486,6 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
       context,
       color: AppColors.criticalHighlight,
     );
-
-    Widget singleColorCardLabel({
-      required String caption,
-      required Color color,
-      double? verticalGap,
-      TextStyle? style,
-    }) {
-      return Container(
-        alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(
-          vertical: verticalGap ?? 2.0,
-          horizontal: AppSize.insideSpace,
-        ),
-        decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(5.0)),
-        child: Text(
-          caption,
-          style:
-              style ??
-              AppTextStyles.labelSmaller(
-                context,
-                color: Colors.white,
-                sizeOffset: -2,
-              ).copyWith(fontWeight: FontWeight.bold),
-        ),
-      );
-    }
-
-    Widget closeCard({Color? color, double? verticalGap, TextStyle? style}) => singleColorCardLabel(
-      caption: 'ยกเลิก',
-      style: style,
-      verticalGap: verticalGap,
-      color: color ?? Colors.red.shade700,
-    );
-
-    Widget defaultCard({Color? color, double? verticalGap, TextStyle? style}) =>
-        singleColorCardLabel(
-          caption: 'บัญชีหลัก',
-          style: style,
-          verticalGap: verticalGap,
-          color: color ?? Colors.green.shade700,
-        );
 
     Widget emptyDataWidget() {
       return Center(
@@ -487,7 +498,7 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('คุณยังไม่มีข้อมูลบัญชีพร้อมเพย์'),
+                    const Text('คุณยังไม่มีข้อมูลบัญชีธนาคารหรือพร้อมเพย์'),
                     const Text('กด + เพื่อเพิ่มบัญชีใหม่'),
                     const Gap.height(GapSize.loose),
                     StandardButton(
@@ -497,7 +508,7 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
                     ),
                   ],
                 )
-              : const Text('ไม่มีข้อมูลบัญชีพร้อมเพย์'),
+              : const Text('ไม่มีข้อมูลบัญชีธนาคารหรือพร้อมเพย์'),
         ),
       );
     }
@@ -505,69 +516,19 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
     Widget dataTile({
       ShopBankAccount? account,
       bool enabledEdit = true,
+      bool visibledEdit = true,
       void Function()? onPressedEdit,
       void Function()? onPressedDelete,
+      Future<bool?> Function(DismissDirection direction)? confirmDelete,
     }) {
-      // debugPrint('Account : ${account?.accountName}, default : ${account?.defaultPromptpay}');
-      return ListTile(
-        visualDensity: VisualDensity.compact,
-        title:
-            account != null && (account.isPromptpay && account.defaultPromptpay || account.closed)
-            ? Text.rich(
-                TextSpan(
-                  text: account.accountNo ?? '',
-                  children: [
-                    const WidgetSpan(child: Gap.width(GapSize.dense)),
-                    WidgetSpan(
-                      child: UnconstrainedBox(child: account.closed ? closeCard() : defaultCard()),
-                    ),
-                  ],
-                ),
-              )
-            : Text(account?.accountNo ?? ''),
-        subtitle: Text(
-          account?.accountName ?? '',
-          style: AppTextStyles.titleDeepStyle(context, sizeOffset: 0.5),
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              onPressed: enabledEdit && account != null && account.accountNo!.isNotEmpty
-                  ? () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ShopQRPromptpayPage(
-                          shop: widget.shop,
-                          promptpayID: account.accountNo ?? '',
-                          accountName: account.accountName,
-                          showSaveButton: false,
-                          // amount: 1234567.89,
-                        ),
-                      ),
-                    )
-                  : null,
-              icon: Icon(
-                Icons.qr_code_scanner,
-                color: enabledEdit ? AppColors.title : AppColors.disableObjectColor,
-              ),
-            ),
-            IconButton(
-              onPressed: enabledEdit ? onPressedDelete : null,
-              icon: Icon(
-                AppIcons.delete,
-                color: enabledEdit ? AppColors.critical : AppColors.disableObjectColor,
-              ),
-            ),
-            IconButton(
-              onPressed: enabledEdit ? onPressedEdit : null,
-              icon: Icon(
-                AppIcons.edit,
-                color: enabledEdit ? AppColors.infoEmphasize : AppColors.disableObjectColor,
-              ),
-            ),
-          ],
-        ),
+      return ShopBankAccountDisplay(
+        shop: widget.shop,
+        account: account,
+        enabledEdit: enabledEdit,
+        visibledEdit: visibledEdit,
+        onPressedEdit: onPressedEdit,
+        confirmDelete: confirmDelete,
+        onDismissDelete: (direction) => onPressedDelete,
       );
     }
 
@@ -585,11 +546,15 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
           return dataTile(
             account: acct,
             enabledEdit: widget.canEdit,
+            visibledEdit: widget.visibledEditor,
             onPressedEdit: widget.canEdit && acct != null
                 ? () => _editData(context, acct, accounts: accounts)
                 : null,
+            confirmDelete: widget.canEdit && acct != null
+                ? (direction) => _confirmDelete(acct)
+                : null,
             onPressedDelete: widget.canEdit && acct != null
-                ? () => _deleteBankAccount(acct, confirm: true)
+                ? () => _deleteBankAccount(acct, confirm: false)
                 : null,
           );
         },
@@ -626,7 +591,7 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
                       backgroundColor: AppColors.background,
                       headerBuilder: (context, isExpanded) => Padding(
                         padding: hozPadding.copyWith(top: AppSize.indentDense),
-                        child: Text('กำหนดบัญชีพร้อมเพย์', style: headerStyle),
+                        child: Text('กำหนดบัญชีธนาคารหรือบัญชีพร้อมเพย์', style: headerStyle),
                       ),
                       body: Padding(
                         padding: hozPadding.copyWith(
@@ -634,7 +599,7 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
                           bottom: AppSize.pageVerticalSpace,
                         ),
                         child: Text(
-                          'กำหนดเลขที่บัญชีพร้อมเพย์สำหรับรับเงินด้วย QR-Code เมื่อคุณกำหนดบัญชีใดเป็นบัญชีหลัก '
+                          'กำหนดเลขที่บัญชีธนาคารหรือบัญชีพร้อมเพย์สำหรับรับเงินด้วย QR-Code เมื่อคุณกำหนดบัญชีใดเป็นบัญชีหลัก '
                           'บัญชีนั้นจะถูกแสดงโดยอัตโนมัติ เมื่อต้องทำการรับชำระเงินด้วย QR-Code',
                           style: AppTextStyles.dataSmall(context, color: AppColors.title),
                         ),

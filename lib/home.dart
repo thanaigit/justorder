@@ -271,10 +271,10 @@ class _HomePageState extends ConsumerState<HomePage> {
           onPageChanged: (value) => _pageIndexNotifier.value = value,
           children: [
             settingPane(),
-            Center(child: Text('Food Menus')),
-            Center(child: Text('Order')),
             Center(child: Text('History')),
+            Center(child: Text('Order')),
             Center(child: Text('Report')),
+            Center(child: Text('Persoanl')),
           ],
         ),
       ),
@@ -302,20 +302,20 @@ class _HomePageState extends ConsumerState<HomePage> {
                 label: 'Setting',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.menu_book, size: iconSize),
-                label: 'Food Menus',
+                icon: Icon(Icons.history, size: iconSize),
+                label: 'History',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.dining, size: iconSize),
                 label: 'Order',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.history, size: iconSize),
-                label: 'History',
-              ),
-              BottomNavigationBarItem(
                 icon: Icon(Icons.bar_chart_sharp, size: iconSize),
                 label: 'Report',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person, size: iconSize),
+                label: 'Personal',
               ),
             ],
           );

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:justorder/core/const/fonts.dart';
 import 'package:justorder/core/domain/entities/image_base.dart';
+import 'package:justorder/views/widgets/shop_bank_account_display.dart';
 import 'package:my_ui/widgets/common/input/text_input.dart';
 
 import '../../../../core/const/colors.dart';
@@ -474,47 +475,6 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
       );
     }
 
-    Widget singleColorCardLabel({
-      required String caption,
-      required Color color,
-      double? verticalGap,
-      TextStyle? style,
-    }) {
-      return Container(
-        alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(
-          vertical: verticalGap ?? 2.0,
-          horizontal: AppSize.insideSpace,
-        ),
-        decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(5.0)),
-        child: Text(
-          caption,
-          style:
-              style ??
-              AppTextStyles.labelSmaller(
-                context,
-                color: Colors.white,
-                sizeOffset: -2,
-              ).copyWith(fontWeight: FontWeight.bold),
-        ),
-      );
-    }
-
-    Widget closeCard({Color? color, double? verticalGap, TextStyle? style}) => singleColorCardLabel(
-      caption: 'ยกเลิก',
-      style: style,
-      verticalGap: verticalGap,
-      color: color ?? Colors.red.shade700,
-    );
-
-    Widget defaultCard({Color? color, double? verticalGap, TextStyle? style}) =>
-        singleColorCardLabel(
-          caption: 'บัญชีหลัก',
-          style: style,
-          verticalGap: verticalGap,
-          color: color ?? Colors.green.shade700,
-        );
-
     Widget promptPay() {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: AppSize.paragraphSpaceLoose),
@@ -529,43 +489,27 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   headerMenuButton(
-                    text: 'บัญชี Promptpay',
+                    text: 'บัญชีธนาคารหรือพร้อมเพย์',
                     onTap: widget.onPressPromptpay,
                     enabled: shopExists,
                   ),
                   const Gap.height(GapSize.normal),
-                  bankAccounts == null || bankAccounts.isEmpty
+                  shop == null || bankAccounts == null || bankAccounts.isEmpty
                       ? Text(
-                          'กำหนดบัญชี Promptpay สำหรับการรับชำระเงินผ่าน QR-Code',
+                          'กำหนดบัญชีธนาคารหรือพร้อมเพย์ สำหรับการรับชำระเงินผ่าน QR-Code',
                           style: subInfoStyle,
                         )
                       : Column(
                           children: [
                             ...List.generate(bankAccounts.length, (index) {
                               final account = bankAccounts[index];
-                              return ListTile(
-                                visualDensity: VisualDensity.compact,
-                                title:
-                                    (account.isPromptpay && account.defaultPromptpay ||
-                                        account.closed)
-                                    ? Text.rich(
-                                        TextSpan(
-                                          text: account.accountNo ?? '',
-                                          children: [
-                                            const WidgetSpan(child: Gap.width(GapSize.dense)),
-                                            WidgetSpan(
-                                              child: UnconstrainedBox(
-                                                child: account.closed ? closeCard() : defaultCard(),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    : Text(account.accountNo ?? ''),
-                                subtitle: Text(
-                                  account.accountName ?? '',
-                                  style: AppTextStyles.titleDeepStyle(context, sizeOffset: 0.5),
-                                ),
+                              return ShopBankAccountDisplay(
+                                shop: shop,
+                                account: account,
+                                enabledEdit: false,
+                                visibledEdit: false,
+                                minVerticalPadding: 0.0,
+                                contentPadding: EdgeInsets.zero,
                               );
                             }),
                           ],
