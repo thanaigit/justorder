@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_popup/flutter_popup.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:justorder/core/presentation/widgets/simple_menu.dart';
 
 import 'core/const/colors.dart';
 import 'core/const/size.dart';
@@ -184,17 +185,37 @@ class _HomePageState extends ConsumerState<HomePage> {
                     )
                   : null,
             ),
-            const Gap.height(GapSize.mostLoose),
+            const Gap.height(GapSize.veryLoose),
             Row(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Icon(Icons.list_alt, color: Colors.deepPurple, size: AppSize.iconLarge),
                 const Gap.width(GapSize.dense),
-                Text('กำหนดข้อมูลอื่นๆ', style: headerStyle),
+                Text('กำหนดข้อมูลทั่วไป', style: headerStyle),
               ],
             ),
             SettingMenu(enabled: shopExists),
+            const Gap.height(GapSize.mostLoose),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Icon(Icons.menu_book, color: Colors.deepPurple, size: AppSize.iconLarge),
+                const Gap.width(GapSize.dense),
+                Text('กำหนดเมนูอาหาร', style: headerStyle),
+              ],
+            ),
+            const Gap.height(AppSize.indentNormal),
+            SimpleMenu(
+              menuTitle: 'ข้อมูลเมนูอาหาร',
+              menuTitleStyle: AppTextStyles.headerMediumStyle(
+                context,
+                sizeOffset: -0.5,
+                color: AppColors.infoHighlight,
+              ),
+            ),
+            const Gap.height(GapSize.veryLoose),
           ],
         ),
       );
@@ -274,7 +295,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             Center(child: Text('History')),
             Center(child: Text('Order')),
             Center(child: Text('Report')),
-            Center(child: Text('Persoanl')),
+            Center(child: Text('Personal')),
           ],
         ),
       ),

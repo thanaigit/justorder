@@ -308,8 +308,15 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
                   maxLines: 1,
                   maxLength: 13,
                   counterText: '',
+                  textInputAction: TextInputAction.next,
                   keyboardType: const TextInputType.numberWithOptions(signed: true),
-                  onFieldSubmitted: (value) => _nameFocus.requestFocus(),
+                  onFieldSubmitted: (value) {
+                    if (value.contains(' ') || value.contains('-')) {
+                      final acctNo = value.replaceAll(' ', '').replaceAll('-', '');
+                      _noController.text = acctNo;
+                    }
+                    _nameFocus.requestFocus();
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'กรุณาใส่เลขที่บัญชีธนาคารหรือหมายเลขพร้อมเพย์';
@@ -333,6 +340,7 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
                   maxLines: 1,
                   maxLength: 100,
                   counterText: '',
+                  textInputAction: TextInputAction.next,
                   onFieldSubmitted: (value) => _bankFocus.requestFocus(),
                 ),
                 const Gap.height(GapSize.dense),
@@ -348,6 +356,7 @@ class _ShopInfoBankAccountPageState extends ConsumerState<ShopInfoBankAccountPag
                   maxLines: 1,
                   maxLength: 100,
                   counterText: '',
+                  textInputAction: TextInputAction.next,
                   onFieldSubmitted: (value) => _noteFocus.requestFocus(),
                 ),
                 const Gap.height(GapSize.dense),

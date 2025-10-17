@@ -508,7 +508,7 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
                                 account: account,
                                 enabledEdit: false,
                                 visibledEdit: false,
-                                minVerticalPadding: 0.0,
+                                // minVerticalPadding: 0.0,
                                 contentPadding: EdgeInsets.zero,
                               );
                             }),

@@ -86,11 +86,9 @@ class _ShopInfoEditTablePageState extends ConsumerState<ShopInfoEditTablePage> {
   }
 
   Future<void> _loadShopTable(int shopID, {bool refreshed = false}) async {
-    if (refreshed) {
-      await ref.refresh(shopTableViewModelProvider(shopID).notifier).loadShopTables();
-    } else {
-      await ref.read(shopTableViewModelProvider(shopID).notifier).loadShopTables();
-    }
+    await ref
+        .read(shopTableViewModelProvider(shopID).notifier)
+        .loadShopTables(refreshed: refreshed);
     _firstLoad = false;
     _busyNotifier.value = false;
   }

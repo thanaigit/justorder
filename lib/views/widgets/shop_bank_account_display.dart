@@ -36,7 +36,10 @@ class ShopBankAccountDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var subBankInfo = account?.bankName ?? '';
+    final bankName = (account?.bankName ?? '').trim();
+    var subBankInfo = !bankName.contains('ธนาคาร') && bankName.isNotEmpty
+        ? 'ธนาคาร$bankName'
+        : bankName;
     if (subBankInfo.isNotEmpty) {
       subBankInfo = (account?.isPromptpay ?? false) ? '$subBankInfo (พร้อมเพย์)' : subBankInfo;
     } else {
