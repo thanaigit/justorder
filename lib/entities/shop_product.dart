@@ -27,6 +27,7 @@ class ShopProduct extends BaseClass {
   final DateTime? outStockTime;
   final DateTime? hasStockTime;
   final int? order;
+  final String? imagePath;
   ImageBase? image; // Use for cache only
   int? groupOrder; // Use for cache only
   ShopProduct({
@@ -53,6 +54,7 @@ class ShopProduct extends BaseClass {
     this.outStockTime,
     this.hasStockTime,
     this.order,
+    this.imagePath,
     this.image,
     this.groupOrder,
     super.dataStatus,
@@ -86,6 +88,7 @@ class ShopProduct extends BaseClass {
     DateTime? outStockTime,
     DateTime? hasStockTime,
     int? order,
+    String? imagePath,
     ImageBase? image,
     int? groupOrder,
     DataStatus? dataStatus,
@@ -118,6 +121,7 @@ class ShopProduct extends BaseClass {
       outStockTime: outStockTime ?? this.outStockTime,
       hasStockTime: hasStockTime ?? this.hasStockTime,
       order: order ?? this.order,
+      imagePath: imagePath ?? this.imagePath,
       image: image ?? this.image,
       groupOrder: groupOrder ?? this.groupOrder,
       dataStatus: dataStatus ?? this.dataStatus,
@@ -155,7 +159,8 @@ class ShopProduct extends BaseClass {
         other.outStock == outStock &&
         other.outStockTime == outStockTime &&
         other.hasStockTime == hasStockTime &&
-        other.order == order;
+        other.order == order &&
+        other.imagePath == imagePath;
   }
 
   @override
@@ -182,7 +187,8 @@ class ShopProduct extends BaseClass {
         outStock.hashCode ^
         outStockTime.hashCode ^
         hasStockTime.hashCode ^
-        order.hashCode;
+        order.hashCode ^
+        imagePath.hashCode;
   }
 
   @override
@@ -217,6 +223,7 @@ class ShopProduct extends BaseClass {
       outStockTime: outStockTime,
       hasStockTime: hasStockTime,
       order: order,
+      imagePath: imagePath,
       dataStatus: dataStatus ?? this.dataStatus,
       createdTime: createdTime ?? this.createdTime,
       updatedTime: updatedTime ?? this.updatedTime,

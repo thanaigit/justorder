@@ -8,6 +8,6 @@ final imageLocalStorageProvider = Provider<ImageStorageLocalRepository>(
   (ref) => ImageStorageLocalRepository(),
 );
 
-final imageLocalLoadProvider = FutureProvider.autoDispose.family<Result<ImageBase>, String>(
+final imageLocalLoadFutureProvider = FutureProvider.autoDispose.family<Result<ImageBase>, String>(
   (ref, filePath) => ref.watch(imageLocalStorageProvider).loadImageLocal(filePath),
 );

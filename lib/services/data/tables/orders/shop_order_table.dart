@@ -1,0 +1,50 @@
+import 'package:drift/drift.dart';
+
+import '../../../../core/enum/data_status.dart';
+import '../../../../enum/order_status.dart';
+import '../../../../enum/payment_status.dart';
+import '../../../../enum/service_charge_method.dart';
+import '../shop_info_table.dart';
+
+class ShopOrderTbl extends Table {
+  late final id = integer().autoIncrement()();
+  late final shopID = integer().references(ShopInfoTbl, #id)();
+  late final tableID = integer().nullable()();
+  late final orderNo = integer().nullable()();
+  late final orderNoChar = text().nullable()();
+  late final orderCode = text().nullable()();
+  late final orderDate = dateTime().nullable()();
+  late final receiptNo = integer().nullable()();
+  late final receiptNoChar = text().nullable()();
+  late final receiptDate = dateTime().nullable()();
+  late final seatNumber = integer().nullable()();
+  late final note = text().nullable()();
+  late final serviceAmount = real().nullable()();
+  late final totalPrice = real().nullable()();
+  late final discountPercent = real().nullable()();
+  late final discountValue = real().nullable()();
+  late final serviceChargeMethod = textEnum<ServiceChargeMethod>().nullable()();
+  late final serviceCalcTakehome = boolean().clientDefault(() => false)();
+  late final serviceCalcAll = boolean().clientDefault(() => false)();
+  late final servicePercent = real().nullable()();
+  late final serviceValue = real().nullable()();
+  late final vatInside = boolean().clientDefault(() => false)();
+  late final taxPercent = real().nullable()();
+  late final taxValue = real().nullable()();
+  late final netAmount = real().nullable()();
+  late final status = textEnum<OrderStatus>().withDefault(Constant(OrderStatus.prepared.text))();
+  late final payStatus = textEnum<PaymentStatus>().withDefault(Constant(PaymentStatus.none.text))();
+  late final requestOrderTime = dateTime().nullable()();
+  late final requestOrderBy = text().nullable()();
+  late final orderedTime = dateTime().nullable()();
+  late final orderedBy = text().nullable()();
+  late final billedTime = dateTime().nullable()();
+  late final billedBy = text().nullable()();
+  late final paidTime = dateTime().nullable()();
+  late final paidBy = text().nullable()();
+  late final dataStatus = textEnum<DataStatus>().withDefault(Constant(DataStatus.active.text))();
+  late final createdTime = dateTime().withDefault(currentDateAndTime)();
+  late final updatedTime = dateTime().nullable()();
+  late final deviceID = text().nullable()();
+  late final appVersion = text().nullable()();
+}

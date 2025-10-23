@@ -27,6 +27,7 @@ class ShopProductTbl extends Table {
   late final outStockTime = dateTime().nullable()();
   late final hasStockTime = dateTime().nullable()();
   late final order = integer().nullable()();
+  late final imagePath = text().nullable()();
   late final dataStatus = textEnum<DataStatus>().withDefault(Constant(DataStatus.active.text))();
   late final createdTime = dateTime().withDefault(currentDateAndTime)();
   late final updatedTime = dateTime().nullable()();

@@ -7171,6 +7171,17 @@ class $ShopProductTblTable extends ShopProductTbl
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _imagePathMeta = const VerificationMeta(
+    'imagePath',
+  );
+  @override
+  late final GeneratedColumn<String> imagePath = GeneratedColumn<String>(
+    'image_path',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   late final GeneratedColumnWithTypeConverter<DataStatus, String> dataStatus =
       GeneratedColumn<String>(
@@ -7251,6 +7262,7 @@ class $ShopProductTblTable extends ShopProductTbl
     outStockTime,
     hasStockTime,
     order,
+    imagePath,
     dataStatus,
     createdTime,
     updatedTime,
@@ -7436,6 +7448,12 @@ class $ShopProductTblTable extends ShopProductTbl
         order.isAcceptableOrUnknown(data['order']!, _orderMeta),
       );
     }
+    if (data.containsKey('image_path')) {
+      context.handle(
+        _imagePathMeta,
+        imagePath.isAcceptableOrUnknown(data['image_path']!, _imagePathMeta),
+      );
+    }
     if (data.containsKey('created_time')) {
       context.handle(
         _createdTimeMeta,
@@ -7567,6 +7585,10 @@ class $ShopProductTblTable extends ShopProductTbl
         DriftSqlType.int,
         data['${effectivePrefix}order'],
       ),
+      imagePath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}image_path'],
+      ),
       dataStatus: $ShopProductTblTable.$converterdataStatus.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
@@ -7626,6 +7648,7 @@ class ShopProductTblData extends DataClass
   final DateTime? outStockTime;
   final DateTime? hasStockTime;
   final int? order;
+  final String? imagePath;
   final DataStatus dataStatus;
   final DateTime createdTime;
   final DateTime? updatedTime;
@@ -7655,6 +7678,7 @@ class ShopProductTblData extends DataClass
     this.outStockTime,
     this.hasStockTime,
     this.order,
+    this.imagePath,
     required this.dataStatus,
     required this.createdTime,
     this.updatedTime,
@@ -7708,6 +7732,9 @@ class ShopProductTblData extends DataClass
     }
     if (!nullToAbsent || order != null) {
       map['order'] = Variable<int>(order);
+    }
+    if (!nullToAbsent || imagePath != null) {
+      map['image_path'] = Variable<String>(imagePath);
     }
     {
       map['data_status'] = Variable<String>(
@@ -7772,6 +7799,9 @@ class ShopProductTblData extends DataClass
       order: order == null && nullToAbsent
           ? const Value.absent()
           : Value(order),
+      imagePath: imagePath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(imagePath),
       dataStatus: Value(dataStatus),
       createdTime: Value(createdTime),
       updatedTime: updatedTime == null && nullToAbsent
@@ -7815,6 +7845,7 @@ class ShopProductTblData extends DataClass
       outStockTime: serializer.fromJson<DateTime?>(json['outStockTime']),
       hasStockTime: serializer.fromJson<DateTime?>(json['hasStockTime']),
       order: serializer.fromJson<int?>(json['order']),
+      imagePath: serializer.fromJson<String?>(json['imagePath']),
       dataStatus: $ShopProductTblTable.$converterdataStatus.fromJson(
         serializer.fromJson<String>(json['dataStatus']),
       ),
@@ -7851,6 +7882,7 @@ class ShopProductTblData extends DataClass
       'outStockTime': serializer.toJson<DateTime?>(outStockTime),
       'hasStockTime': serializer.toJson<DateTime?>(hasStockTime),
       'order': serializer.toJson<int?>(order),
+      'imagePath': serializer.toJson<String?>(imagePath),
       'dataStatus': serializer.toJson<String>(
         $ShopProductTblTable.$converterdataStatus.toJson(dataStatus),
       ),
@@ -7885,6 +7917,7 @@ class ShopProductTblData extends DataClass
     Value<DateTime?> outStockTime = const Value.absent(),
     Value<DateTime?> hasStockTime = const Value.absent(),
     Value<int?> order = const Value.absent(),
+    Value<String?> imagePath = const Value.absent(),
     DataStatus? dataStatus,
     DateTime? createdTime,
     Value<DateTime?> updatedTime = const Value.absent(),
@@ -7916,6 +7949,7 @@ class ShopProductTblData extends DataClass
     outStockTime: outStockTime.present ? outStockTime.value : this.outStockTime,
     hasStockTime: hasStockTime.present ? hasStockTime.value : this.hasStockTime,
     order: order.present ? order.value : this.order,
+    imagePath: imagePath.present ? imagePath.value : this.imagePath,
     dataStatus: dataStatus ?? this.dataStatus,
     createdTime: createdTime ?? this.createdTime,
     updatedTime: updatedTime.present ? updatedTime.value : this.updatedTime,
@@ -7969,6 +8003,7 @@ class ShopProductTblData extends DataClass
           ? data.hasStockTime.value
           : this.hasStockTime,
       order: data.order.present ? data.order.value : this.order,
+      imagePath: data.imagePath.present ? data.imagePath.value : this.imagePath,
       dataStatus: data.dataStatus.present
           ? data.dataStatus.value
           : this.dataStatus,
@@ -8011,6 +8046,7 @@ class ShopProductTblData extends DataClass
           ..write('outStockTime: $outStockTime, ')
           ..write('hasStockTime: $hasStockTime, ')
           ..write('order: $order, ')
+          ..write('imagePath: $imagePath, ')
           ..write('dataStatus: $dataStatus, ')
           ..write('createdTime: $createdTime, ')
           ..write('updatedTime: $updatedTime, ')
@@ -8045,6 +8081,7 @@ class ShopProductTblData extends DataClass
     outStockTime,
     hasStockTime,
     order,
+    imagePath,
     dataStatus,
     createdTime,
     updatedTime,
@@ -8078,6 +8115,7 @@ class ShopProductTblData extends DataClass
           other.outStockTime == this.outStockTime &&
           other.hasStockTime == this.hasStockTime &&
           other.order == this.order &&
+          other.imagePath == this.imagePath &&
           other.dataStatus == this.dataStatus &&
           other.createdTime == this.createdTime &&
           other.updatedTime == this.updatedTime &&
@@ -8109,6 +8147,7 @@ class ShopProductTblCompanion extends UpdateCompanion<ShopProductTblData> {
   final Value<DateTime?> outStockTime;
   final Value<DateTime?> hasStockTime;
   final Value<int?> order;
+  final Value<String?> imagePath;
   final Value<DataStatus> dataStatus;
   final Value<DateTime> createdTime;
   final Value<DateTime?> updatedTime;
@@ -8138,6 +8177,7 @@ class ShopProductTblCompanion extends UpdateCompanion<ShopProductTblData> {
     this.outStockTime = const Value.absent(),
     this.hasStockTime = const Value.absent(),
     this.order = const Value.absent(),
+    this.imagePath = const Value.absent(),
     this.dataStatus = const Value.absent(),
     this.createdTime = const Value.absent(),
     this.updatedTime = const Value.absent(),
@@ -8168,6 +8208,7 @@ class ShopProductTblCompanion extends UpdateCompanion<ShopProductTblData> {
     this.outStockTime = const Value.absent(),
     this.hasStockTime = const Value.absent(),
     this.order = const Value.absent(),
+    this.imagePath = const Value.absent(),
     this.dataStatus = const Value.absent(),
     this.createdTime = const Value.absent(),
     this.updatedTime = const Value.absent(),
@@ -8198,6 +8239,7 @@ class ShopProductTblCompanion extends UpdateCompanion<ShopProductTblData> {
     Expression<DateTime>? outStockTime,
     Expression<DateTime>? hasStockTime,
     Expression<int>? order,
+    Expression<String>? imagePath,
     Expression<String>? dataStatus,
     Expression<DateTime>? createdTime,
     Expression<DateTime>? updatedTime,
@@ -8228,6 +8270,7 @@ class ShopProductTblCompanion extends UpdateCompanion<ShopProductTblData> {
       if (outStockTime != null) 'out_stock_time': outStockTime,
       if (hasStockTime != null) 'has_stock_time': hasStockTime,
       if (order != null) 'order': order,
+      if (imagePath != null) 'image_path': imagePath,
       if (dataStatus != null) 'data_status': dataStatus,
       if (createdTime != null) 'created_time': createdTime,
       if (updatedTime != null) 'updated_time': updatedTime,
@@ -8260,6 +8303,7 @@ class ShopProductTblCompanion extends UpdateCompanion<ShopProductTblData> {
     Value<DateTime?>? outStockTime,
     Value<DateTime?>? hasStockTime,
     Value<int?>? order,
+    Value<String?>? imagePath,
     Value<DataStatus>? dataStatus,
     Value<DateTime>? createdTime,
     Value<DateTime?>? updatedTime,
@@ -8290,6 +8334,7 @@ class ShopProductTblCompanion extends UpdateCompanion<ShopProductTblData> {
       outStockTime: outStockTime ?? this.outStockTime,
       hasStockTime: hasStockTime ?? this.hasStockTime,
       order: order ?? this.order,
+      imagePath: imagePath ?? this.imagePath,
       dataStatus: dataStatus ?? this.dataStatus,
       createdTime: createdTime ?? this.createdTime,
       updatedTime: updatedTime ?? this.updatedTime,
@@ -8370,6 +8415,9 @@ class ShopProductTblCompanion extends UpdateCompanion<ShopProductTblData> {
     if (order.present) {
       map['order'] = Variable<int>(order.value);
     }
+    if (imagePath.present) {
+      map['image_path'] = Variable<String>(imagePath.value);
+    }
     if (dataStatus.present) {
       map['data_status'] = Variable<String>(
         $ShopProductTblTable.$converterdataStatus.toSql(dataStatus.value),
@@ -8416,6 +8464,7552 @@ class ShopProductTblCompanion extends UpdateCompanion<ShopProductTblData> {
           ..write('outStockTime: $outStockTime, ')
           ..write('hasStockTime: $hasStockTime, ')
           ..write('order: $order, ')
+          ..write('imagePath: $imagePath, ')
+          ..write('dataStatus: $dataStatus, ')
+          ..write('createdTime: $createdTime, ')
+          ..write('updatedTime: $updatedTime, ')
+          ..write('deviceID: $deviceID, ')
+          ..write('appVersion: $appVersion')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ShopImageTblTable extends ShopImageTbl
+    with TableInfo<$ShopImageTblTable, ShopImageTblData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ShopImageTblTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _shopIDMeta = const VerificationMeta('shopID');
+  @override
+  late final GeneratedColumn<int> shopID = GeneratedColumn<int>(
+    'shop_i_d',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES shop_info_tbl (id)',
+    ),
+  );
+  static const VerificationMeta _refIDMeta = const VerificationMeta('refID');
+  @override
+  late final GeneratedColumn<int> refID = GeneratedColumn<int>(
+    'ref_i_d',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _bucketMeta = const VerificationMeta('bucket');
+  @override
+  late final GeneratedColumn<String> bucket = GeneratedColumn<String>(
+    'bucket',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _folderMeta = const VerificationMeta('folder');
+  @override
+  late final GeneratedColumn<String> folder = GeneratedColumn<String>(
+    'folder',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _imageNameMeta = const VerificationMeta(
+    'imageName',
+  );
+  @override
+  late final GeneratedColumn<String> imageName = GeneratedColumn<String>(
+    'image_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _imageVersionMeta = const VerificationMeta(
+    'imageVersion',
+  );
+  @override
+  late final GeneratedColumn<String> imageVersion = GeneratedColumn<String>(
+    'image_version',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _imageOrderMeta = const VerificationMeta(
+    'imageOrder',
+  );
+  @override
+  late final GeneratedColumn<int> imageOrder = GeneratedColumn<int>(
+    'image_order',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _isDefaultMeta = const VerificationMeta(
+    'isDefault',
+  );
+  @override
+  late final GeneratedColumn<bool> isDefault = GeneratedColumn<bool>(
+    'is_default',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_default" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DataStatus, String> dataStatus =
+      GeneratedColumn<String>(
+        'data_status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: Constant(DataStatus.active.text),
+      ).withConverter<DataStatus>($ShopImageTblTable.$converterdataStatus);
+  static const VerificationMeta _createdTimeMeta = const VerificationMeta(
+    'createdTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdTime = GeneratedColumn<DateTime>(
+    'created_time',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedTimeMeta = const VerificationMeta(
+    'updatedTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedTime = GeneratedColumn<DateTime>(
+    'updated_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _deviceIDMeta = const VerificationMeta(
+    'deviceID',
+  );
+  @override
+  late final GeneratedColumn<String> deviceID = GeneratedColumn<String>(
+    'device_i_d',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _appVersionMeta = const VerificationMeta(
+    'appVersion',
+  );
+  @override
+  late final GeneratedColumn<String> appVersion = GeneratedColumn<String>(
+    'app_version',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    shopID,
+    refID,
+    bucket,
+    folder,
+    imageName,
+    imageVersion,
+    imageOrder,
+    isDefault,
+    dataStatus,
+    createdTime,
+    updatedTime,
+    deviceID,
+    appVersion,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'shop_image_tbl';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ShopImageTblData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('shop_i_d')) {
+      context.handle(
+        _shopIDMeta,
+        shopID.isAcceptableOrUnknown(data['shop_i_d']!, _shopIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_shopIDMeta);
+    }
+    if (data.containsKey('ref_i_d')) {
+      context.handle(
+        _refIDMeta,
+        refID.isAcceptableOrUnknown(data['ref_i_d']!, _refIDMeta),
+      );
+    }
+    if (data.containsKey('bucket')) {
+      context.handle(
+        _bucketMeta,
+        bucket.isAcceptableOrUnknown(data['bucket']!, _bucketMeta),
+      );
+    }
+    if (data.containsKey('folder')) {
+      context.handle(
+        _folderMeta,
+        folder.isAcceptableOrUnknown(data['folder']!, _folderMeta),
+      );
+    }
+    if (data.containsKey('image_name')) {
+      context.handle(
+        _imageNameMeta,
+        imageName.isAcceptableOrUnknown(data['image_name']!, _imageNameMeta),
+      );
+    }
+    if (data.containsKey('image_version')) {
+      context.handle(
+        _imageVersionMeta,
+        imageVersion.isAcceptableOrUnknown(
+          data['image_version']!,
+          _imageVersionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('image_order')) {
+      context.handle(
+        _imageOrderMeta,
+        imageOrder.isAcceptableOrUnknown(data['image_order']!, _imageOrderMeta),
+      );
+    }
+    if (data.containsKey('is_default')) {
+      context.handle(
+        _isDefaultMeta,
+        isDefault.isAcceptableOrUnknown(data['is_default']!, _isDefaultMeta),
+      );
+    }
+    if (data.containsKey('created_time')) {
+      context.handle(
+        _createdTimeMeta,
+        createdTime.isAcceptableOrUnknown(
+          data['created_time']!,
+          _createdTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('updated_time')) {
+      context.handle(
+        _updatedTimeMeta,
+        updatedTime.isAcceptableOrUnknown(
+          data['updated_time']!,
+          _updatedTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('device_i_d')) {
+      context.handle(
+        _deviceIDMeta,
+        deviceID.isAcceptableOrUnknown(data['device_i_d']!, _deviceIDMeta),
+      );
+    }
+    if (data.containsKey('app_version')) {
+      context.handle(
+        _appVersionMeta,
+        appVersion.isAcceptableOrUnknown(data['app_version']!, _appVersionMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ShopImageTblData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ShopImageTblData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      shopID: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}shop_i_d'],
+      )!,
+      refID: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}ref_i_d'],
+      ),
+      bucket: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}bucket'],
+      ),
+      folder: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}folder'],
+      ),
+      imageName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}image_name'],
+      ),
+      imageVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}image_version'],
+      ),
+      imageOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}image_order'],
+      ),
+      isDefault: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_default'],
+      )!,
+      dataStatus: $ShopImageTblTable.$converterdataStatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}data_status'],
+        )!,
+      ),
+      createdTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_time'],
+      )!,
+      updatedTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_time'],
+      ),
+      deviceID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}device_i_d'],
+      ),
+      appVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}app_version'],
+      ),
+    );
+  }
+
+  @override
+  $ShopImageTblTable createAlias(String alias) {
+    return $ShopImageTblTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<DataStatus, String, String> $converterdataStatus =
+      const EnumNameConverter<DataStatus>(DataStatus.values);
+}
+
+class ShopImageTblData extends DataClass
+    implements Insertable<ShopImageTblData> {
+  final int id;
+  final int shopID;
+  final int? refID;
+  final String? bucket;
+  final String? folder;
+  final String? imageName;
+  final String? imageVersion;
+  final int? imageOrder;
+  final bool isDefault;
+  final DataStatus dataStatus;
+  final DateTime createdTime;
+  final DateTime? updatedTime;
+  final String? deviceID;
+  final String? appVersion;
+  const ShopImageTblData({
+    required this.id,
+    required this.shopID,
+    this.refID,
+    this.bucket,
+    this.folder,
+    this.imageName,
+    this.imageVersion,
+    this.imageOrder,
+    required this.isDefault,
+    required this.dataStatus,
+    required this.createdTime,
+    this.updatedTime,
+    this.deviceID,
+    this.appVersion,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['shop_i_d'] = Variable<int>(shopID);
+    if (!nullToAbsent || refID != null) {
+      map['ref_i_d'] = Variable<int>(refID);
+    }
+    if (!nullToAbsent || bucket != null) {
+      map['bucket'] = Variable<String>(bucket);
+    }
+    if (!nullToAbsent || folder != null) {
+      map['folder'] = Variable<String>(folder);
+    }
+    if (!nullToAbsent || imageName != null) {
+      map['image_name'] = Variable<String>(imageName);
+    }
+    if (!nullToAbsent || imageVersion != null) {
+      map['image_version'] = Variable<String>(imageVersion);
+    }
+    if (!nullToAbsent || imageOrder != null) {
+      map['image_order'] = Variable<int>(imageOrder);
+    }
+    map['is_default'] = Variable<bool>(isDefault);
+    {
+      map['data_status'] = Variable<String>(
+        $ShopImageTblTable.$converterdataStatus.toSql(dataStatus),
+      );
+    }
+    map['created_time'] = Variable<DateTime>(createdTime);
+    if (!nullToAbsent || updatedTime != null) {
+      map['updated_time'] = Variable<DateTime>(updatedTime);
+    }
+    if (!nullToAbsent || deviceID != null) {
+      map['device_i_d'] = Variable<String>(deviceID);
+    }
+    if (!nullToAbsent || appVersion != null) {
+      map['app_version'] = Variable<String>(appVersion);
+    }
+    return map;
+  }
+
+  ShopImageTblCompanion toCompanion(bool nullToAbsent) {
+    return ShopImageTblCompanion(
+      id: Value(id),
+      shopID: Value(shopID),
+      refID: refID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(refID),
+      bucket: bucket == null && nullToAbsent
+          ? const Value.absent()
+          : Value(bucket),
+      folder: folder == null && nullToAbsent
+          ? const Value.absent()
+          : Value(folder),
+      imageName: imageName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(imageName),
+      imageVersion: imageVersion == null && nullToAbsent
+          ? const Value.absent()
+          : Value(imageVersion),
+      imageOrder: imageOrder == null && nullToAbsent
+          ? const Value.absent()
+          : Value(imageOrder),
+      isDefault: Value(isDefault),
+      dataStatus: Value(dataStatus),
+      createdTime: Value(createdTime),
+      updatedTime: updatedTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedTime),
+      deviceID: deviceID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deviceID),
+      appVersion: appVersion == null && nullToAbsent
+          ? const Value.absent()
+          : Value(appVersion),
+    );
+  }
+
+  factory ShopImageTblData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ShopImageTblData(
+      id: serializer.fromJson<int>(json['id']),
+      shopID: serializer.fromJson<int>(json['shopID']),
+      refID: serializer.fromJson<int?>(json['refID']),
+      bucket: serializer.fromJson<String?>(json['bucket']),
+      folder: serializer.fromJson<String?>(json['folder']),
+      imageName: serializer.fromJson<String?>(json['imageName']),
+      imageVersion: serializer.fromJson<String?>(json['imageVersion']),
+      imageOrder: serializer.fromJson<int?>(json['imageOrder']),
+      isDefault: serializer.fromJson<bool>(json['isDefault']),
+      dataStatus: $ShopImageTblTable.$converterdataStatus.fromJson(
+        serializer.fromJson<String>(json['dataStatus']),
+      ),
+      createdTime: serializer.fromJson<DateTime>(json['createdTime']),
+      updatedTime: serializer.fromJson<DateTime?>(json['updatedTime']),
+      deviceID: serializer.fromJson<String?>(json['deviceID']),
+      appVersion: serializer.fromJson<String?>(json['appVersion']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'shopID': serializer.toJson<int>(shopID),
+      'refID': serializer.toJson<int?>(refID),
+      'bucket': serializer.toJson<String?>(bucket),
+      'folder': serializer.toJson<String?>(folder),
+      'imageName': serializer.toJson<String?>(imageName),
+      'imageVersion': serializer.toJson<String?>(imageVersion),
+      'imageOrder': serializer.toJson<int?>(imageOrder),
+      'isDefault': serializer.toJson<bool>(isDefault),
+      'dataStatus': serializer.toJson<String>(
+        $ShopImageTblTable.$converterdataStatus.toJson(dataStatus),
+      ),
+      'createdTime': serializer.toJson<DateTime>(createdTime),
+      'updatedTime': serializer.toJson<DateTime?>(updatedTime),
+      'deviceID': serializer.toJson<String?>(deviceID),
+      'appVersion': serializer.toJson<String?>(appVersion),
+    };
+  }
+
+  ShopImageTblData copyWith({
+    int? id,
+    int? shopID,
+    Value<int?> refID = const Value.absent(),
+    Value<String?> bucket = const Value.absent(),
+    Value<String?> folder = const Value.absent(),
+    Value<String?> imageName = const Value.absent(),
+    Value<String?> imageVersion = const Value.absent(),
+    Value<int?> imageOrder = const Value.absent(),
+    bool? isDefault,
+    DataStatus? dataStatus,
+    DateTime? createdTime,
+    Value<DateTime?> updatedTime = const Value.absent(),
+    Value<String?> deviceID = const Value.absent(),
+    Value<String?> appVersion = const Value.absent(),
+  }) => ShopImageTblData(
+    id: id ?? this.id,
+    shopID: shopID ?? this.shopID,
+    refID: refID.present ? refID.value : this.refID,
+    bucket: bucket.present ? bucket.value : this.bucket,
+    folder: folder.present ? folder.value : this.folder,
+    imageName: imageName.present ? imageName.value : this.imageName,
+    imageVersion: imageVersion.present ? imageVersion.value : this.imageVersion,
+    imageOrder: imageOrder.present ? imageOrder.value : this.imageOrder,
+    isDefault: isDefault ?? this.isDefault,
+    dataStatus: dataStatus ?? this.dataStatus,
+    createdTime: createdTime ?? this.createdTime,
+    updatedTime: updatedTime.present ? updatedTime.value : this.updatedTime,
+    deviceID: deviceID.present ? deviceID.value : this.deviceID,
+    appVersion: appVersion.present ? appVersion.value : this.appVersion,
+  );
+  ShopImageTblData copyWithCompanion(ShopImageTblCompanion data) {
+    return ShopImageTblData(
+      id: data.id.present ? data.id.value : this.id,
+      shopID: data.shopID.present ? data.shopID.value : this.shopID,
+      refID: data.refID.present ? data.refID.value : this.refID,
+      bucket: data.bucket.present ? data.bucket.value : this.bucket,
+      folder: data.folder.present ? data.folder.value : this.folder,
+      imageName: data.imageName.present ? data.imageName.value : this.imageName,
+      imageVersion: data.imageVersion.present
+          ? data.imageVersion.value
+          : this.imageVersion,
+      imageOrder: data.imageOrder.present
+          ? data.imageOrder.value
+          : this.imageOrder,
+      isDefault: data.isDefault.present ? data.isDefault.value : this.isDefault,
+      dataStatus: data.dataStatus.present
+          ? data.dataStatus.value
+          : this.dataStatus,
+      createdTime: data.createdTime.present
+          ? data.createdTime.value
+          : this.createdTime,
+      updatedTime: data.updatedTime.present
+          ? data.updatedTime.value
+          : this.updatedTime,
+      deviceID: data.deviceID.present ? data.deviceID.value : this.deviceID,
+      appVersion: data.appVersion.present
+          ? data.appVersion.value
+          : this.appVersion,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShopImageTblData(')
+          ..write('id: $id, ')
+          ..write('shopID: $shopID, ')
+          ..write('refID: $refID, ')
+          ..write('bucket: $bucket, ')
+          ..write('folder: $folder, ')
+          ..write('imageName: $imageName, ')
+          ..write('imageVersion: $imageVersion, ')
+          ..write('imageOrder: $imageOrder, ')
+          ..write('isDefault: $isDefault, ')
+          ..write('dataStatus: $dataStatus, ')
+          ..write('createdTime: $createdTime, ')
+          ..write('updatedTime: $updatedTime, ')
+          ..write('deviceID: $deviceID, ')
+          ..write('appVersion: $appVersion')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    shopID,
+    refID,
+    bucket,
+    folder,
+    imageName,
+    imageVersion,
+    imageOrder,
+    isDefault,
+    dataStatus,
+    createdTime,
+    updatedTime,
+    deviceID,
+    appVersion,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ShopImageTblData &&
+          other.id == this.id &&
+          other.shopID == this.shopID &&
+          other.refID == this.refID &&
+          other.bucket == this.bucket &&
+          other.folder == this.folder &&
+          other.imageName == this.imageName &&
+          other.imageVersion == this.imageVersion &&
+          other.imageOrder == this.imageOrder &&
+          other.isDefault == this.isDefault &&
+          other.dataStatus == this.dataStatus &&
+          other.createdTime == this.createdTime &&
+          other.updatedTime == this.updatedTime &&
+          other.deviceID == this.deviceID &&
+          other.appVersion == this.appVersion);
+}
+
+class ShopImageTblCompanion extends UpdateCompanion<ShopImageTblData> {
+  final Value<int> id;
+  final Value<int> shopID;
+  final Value<int?> refID;
+  final Value<String?> bucket;
+  final Value<String?> folder;
+  final Value<String?> imageName;
+  final Value<String?> imageVersion;
+  final Value<int?> imageOrder;
+  final Value<bool> isDefault;
+  final Value<DataStatus> dataStatus;
+  final Value<DateTime> createdTime;
+  final Value<DateTime?> updatedTime;
+  final Value<String?> deviceID;
+  final Value<String?> appVersion;
+  const ShopImageTblCompanion({
+    this.id = const Value.absent(),
+    this.shopID = const Value.absent(),
+    this.refID = const Value.absent(),
+    this.bucket = const Value.absent(),
+    this.folder = const Value.absent(),
+    this.imageName = const Value.absent(),
+    this.imageVersion = const Value.absent(),
+    this.imageOrder = const Value.absent(),
+    this.isDefault = const Value.absent(),
+    this.dataStatus = const Value.absent(),
+    this.createdTime = const Value.absent(),
+    this.updatedTime = const Value.absent(),
+    this.deviceID = const Value.absent(),
+    this.appVersion = const Value.absent(),
+  });
+  ShopImageTblCompanion.insert({
+    this.id = const Value.absent(),
+    required int shopID,
+    this.refID = const Value.absent(),
+    this.bucket = const Value.absent(),
+    this.folder = const Value.absent(),
+    this.imageName = const Value.absent(),
+    this.imageVersion = const Value.absent(),
+    this.imageOrder = const Value.absent(),
+    this.isDefault = const Value.absent(),
+    this.dataStatus = const Value.absent(),
+    this.createdTime = const Value.absent(),
+    this.updatedTime = const Value.absent(),
+    this.deviceID = const Value.absent(),
+    this.appVersion = const Value.absent(),
+  }) : shopID = Value(shopID);
+  static Insertable<ShopImageTblData> custom({
+    Expression<int>? id,
+    Expression<int>? shopID,
+    Expression<int>? refID,
+    Expression<String>? bucket,
+    Expression<String>? folder,
+    Expression<String>? imageName,
+    Expression<String>? imageVersion,
+    Expression<int>? imageOrder,
+    Expression<bool>? isDefault,
+    Expression<String>? dataStatus,
+    Expression<DateTime>? createdTime,
+    Expression<DateTime>? updatedTime,
+    Expression<String>? deviceID,
+    Expression<String>? appVersion,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (shopID != null) 'shop_i_d': shopID,
+      if (refID != null) 'ref_i_d': refID,
+      if (bucket != null) 'bucket': bucket,
+      if (folder != null) 'folder': folder,
+      if (imageName != null) 'image_name': imageName,
+      if (imageVersion != null) 'image_version': imageVersion,
+      if (imageOrder != null) 'image_order': imageOrder,
+      if (isDefault != null) 'is_default': isDefault,
+      if (dataStatus != null) 'data_status': dataStatus,
+      if (createdTime != null) 'created_time': createdTime,
+      if (updatedTime != null) 'updated_time': updatedTime,
+      if (deviceID != null) 'device_i_d': deviceID,
+      if (appVersion != null) 'app_version': appVersion,
+    });
+  }
+
+  ShopImageTblCompanion copyWith({
+    Value<int>? id,
+    Value<int>? shopID,
+    Value<int?>? refID,
+    Value<String?>? bucket,
+    Value<String?>? folder,
+    Value<String?>? imageName,
+    Value<String?>? imageVersion,
+    Value<int?>? imageOrder,
+    Value<bool>? isDefault,
+    Value<DataStatus>? dataStatus,
+    Value<DateTime>? createdTime,
+    Value<DateTime?>? updatedTime,
+    Value<String?>? deviceID,
+    Value<String?>? appVersion,
+  }) {
+    return ShopImageTblCompanion(
+      id: id ?? this.id,
+      shopID: shopID ?? this.shopID,
+      refID: refID ?? this.refID,
+      bucket: bucket ?? this.bucket,
+      folder: folder ?? this.folder,
+      imageName: imageName ?? this.imageName,
+      imageVersion: imageVersion ?? this.imageVersion,
+      imageOrder: imageOrder ?? this.imageOrder,
+      isDefault: isDefault ?? this.isDefault,
+      dataStatus: dataStatus ?? this.dataStatus,
+      createdTime: createdTime ?? this.createdTime,
+      updatedTime: updatedTime ?? this.updatedTime,
+      deviceID: deviceID ?? this.deviceID,
+      appVersion: appVersion ?? this.appVersion,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (shopID.present) {
+      map['shop_i_d'] = Variable<int>(shopID.value);
+    }
+    if (refID.present) {
+      map['ref_i_d'] = Variable<int>(refID.value);
+    }
+    if (bucket.present) {
+      map['bucket'] = Variable<String>(bucket.value);
+    }
+    if (folder.present) {
+      map['folder'] = Variable<String>(folder.value);
+    }
+    if (imageName.present) {
+      map['image_name'] = Variable<String>(imageName.value);
+    }
+    if (imageVersion.present) {
+      map['image_version'] = Variable<String>(imageVersion.value);
+    }
+    if (imageOrder.present) {
+      map['image_order'] = Variable<int>(imageOrder.value);
+    }
+    if (isDefault.present) {
+      map['is_default'] = Variable<bool>(isDefault.value);
+    }
+    if (dataStatus.present) {
+      map['data_status'] = Variable<String>(
+        $ShopImageTblTable.$converterdataStatus.toSql(dataStatus.value),
+      );
+    }
+    if (createdTime.present) {
+      map['created_time'] = Variable<DateTime>(createdTime.value);
+    }
+    if (updatedTime.present) {
+      map['updated_time'] = Variable<DateTime>(updatedTime.value);
+    }
+    if (deviceID.present) {
+      map['device_i_d'] = Variable<String>(deviceID.value);
+    }
+    if (appVersion.present) {
+      map['app_version'] = Variable<String>(appVersion.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShopImageTblCompanion(')
+          ..write('id: $id, ')
+          ..write('shopID: $shopID, ')
+          ..write('refID: $refID, ')
+          ..write('bucket: $bucket, ')
+          ..write('folder: $folder, ')
+          ..write('imageName: $imageName, ')
+          ..write('imageVersion: $imageVersion, ')
+          ..write('imageOrder: $imageOrder, ')
+          ..write('isDefault: $isDefault, ')
+          ..write('dataStatus: $dataStatus, ')
+          ..write('createdTime: $createdTime, ')
+          ..write('updatedTime: $updatedTime, ')
+          ..write('deviceID: $deviceID, ')
+          ..write('appVersion: $appVersion')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ShopProductOptionsTblTable extends ShopProductOptionsTbl
+    with TableInfo<$ShopProductOptionsTblTable, ShopProductOptionsTblData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ShopProductOptionsTblTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _productIDMeta = const VerificationMeta(
+    'productID',
+  );
+  @override
+  late final GeneratedColumn<int> productID = GeneratedColumn<int>(
+    'product_i_d',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES shop_product_tbl (id)',
+    ),
+  );
+  static const VerificationMeta _optionIDMeta = const VerificationMeta(
+    'optionID',
+  );
+  @override
+  late final GeneratedColumn<int> optionID = GeneratedColumn<int>(
+    'option_i_d',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES shop_product_options_group_detail_tbl (id)',
+    ),
+  );
+  static const VerificationMeta _orderMeta = const VerificationMeta('order');
+  @override
+  late final GeneratedColumn<int> order = GeneratedColumn<int>(
+    'order',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _priceAddedMeta = const VerificationMeta(
+    'priceAdded',
+  );
+  @override
+  late final GeneratedColumn<double> priceAdded = GeneratedColumn<double>(
+    'price_added',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _closeSaleMeta = const VerificationMeta(
+    'closeSale',
+  );
+  @override
+  late final GeneratedColumn<bool> closeSale = GeneratedColumn<bool>(
+    'close_sale',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("close_sale" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  static const VerificationMeta _stockItemMeta = const VerificationMeta(
+    'stockItem',
+  );
+  @override
+  late final GeneratedColumn<bool> stockItem = GeneratedColumn<bool>(
+    'stock_item',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("stock_item" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  static const VerificationMeta _mustDefineQtyMeta = const VerificationMeta(
+    'mustDefineQty',
+  );
+  @override
+  late final GeneratedColumn<bool> mustDefineQty = GeneratedColumn<bool>(
+    'must_define_qty',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("must_define_qty" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  static const VerificationMeta _maxQtyMeta = const VerificationMeta('maxQty');
+  @override
+  late final GeneratedColumn<double> maxQty = GeneratedColumn<double>(
+    'max_qty',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _outStockMeta = const VerificationMeta(
+    'outStock',
+  );
+  @override
+  late final GeneratedColumn<bool> outStock = GeneratedColumn<bool>(
+    'out_stock',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("out_stock" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  static const VerificationMeta _outStockTimeMeta = const VerificationMeta(
+    'outStockTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> outStockTime = GeneratedColumn<DateTime>(
+    'out_stock_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _hasStockTimeMeta = const VerificationMeta(
+    'hasStockTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> hasStockTime = GeneratedColumn<DateTime>(
+    'has_stock_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DataStatus, String> dataStatus =
+      GeneratedColumn<String>(
+        'data_status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: Constant(DataStatus.active.text),
+      ).withConverter<DataStatus>(
+        $ShopProductOptionsTblTable.$converterdataStatus,
+      );
+  static const VerificationMeta _createdTimeMeta = const VerificationMeta(
+    'createdTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdTime = GeneratedColumn<DateTime>(
+    'created_time',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedTimeMeta = const VerificationMeta(
+    'updatedTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedTime = GeneratedColumn<DateTime>(
+    'updated_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _deviceIDMeta = const VerificationMeta(
+    'deviceID',
+  );
+  @override
+  late final GeneratedColumn<String> deviceID = GeneratedColumn<String>(
+    'device_i_d',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _appVersionMeta = const VerificationMeta(
+    'appVersion',
+  );
+  @override
+  late final GeneratedColumn<String> appVersion = GeneratedColumn<String>(
+    'app_version',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    productID,
+    optionID,
+    order,
+    priceAdded,
+    closeSale,
+    stockItem,
+    mustDefineQty,
+    maxQty,
+    outStock,
+    outStockTime,
+    hasStockTime,
+    dataStatus,
+    createdTime,
+    updatedTime,
+    deviceID,
+    appVersion,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'shop_product_options_tbl';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ShopProductOptionsTblData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('product_i_d')) {
+      context.handle(
+        _productIDMeta,
+        productID.isAcceptableOrUnknown(data['product_i_d']!, _productIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_productIDMeta);
+    }
+    if (data.containsKey('option_i_d')) {
+      context.handle(
+        _optionIDMeta,
+        optionID.isAcceptableOrUnknown(data['option_i_d']!, _optionIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_optionIDMeta);
+    }
+    if (data.containsKey('order')) {
+      context.handle(
+        _orderMeta,
+        order.isAcceptableOrUnknown(data['order']!, _orderMeta),
+      );
+    }
+    if (data.containsKey('price_added')) {
+      context.handle(
+        _priceAddedMeta,
+        priceAdded.isAcceptableOrUnknown(data['price_added']!, _priceAddedMeta),
+      );
+    }
+    if (data.containsKey('close_sale')) {
+      context.handle(
+        _closeSaleMeta,
+        closeSale.isAcceptableOrUnknown(data['close_sale']!, _closeSaleMeta),
+      );
+    }
+    if (data.containsKey('stock_item')) {
+      context.handle(
+        _stockItemMeta,
+        stockItem.isAcceptableOrUnknown(data['stock_item']!, _stockItemMeta),
+      );
+    }
+    if (data.containsKey('must_define_qty')) {
+      context.handle(
+        _mustDefineQtyMeta,
+        mustDefineQty.isAcceptableOrUnknown(
+          data['must_define_qty']!,
+          _mustDefineQtyMeta,
+        ),
+      );
+    }
+    if (data.containsKey('max_qty')) {
+      context.handle(
+        _maxQtyMeta,
+        maxQty.isAcceptableOrUnknown(data['max_qty']!, _maxQtyMeta),
+      );
+    }
+    if (data.containsKey('out_stock')) {
+      context.handle(
+        _outStockMeta,
+        outStock.isAcceptableOrUnknown(data['out_stock']!, _outStockMeta),
+      );
+    }
+    if (data.containsKey('out_stock_time')) {
+      context.handle(
+        _outStockTimeMeta,
+        outStockTime.isAcceptableOrUnknown(
+          data['out_stock_time']!,
+          _outStockTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('has_stock_time')) {
+      context.handle(
+        _hasStockTimeMeta,
+        hasStockTime.isAcceptableOrUnknown(
+          data['has_stock_time']!,
+          _hasStockTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('created_time')) {
+      context.handle(
+        _createdTimeMeta,
+        createdTime.isAcceptableOrUnknown(
+          data['created_time']!,
+          _createdTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('updated_time')) {
+      context.handle(
+        _updatedTimeMeta,
+        updatedTime.isAcceptableOrUnknown(
+          data['updated_time']!,
+          _updatedTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('device_i_d')) {
+      context.handle(
+        _deviceIDMeta,
+        deviceID.isAcceptableOrUnknown(data['device_i_d']!, _deviceIDMeta),
+      );
+    }
+    if (data.containsKey('app_version')) {
+      context.handle(
+        _appVersionMeta,
+        appVersion.isAcceptableOrUnknown(data['app_version']!, _appVersionMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ShopProductOptionsTblData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ShopProductOptionsTblData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      productID: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}product_i_d'],
+      )!,
+      optionID: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}option_i_d'],
+      )!,
+      order: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}order'],
+      ),
+      priceAdded: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}price_added'],
+      ),
+      closeSale: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}close_sale'],
+      )!,
+      stockItem: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}stock_item'],
+      )!,
+      mustDefineQty: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}must_define_qty'],
+      )!,
+      maxQty: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}max_qty'],
+      ),
+      outStock: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}out_stock'],
+      )!,
+      outStockTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}out_stock_time'],
+      ),
+      hasStockTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}has_stock_time'],
+      ),
+      dataStatus: $ShopProductOptionsTblTable.$converterdataStatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}data_status'],
+        )!,
+      ),
+      createdTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_time'],
+      )!,
+      updatedTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_time'],
+      ),
+      deviceID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}device_i_d'],
+      ),
+      appVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}app_version'],
+      ),
+    );
+  }
+
+  @override
+  $ShopProductOptionsTblTable createAlias(String alias) {
+    return $ShopProductOptionsTblTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<DataStatus, String, String> $converterdataStatus =
+      const EnumNameConverter<DataStatus>(DataStatus.values);
+}
+
+class ShopProductOptionsTblData extends DataClass
+    implements Insertable<ShopProductOptionsTblData> {
+  final int id;
+  final int productID;
+  final int optionID;
+  final int? order;
+  final double? priceAdded;
+  final bool closeSale;
+  final bool stockItem;
+  final bool mustDefineQty;
+  final double? maxQty;
+  final bool outStock;
+  final DateTime? outStockTime;
+  final DateTime? hasStockTime;
+  final DataStatus dataStatus;
+  final DateTime createdTime;
+  final DateTime? updatedTime;
+  final String? deviceID;
+  final String? appVersion;
+  const ShopProductOptionsTblData({
+    required this.id,
+    required this.productID,
+    required this.optionID,
+    this.order,
+    this.priceAdded,
+    required this.closeSale,
+    required this.stockItem,
+    required this.mustDefineQty,
+    this.maxQty,
+    required this.outStock,
+    this.outStockTime,
+    this.hasStockTime,
+    required this.dataStatus,
+    required this.createdTime,
+    this.updatedTime,
+    this.deviceID,
+    this.appVersion,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['product_i_d'] = Variable<int>(productID);
+    map['option_i_d'] = Variable<int>(optionID);
+    if (!nullToAbsent || order != null) {
+      map['order'] = Variable<int>(order);
+    }
+    if (!nullToAbsent || priceAdded != null) {
+      map['price_added'] = Variable<double>(priceAdded);
+    }
+    map['close_sale'] = Variable<bool>(closeSale);
+    map['stock_item'] = Variable<bool>(stockItem);
+    map['must_define_qty'] = Variable<bool>(mustDefineQty);
+    if (!nullToAbsent || maxQty != null) {
+      map['max_qty'] = Variable<double>(maxQty);
+    }
+    map['out_stock'] = Variable<bool>(outStock);
+    if (!nullToAbsent || outStockTime != null) {
+      map['out_stock_time'] = Variable<DateTime>(outStockTime);
+    }
+    if (!nullToAbsent || hasStockTime != null) {
+      map['has_stock_time'] = Variable<DateTime>(hasStockTime);
+    }
+    {
+      map['data_status'] = Variable<String>(
+        $ShopProductOptionsTblTable.$converterdataStatus.toSql(dataStatus),
+      );
+    }
+    map['created_time'] = Variable<DateTime>(createdTime);
+    if (!nullToAbsent || updatedTime != null) {
+      map['updated_time'] = Variable<DateTime>(updatedTime);
+    }
+    if (!nullToAbsent || deviceID != null) {
+      map['device_i_d'] = Variable<String>(deviceID);
+    }
+    if (!nullToAbsent || appVersion != null) {
+      map['app_version'] = Variable<String>(appVersion);
+    }
+    return map;
+  }
+
+  ShopProductOptionsTblCompanion toCompanion(bool nullToAbsent) {
+    return ShopProductOptionsTblCompanion(
+      id: Value(id),
+      productID: Value(productID),
+      optionID: Value(optionID),
+      order: order == null && nullToAbsent
+          ? const Value.absent()
+          : Value(order),
+      priceAdded: priceAdded == null && nullToAbsent
+          ? const Value.absent()
+          : Value(priceAdded),
+      closeSale: Value(closeSale),
+      stockItem: Value(stockItem),
+      mustDefineQty: Value(mustDefineQty),
+      maxQty: maxQty == null && nullToAbsent
+          ? const Value.absent()
+          : Value(maxQty),
+      outStock: Value(outStock),
+      outStockTime: outStockTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(outStockTime),
+      hasStockTime: hasStockTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(hasStockTime),
+      dataStatus: Value(dataStatus),
+      createdTime: Value(createdTime),
+      updatedTime: updatedTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedTime),
+      deviceID: deviceID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deviceID),
+      appVersion: appVersion == null && nullToAbsent
+          ? const Value.absent()
+          : Value(appVersion),
+    );
+  }
+
+  factory ShopProductOptionsTblData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ShopProductOptionsTblData(
+      id: serializer.fromJson<int>(json['id']),
+      productID: serializer.fromJson<int>(json['productID']),
+      optionID: serializer.fromJson<int>(json['optionID']),
+      order: serializer.fromJson<int?>(json['order']),
+      priceAdded: serializer.fromJson<double?>(json['priceAdded']),
+      closeSale: serializer.fromJson<bool>(json['closeSale']),
+      stockItem: serializer.fromJson<bool>(json['stockItem']),
+      mustDefineQty: serializer.fromJson<bool>(json['mustDefineQty']),
+      maxQty: serializer.fromJson<double?>(json['maxQty']),
+      outStock: serializer.fromJson<bool>(json['outStock']),
+      outStockTime: serializer.fromJson<DateTime?>(json['outStockTime']),
+      hasStockTime: serializer.fromJson<DateTime?>(json['hasStockTime']),
+      dataStatus: $ShopProductOptionsTblTable.$converterdataStatus.fromJson(
+        serializer.fromJson<String>(json['dataStatus']),
+      ),
+      createdTime: serializer.fromJson<DateTime>(json['createdTime']),
+      updatedTime: serializer.fromJson<DateTime?>(json['updatedTime']),
+      deviceID: serializer.fromJson<String?>(json['deviceID']),
+      appVersion: serializer.fromJson<String?>(json['appVersion']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'productID': serializer.toJson<int>(productID),
+      'optionID': serializer.toJson<int>(optionID),
+      'order': serializer.toJson<int?>(order),
+      'priceAdded': serializer.toJson<double?>(priceAdded),
+      'closeSale': serializer.toJson<bool>(closeSale),
+      'stockItem': serializer.toJson<bool>(stockItem),
+      'mustDefineQty': serializer.toJson<bool>(mustDefineQty),
+      'maxQty': serializer.toJson<double?>(maxQty),
+      'outStock': serializer.toJson<bool>(outStock),
+      'outStockTime': serializer.toJson<DateTime?>(outStockTime),
+      'hasStockTime': serializer.toJson<DateTime?>(hasStockTime),
+      'dataStatus': serializer.toJson<String>(
+        $ShopProductOptionsTblTable.$converterdataStatus.toJson(dataStatus),
+      ),
+      'createdTime': serializer.toJson<DateTime>(createdTime),
+      'updatedTime': serializer.toJson<DateTime?>(updatedTime),
+      'deviceID': serializer.toJson<String?>(deviceID),
+      'appVersion': serializer.toJson<String?>(appVersion),
+    };
+  }
+
+  ShopProductOptionsTblData copyWith({
+    int? id,
+    int? productID,
+    int? optionID,
+    Value<int?> order = const Value.absent(),
+    Value<double?> priceAdded = const Value.absent(),
+    bool? closeSale,
+    bool? stockItem,
+    bool? mustDefineQty,
+    Value<double?> maxQty = const Value.absent(),
+    bool? outStock,
+    Value<DateTime?> outStockTime = const Value.absent(),
+    Value<DateTime?> hasStockTime = const Value.absent(),
+    DataStatus? dataStatus,
+    DateTime? createdTime,
+    Value<DateTime?> updatedTime = const Value.absent(),
+    Value<String?> deviceID = const Value.absent(),
+    Value<String?> appVersion = const Value.absent(),
+  }) => ShopProductOptionsTblData(
+    id: id ?? this.id,
+    productID: productID ?? this.productID,
+    optionID: optionID ?? this.optionID,
+    order: order.present ? order.value : this.order,
+    priceAdded: priceAdded.present ? priceAdded.value : this.priceAdded,
+    closeSale: closeSale ?? this.closeSale,
+    stockItem: stockItem ?? this.stockItem,
+    mustDefineQty: mustDefineQty ?? this.mustDefineQty,
+    maxQty: maxQty.present ? maxQty.value : this.maxQty,
+    outStock: outStock ?? this.outStock,
+    outStockTime: outStockTime.present ? outStockTime.value : this.outStockTime,
+    hasStockTime: hasStockTime.present ? hasStockTime.value : this.hasStockTime,
+    dataStatus: dataStatus ?? this.dataStatus,
+    createdTime: createdTime ?? this.createdTime,
+    updatedTime: updatedTime.present ? updatedTime.value : this.updatedTime,
+    deviceID: deviceID.present ? deviceID.value : this.deviceID,
+    appVersion: appVersion.present ? appVersion.value : this.appVersion,
+  );
+  ShopProductOptionsTblData copyWithCompanion(
+    ShopProductOptionsTblCompanion data,
+  ) {
+    return ShopProductOptionsTblData(
+      id: data.id.present ? data.id.value : this.id,
+      productID: data.productID.present ? data.productID.value : this.productID,
+      optionID: data.optionID.present ? data.optionID.value : this.optionID,
+      order: data.order.present ? data.order.value : this.order,
+      priceAdded: data.priceAdded.present
+          ? data.priceAdded.value
+          : this.priceAdded,
+      closeSale: data.closeSale.present ? data.closeSale.value : this.closeSale,
+      stockItem: data.stockItem.present ? data.stockItem.value : this.stockItem,
+      mustDefineQty: data.mustDefineQty.present
+          ? data.mustDefineQty.value
+          : this.mustDefineQty,
+      maxQty: data.maxQty.present ? data.maxQty.value : this.maxQty,
+      outStock: data.outStock.present ? data.outStock.value : this.outStock,
+      outStockTime: data.outStockTime.present
+          ? data.outStockTime.value
+          : this.outStockTime,
+      hasStockTime: data.hasStockTime.present
+          ? data.hasStockTime.value
+          : this.hasStockTime,
+      dataStatus: data.dataStatus.present
+          ? data.dataStatus.value
+          : this.dataStatus,
+      createdTime: data.createdTime.present
+          ? data.createdTime.value
+          : this.createdTime,
+      updatedTime: data.updatedTime.present
+          ? data.updatedTime.value
+          : this.updatedTime,
+      deviceID: data.deviceID.present ? data.deviceID.value : this.deviceID,
+      appVersion: data.appVersion.present
+          ? data.appVersion.value
+          : this.appVersion,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShopProductOptionsTblData(')
+          ..write('id: $id, ')
+          ..write('productID: $productID, ')
+          ..write('optionID: $optionID, ')
+          ..write('order: $order, ')
+          ..write('priceAdded: $priceAdded, ')
+          ..write('closeSale: $closeSale, ')
+          ..write('stockItem: $stockItem, ')
+          ..write('mustDefineQty: $mustDefineQty, ')
+          ..write('maxQty: $maxQty, ')
+          ..write('outStock: $outStock, ')
+          ..write('outStockTime: $outStockTime, ')
+          ..write('hasStockTime: $hasStockTime, ')
+          ..write('dataStatus: $dataStatus, ')
+          ..write('createdTime: $createdTime, ')
+          ..write('updatedTime: $updatedTime, ')
+          ..write('deviceID: $deviceID, ')
+          ..write('appVersion: $appVersion')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    productID,
+    optionID,
+    order,
+    priceAdded,
+    closeSale,
+    stockItem,
+    mustDefineQty,
+    maxQty,
+    outStock,
+    outStockTime,
+    hasStockTime,
+    dataStatus,
+    createdTime,
+    updatedTime,
+    deviceID,
+    appVersion,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ShopProductOptionsTblData &&
+          other.id == this.id &&
+          other.productID == this.productID &&
+          other.optionID == this.optionID &&
+          other.order == this.order &&
+          other.priceAdded == this.priceAdded &&
+          other.closeSale == this.closeSale &&
+          other.stockItem == this.stockItem &&
+          other.mustDefineQty == this.mustDefineQty &&
+          other.maxQty == this.maxQty &&
+          other.outStock == this.outStock &&
+          other.outStockTime == this.outStockTime &&
+          other.hasStockTime == this.hasStockTime &&
+          other.dataStatus == this.dataStatus &&
+          other.createdTime == this.createdTime &&
+          other.updatedTime == this.updatedTime &&
+          other.deviceID == this.deviceID &&
+          other.appVersion == this.appVersion);
+}
+
+class ShopProductOptionsTblCompanion
+    extends UpdateCompanion<ShopProductOptionsTblData> {
+  final Value<int> id;
+  final Value<int> productID;
+  final Value<int> optionID;
+  final Value<int?> order;
+  final Value<double?> priceAdded;
+  final Value<bool> closeSale;
+  final Value<bool> stockItem;
+  final Value<bool> mustDefineQty;
+  final Value<double?> maxQty;
+  final Value<bool> outStock;
+  final Value<DateTime?> outStockTime;
+  final Value<DateTime?> hasStockTime;
+  final Value<DataStatus> dataStatus;
+  final Value<DateTime> createdTime;
+  final Value<DateTime?> updatedTime;
+  final Value<String?> deviceID;
+  final Value<String?> appVersion;
+  const ShopProductOptionsTblCompanion({
+    this.id = const Value.absent(),
+    this.productID = const Value.absent(),
+    this.optionID = const Value.absent(),
+    this.order = const Value.absent(),
+    this.priceAdded = const Value.absent(),
+    this.closeSale = const Value.absent(),
+    this.stockItem = const Value.absent(),
+    this.mustDefineQty = const Value.absent(),
+    this.maxQty = const Value.absent(),
+    this.outStock = const Value.absent(),
+    this.outStockTime = const Value.absent(),
+    this.hasStockTime = const Value.absent(),
+    this.dataStatus = const Value.absent(),
+    this.createdTime = const Value.absent(),
+    this.updatedTime = const Value.absent(),
+    this.deviceID = const Value.absent(),
+    this.appVersion = const Value.absent(),
+  });
+  ShopProductOptionsTblCompanion.insert({
+    this.id = const Value.absent(),
+    required int productID,
+    required int optionID,
+    this.order = const Value.absent(),
+    this.priceAdded = const Value.absent(),
+    this.closeSale = const Value.absent(),
+    this.stockItem = const Value.absent(),
+    this.mustDefineQty = const Value.absent(),
+    this.maxQty = const Value.absent(),
+    this.outStock = const Value.absent(),
+    this.outStockTime = const Value.absent(),
+    this.hasStockTime = const Value.absent(),
+    this.dataStatus = const Value.absent(),
+    this.createdTime = const Value.absent(),
+    this.updatedTime = const Value.absent(),
+    this.deviceID = const Value.absent(),
+    this.appVersion = const Value.absent(),
+  }) : productID = Value(productID),
+       optionID = Value(optionID);
+  static Insertable<ShopProductOptionsTblData> custom({
+    Expression<int>? id,
+    Expression<int>? productID,
+    Expression<int>? optionID,
+    Expression<int>? order,
+    Expression<double>? priceAdded,
+    Expression<bool>? closeSale,
+    Expression<bool>? stockItem,
+    Expression<bool>? mustDefineQty,
+    Expression<double>? maxQty,
+    Expression<bool>? outStock,
+    Expression<DateTime>? outStockTime,
+    Expression<DateTime>? hasStockTime,
+    Expression<String>? dataStatus,
+    Expression<DateTime>? createdTime,
+    Expression<DateTime>? updatedTime,
+    Expression<String>? deviceID,
+    Expression<String>? appVersion,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (productID != null) 'product_i_d': productID,
+      if (optionID != null) 'option_i_d': optionID,
+      if (order != null) 'order': order,
+      if (priceAdded != null) 'price_added': priceAdded,
+      if (closeSale != null) 'close_sale': closeSale,
+      if (stockItem != null) 'stock_item': stockItem,
+      if (mustDefineQty != null) 'must_define_qty': mustDefineQty,
+      if (maxQty != null) 'max_qty': maxQty,
+      if (outStock != null) 'out_stock': outStock,
+      if (outStockTime != null) 'out_stock_time': outStockTime,
+      if (hasStockTime != null) 'has_stock_time': hasStockTime,
+      if (dataStatus != null) 'data_status': dataStatus,
+      if (createdTime != null) 'created_time': createdTime,
+      if (updatedTime != null) 'updated_time': updatedTime,
+      if (deviceID != null) 'device_i_d': deviceID,
+      if (appVersion != null) 'app_version': appVersion,
+    });
+  }
+
+  ShopProductOptionsTblCompanion copyWith({
+    Value<int>? id,
+    Value<int>? productID,
+    Value<int>? optionID,
+    Value<int?>? order,
+    Value<double?>? priceAdded,
+    Value<bool>? closeSale,
+    Value<bool>? stockItem,
+    Value<bool>? mustDefineQty,
+    Value<double?>? maxQty,
+    Value<bool>? outStock,
+    Value<DateTime?>? outStockTime,
+    Value<DateTime?>? hasStockTime,
+    Value<DataStatus>? dataStatus,
+    Value<DateTime>? createdTime,
+    Value<DateTime?>? updatedTime,
+    Value<String?>? deviceID,
+    Value<String?>? appVersion,
+  }) {
+    return ShopProductOptionsTblCompanion(
+      id: id ?? this.id,
+      productID: productID ?? this.productID,
+      optionID: optionID ?? this.optionID,
+      order: order ?? this.order,
+      priceAdded: priceAdded ?? this.priceAdded,
+      closeSale: closeSale ?? this.closeSale,
+      stockItem: stockItem ?? this.stockItem,
+      mustDefineQty: mustDefineQty ?? this.mustDefineQty,
+      maxQty: maxQty ?? this.maxQty,
+      outStock: outStock ?? this.outStock,
+      outStockTime: outStockTime ?? this.outStockTime,
+      hasStockTime: hasStockTime ?? this.hasStockTime,
+      dataStatus: dataStatus ?? this.dataStatus,
+      createdTime: createdTime ?? this.createdTime,
+      updatedTime: updatedTime ?? this.updatedTime,
+      deviceID: deviceID ?? this.deviceID,
+      appVersion: appVersion ?? this.appVersion,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (productID.present) {
+      map['product_i_d'] = Variable<int>(productID.value);
+    }
+    if (optionID.present) {
+      map['option_i_d'] = Variable<int>(optionID.value);
+    }
+    if (order.present) {
+      map['order'] = Variable<int>(order.value);
+    }
+    if (priceAdded.present) {
+      map['price_added'] = Variable<double>(priceAdded.value);
+    }
+    if (closeSale.present) {
+      map['close_sale'] = Variable<bool>(closeSale.value);
+    }
+    if (stockItem.present) {
+      map['stock_item'] = Variable<bool>(stockItem.value);
+    }
+    if (mustDefineQty.present) {
+      map['must_define_qty'] = Variable<bool>(mustDefineQty.value);
+    }
+    if (maxQty.present) {
+      map['max_qty'] = Variable<double>(maxQty.value);
+    }
+    if (outStock.present) {
+      map['out_stock'] = Variable<bool>(outStock.value);
+    }
+    if (outStockTime.present) {
+      map['out_stock_time'] = Variable<DateTime>(outStockTime.value);
+    }
+    if (hasStockTime.present) {
+      map['has_stock_time'] = Variable<DateTime>(hasStockTime.value);
+    }
+    if (dataStatus.present) {
+      map['data_status'] = Variable<String>(
+        $ShopProductOptionsTblTable.$converterdataStatus.toSql(
+          dataStatus.value,
+        ),
+      );
+    }
+    if (createdTime.present) {
+      map['created_time'] = Variable<DateTime>(createdTime.value);
+    }
+    if (updatedTime.present) {
+      map['updated_time'] = Variable<DateTime>(updatedTime.value);
+    }
+    if (deviceID.present) {
+      map['device_i_d'] = Variable<String>(deviceID.value);
+    }
+    if (appVersion.present) {
+      map['app_version'] = Variable<String>(appVersion.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShopProductOptionsTblCompanion(')
+          ..write('id: $id, ')
+          ..write('productID: $productID, ')
+          ..write('optionID: $optionID, ')
+          ..write('order: $order, ')
+          ..write('priceAdded: $priceAdded, ')
+          ..write('closeSale: $closeSale, ')
+          ..write('stockItem: $stockItem, ')
+          ..write('mustDefineQty: $mustDefineQty, ')
+          ..write('maxQty: $maxQty, ')
+          ..write('outStock: $outStock, ')
+          ..write('outStockTime: $outStockTime, ')
+          ..write('hasStockTime: $hasStockTime, ')
+          ..write('dataStatus: $dataStatus, ')
+          ..write('createdTime: $createdTime, ')
+          ..write('updatedTime: $updatedTime, ')
+          ..write('deviceID: $deviceID, ')
+          ..write('appVersion: $appVersion')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ShopOrderTblTable extends ShopOrderTbl
+    with TableInfo<$ShopOrderTblTable, ShopOrderTblData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ShopOrderTblTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _shopIDMeta = const VerificationMeta('shopID');
+  @override
+  late final GeneratedColumn<int> shopID = GeneratedColumn<int>(
+    'shop_i_d',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES shop_info_tbl (id)',
+    ),
+  );
+  static const VerificationMeta _tableIDMeta = const VerificationMeta(
+    'tableID',
+  );
+  @override
+  late final GeneratedColumn<int> tableID = GeneratedColumn<int>(
+    'table_i_d',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _orderNoMeta = const VerificationMeta(
+    'orderNo',
+  );
+  @override
+  late final GeneratedColumn<int> orderNo = GeneratedColumn<int>(
+    'order_no',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _orderNoCharMeta = const VerificationMeta(
+    'orderNoChar',
+  );
+  @override
+  late final GeneratedColumn<String> orderNoChar = GeneratedColumn<String>(
+    'order_no_char',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _orderCodeMeta = const VerificationMeta(
+    'orderCode',
+  );
+  @override
+  late final GeneratedColumn<String> orderCode = GeneratedColumn<String>(
+    'order_code',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _orderDateMeta = const VerificationMeta(
+    'orderDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> orderDate = GeneratedColumn<DateTime>(
+    'order_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _receiptNoMeta = const VerificationMeta(
+    'receiptNo',
+  );
+  @override
+  late final GeneratedColumn<int> receiptNo = GeneratedColumn<int>(
+    'receipt_no',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _receiptNoCharMeta = const VerificationMeta(
+    'receiptNoChar',
+  );
+  @override
+  late final GeneratedColumn<String> receiptNoChar = GeneratedColumn<String>(
+    'receipt_no_char',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _receiptDateMeta = const VerificationMeta(
+    'receiptDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> receiptDate = GeneratedColumn<DateTime>(
+    'receipt_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _seatNumberMeta = const VerificationMeta(
+    'seatNumber',
+  );
+  @override
+  late final GeneratedColumn<int> seatNumber = GeneratedColumn<int>(
+    'seat_number',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _serviceAmountMeta = const VerificationMeta(
+    'serviceAmount',
+  );
+  @override
+  late final GeneratedColumn<double> serviceAmount = GeneratedColumn<double>(
+    'service_amount',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _totalPriceMeta = const VerificationMeta(
+    'totalPrice',
+  );
+  @override
+  late final GeneratedColumn<double> totalPrice = GeneratedColumn<double>(
+    'total_price',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _discountPercentMeta = const VerificationMeta(
+    'discountPercent',
+  );
+  @override
+  late final GeneratedColumn<double> discountPercent = GeneratedColumn<double>(
+    'discount_percent',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _discountValueMeta = const VerificationMeta(
+    'discountValue',
+  );
+  @override
+  late final GeneratedColumn<double> discountValue = GeneratedColumn<double>(
+    'discount_value',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<ServiceChargeMethod?, String>
+  serviceChargeMethod =
+      GeneratedColumn<String>(
+        'service_charge_method',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      ).withConverter<ServiceChargeMethod?>(
+        $ShopOrderTblTable.$converterserviceChargeMethodn,
+      );
+  static const VerificationMeta _serviceCalcTakehomeMeta =
+      const VerificationMeta('serviceCalcTakehome');
+  @override
+  late final GeneratedColumn<bool> serviceCalcTakehome = GeneratedColumn<bool>(
+    'service_calc_takehome',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("service_calc_takehome" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  static const VerificationMeta _serviceCalcAllMeta = const VerificationMeta(
+    'serviceCalcAll',
+  );
+  @override
+  late final GeneratedColumn<bool> serviceCalcAll = GeneratedColumn<bool>(
+    'service_calc_all',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("service_calc_all" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  static const VerificationMeta _servicePercentMeta = const VerificationMeta(
+    'servicePercent',
+  );
+  @override
+  late final GeneratedColumn<double> servicePercent = GeneratedColumn<double>(
+    'service_percent',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _serviceValueMeta = const VerificationMeta(
+    'serviceValue',
+  );
+  @override
+  late final GeneratedColumn<double> serviceValue = GeneratedColumn<double>(
+    'service_value',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _vatInsideMeta = const VerificationMeta(
+    'vatInside',
+  );
+  @override
+  late final GeneratedColumn<bool> vatInside = GeneratedColumn<bool>(
+    'vat_inside',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("vat_inside" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  static const VerificationMeta _taxPercentMeta = const VerificationMeta(
+    'taxPercent',
+  );
+  @override
+  late final GeneratedColumn<double> taxPercent = GeneratedColumn<double>(
+    'tax_percent',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _taxValueMeta = const VerificationMeta(
+    'taxValue',
+  );
+  @override
+  late final GeneratedColumn<double> taxValue = GeneratedColumn<double>(
+    'tax_value',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _netAmountMeta = const VerificationMeta(
+    'netAmount',
+  );
+  @override
+  late final GeneratedColumn<double> netAmount = GeneratedColumn<double>(
+    'net_amount',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<OrderStatus, String> status =
+      GeneratedColumn<String>(
+        'status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: Constant(OrderStatus.prepared.text),
+      ).withConverter<OrderStatus>($ShopOrderTblTable.$converterstatus);
+  @override
+  late final GeneratedColumnWithTypeConverter<PaymentStatus, String> payStatus =
+      GeneratedColumn<String>(
+        'pay_status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: Constant(PaymentStatus.none.text),
+      ).withConverter<PaymentStatus>($ShopOrderTblTable.$converterpayStatus);
+  static const VerificationMeta _requestOrderTimeMeta = const VerificationMeta(
+    'requestOrderTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> requestOrderTime =
+      GeneratedColumn<DateTime>(
+        'request_order_time',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _requestOrderByMeta = const VerificationMeta(
+    'requestOrderBy',
+  );
+  @override
+  late final GeneratedColumn<String> requestOrderBy = GeneratedColumn<String>(
+    'request_order_by',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _orderedTimeMeta = const VerificationMeta(
+    'orderedTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> orderedTime = GeneratedColumn<DateTime>(
+    'ordered_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _orderedByMeta = const VerificationMeta(
+    'orderedBy',
+  );
+  @override
+  late final GeneratedColumn<String> orderedBy = GeneratedColumn<String>(
+    'ordered_by',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _billedTimeMeta = const VerificationMeta(
+    'billedTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> billedTime = GeneratedColumn<DateTime>(
+    'billed_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _billedByMeta = const VerificationMeta(
+    'billedBy',
+  );
+  @override
+  late final GeneratedColumn<String> billedBy = GeneratedColumn<String>(
+    'billed_by',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _paidTimeMeta = const VerificationMeta(
+    'paidTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> paidTime = GeneratedColumn<DateTime>(
+    'paid_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _paidByMeta = const VerificationMeta('paidBy');
+  @override
+  late final GeneratedColumn<String> paidBy = GeneratedColumn<String>(
+    'paid_by',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DataStatus, String> dataStatus =
+      GeneratedColumn<String>(
+        'data_status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: Constant(DataStatus.active.text),
+      ).withConverter<DataStatus>($ShopOrderTblTable.$converterdataStatus);
+  static const VerificationMeta _createdTimeMeta = const VerificationMeta(
+    'createdTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdTime = GeneratedColumn<DateTime>(
+    'created_time',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedTimeMeta = const VerificationMeta(
+    'updatedTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedTime = GeneratedColumn<DateTime>(
+    'updated_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _deviceIDMeta = const VerificationMeta(
+    'deviceID',
+  );
+  @override
+  late final GeneratedColumn<String> deviceID = GeneratedColumn<String>(
+    'device_i_d',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _appVersionMeta = const VerificationMeta(
+    'appVersion',
+  );
+  @override
+  late final GeneratedColumn<String> appVersion = GeneratedColumn<String>(
+    'app_version',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    shopID,
+    tableID,
+    orderNo,
+    orderNoChar,
+    orderCode,
+    orderDate,
+    receiptNo,
+    receiptNoChar,
+    receiptDate,
+    seatNumber,
+    note,
+    serviceAmount,
+    totalPrice,
+    discountPercent,
+    discountValue,
+    serviceChargeMethod,
+    serviceCalcTakehome,
+    serviceCalcAll,
+    servicePercent,
+    serviceValue,
+    vatInside,
+    taxPercent,
+    taxValue,
+    netAmount,
+    status,
+    payStatus,
+    requestOrderTime,
+    requestOrderBy,
+    orderedTime,
+    orderedBy,
+    billedTime,
+    billedBy,
+    paidTime,
+    paidBy,
+    dataStatus,
+    createdTime,
+    updatedTime,
+    deviceID,
+    appVersion,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'shop_order_tbl';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ShopOrderTblData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('shop_i_d')) {
+      context.handle(
+        _shopIDMeta,
+        shopID.isAcceptableOrUnknown(data['shop_i_d']!, _shopIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_shopIDMeta);
+    }
+    if (data.containsKey('table_i_d')) {
+      context.handle(
+        _tableIDMeta,
+        tableID.isAcceptableOrUnknown(data['table_i_d']!, _tableIDMeta),
+      );
+    }
+    if (data.containsKey('order_no')) {
+      context.handle(
+        _orderNoMeta,
+        orderNo.isAcceptableOrUnknown(data['order_no']!, _orderNoMeta),
+      );
+    }
+    if (data.containsKey('order_no_char')) {
+      context.handle(
+        _orderNoCharMeta,
+        orderNoChar.isAcceptableOrUnknown(
+          data['order_no_char']!,
+          _orderNoCharMeta,
+        ),
+      );
+    }
+    if (data.containsKey('order_code')) {
+      context.handle(
+        _orderCodeMeta,
+        orderCode.isAcceptableOrUnknown(data['order_code']!, _orderCodeMeta),
+      );
+    }
+    if (data.containsKey('order_date')) {
+      context.handle(
+        _orderDateMeta,
+        orderDate.isAcceptableOrUnknown(data['order_date']!, _orderDateMeta),
+      );
+    }
+    if (data.containsKey('receipt_no')) {
+      context.handle(
+        _receiptNoMeta,
+        receiptNo.isAcceptableOrUnknown(data['receipt_no']!, _receiptNoMeta),
+      );
+    }
+    if (data.containsKey('receipt_no_char')) {
+      context.handle(
+        _receiptNoCharMeta,
+        receiptNoChar.isAcceptableOrUnknown(
+          data['receipt_no_char']!,
+          _receiptNoCharMeta,
+        ),
+      );
+    }
+    if (data.containsKey('receipt_date')) {
+      context.handle(
+        _receiptDateMeta,
+        receiptDate.isAcceptableOrUnknown(
+          data['receipt_date']!,
+          _receiptDateMeta,
+        ),
+      );
+    }
+    if (data.containsKey('seat_number')) {
+      context.handle(
+        _seatNumberMeta,
+        seatNumber.isAcceptableOrUnknown(data['seat_number']!, _seatNumberMeta),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    if (data.containsKey('service_amount')) {
+      context.handle(
+        _serviceAmountMeta,
+        serviceAmount.isAcceptableOrUnknown(
+          data['service_amount']!,
+          _serviceAmountMeta,
+        ),
+      );
+    }
+    if (data.containsKey('total_price')) {
+      context.handle(
+        _totalPriceMeta,
+        totalPrice.isAcceptableOrUnknown(data['total_price']!, _totalPriceMeta),
+      );
+    }
+    if (data.containsKey('discount_percent')) {
+      context.handle(
+        _discountPercentMeta,
+        discountPercent.isAcceptableOrUnknown(
+          data['discount_percent']!,
+          _discountPercentMeta,
+        ),
+      );
+    }
+    if (data.containsKey('discount_value')) {
+      context.handle(
+        _discountValueMeta,
+        discountValue.isAcceptableOrUnknown(
+          data['discount_value']!,
+          _discountValueMeta,
+        ),
+      );
+    }
+    if (data.containsKey('service_calc_takehome')) {
+      context.handle(
+        _serviceCalcTakehomeMeta,
+        serviceCalcTakehome.isAcceptableOrUnknown(
+          data['service_calc_takehome']!,
+          _serviceCalcTakehomeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('service_calc_all')) {
+      context.handle(
+        _serviceCalcAllMeta,
+        serviceCalcAll.isAcceptableOrUnknown(
+          data['service_calc_all']!,
+          _serviceCalcAllMeta,
+        ),
+      );
+    }
+    if (data.containsKey('service_percent')) {
+      context.handle(
+        _servicePercentMeta,
+        servicePercent.isAcceptableOrUnknown(
+          data['service_percent']!,
+          _servicePercentMeta,
+        ),
+      );
+    }
+    if (data.containsKey('service_value')) {
+      context.handle(
+        _serviceValueMeta,
+        serviceValue.isAcceptableOrUnknown(
+          data['service_value']!,
+          _serviceValueMeta,
+        ),
+      );
+    }
+    if (data.containsKey('vat_inside')) {
+      context.handle(
+        _vatInsideMeta,
+        vatInside.isAcceptableOrUnknown(data['vat_inside']!, _vatInsideMeta),
+      );
+    }
+    if (data.containsKey('tax_percent')) {
+      context.handle(
+        _taxPercentMeta,
+        taxPercent.isAcceptableOrUnknown(data['tax_percent']!, _taxPercentMeta),
+      );
+    }
+    if (data.containsKey('tax_value')) {
+      context.handle(
+        _taxValueMeta,
+        taxValue.isAcceptableOrUnknown(data['tax_value']!, _taxValueMeta),
+      );
+    }
+    if (data.containsKey('net_amount')) {
+      context.handle(
+        _netAmountMeta,
+        netAmount.isAcceptableOrUnknown(data['net_amount']!, _netAmountMeta),
+      );
+    }
+    if (data.containsKey('request_order_time')) {
+      context.handle(
+        _requestOrderTimeMeta,
+        requestOrderTime.isAcceptableOrUnknown(
+          data['request_order_time']!,
+          _requestOrderTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('request_order_by')) {
+      context.handle(
+        _requestOrderByMeta,
+        requestOrderBy.isAcceptableOrUnknown(
+          data['request_order_by']!,
+          _requestOrderByMeta,
+        ),
+      );
+    }
+    if (data.containsKey('ordered_time')) {
+      context.handle(
+        _orderedTimeMeta,
+        orderedTime.isAcceptableOrUnknown(
+          data['ordered_time']!,
+          _orderedTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('ordered_by')) {
+      context.handle(
+        _orderedByMeta,
+        orderedBy.isAcceptableOrUnknown(data['ordered_by']!, _orderedByMeta),
+      );
+    }
+    if (data.containsKey('billed_time')) {
+      context.handle(
+        _billedTimeMeta,
+        billedTime.isAcceptableOrUnknown(data['billed_time']!, _billedTimeMeta),
+      );
+    }
+    if (data.containsKey('billed_by')) {
+      context.handle(
+        _billedByMeta,
+        billedBy.isAcceptableOrUnknown(data['billed_by']!, _billedByMeta),
+      );
+    }
+    if (data.containsKey('paid_time')) {
+      context.handle(
+        _paidTimeMeta,
+        paidTime.isAcceptableOrUnknown(data['paid_time']!, _paidTimeMeta),
+      );
+    }
+    if (data.containsKey('paid_by')) {
+      context.handle(
+        _paidByMeta,
+        paidBy.isAcceptableOrUnknown(data['paid_by']!, _paidByMeta),
+      );
+    }
+    if (data.containsKey('created_time')) {
+      context.handle(
+        _createdTimeMeta,
+        createdTime.isAcceptableOrUnknown(
+          data['created_time']!,
+          _createdTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('updated_time')) {
+      context.handle(
+        _updatedTimeMeta,
+        updatedTime.isAcceptableOrUnknown(
+          data['updated_time']!,
+          _updatedTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('device_i_d')) {
+      context.handle(
+        _deviceIDMeta,
+        deviceID.isAcceptableOrUnknown(data['device_i_d']!, _deviceIDMeta),
+      );
+    }
+    if (data.containsKey('app_version')) {
+      context.handle(
+        _appVersionMeta,
+        appVersion.isAcceptableOrUnknown(data['app_version']!, _appVersionMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ShopOrderTblData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ShopOrderTblData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      shopID: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}shop_i_d'],
+      )!,
+      tableID: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}table_i_d'],
+      ),
+      orderNo: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}order_no'],
+      ),
+      orderNoChar: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}order_no_char'],
+      ),
+      orderCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}order_code'],
+      ),
+      orderDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}order_date'],
+      ),
+      receiptNo: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}receipt_no'],
+      ),
+      receiptNoChar: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}receipt_no_char'],
+      ),
+      receiptDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}receipt_date'],
+      ),
+      seatNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}seat_number'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+      serviceAmount: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}service_amount'],
+      ),
+      totalPrice: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}total_price'],
+      ),
+      discountPercent: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}discount_percent'],
+      ),
+      discountValue: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}discount_value'],
+      ),
+      serviceChargeMethod: $ShopOrderTblTable.$converterserviceChargeMethodn
+          .fromSql(
+            attachedDatabase.typeMapping.read(
+              DriftSqlType.string,
+              data['${effectivePrefix}service_charge_method'],
+            ),
+          ),
+      serviceCalcTakehome: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}service_calc_takehome'],
+      )!,
+      serviceCalcAll: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}service_calc_all'],
+      )!,
+      servicePercent: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}service_percent'],
+      ),
+      serviceValue: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}service_value'],
+      ),
+      vatInside: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}vat_inside'],
+      )!,
+      taxPercent: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}tax_percent'],
+      ),
+      taxValue: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}tax_value'],
+      ),
+      netAmount: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}net_amount'],
+      ),
+      status: $ShopOrderTblTable.$converterstatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}status'],
+        )!,
+      ),
+      payStatus: $ShopOrderTblTable.$converterpayStatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}pay_status'],
+        )!,
+      ),
+      requestOrderTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}request_order_time'],
+      ),
+      requestOrderBy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}request_order_by'],
+      ),
+      orderedTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}ordered_time'],
+      ),
+      orderedBy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}ordered_by'],
+      ),
+      billedTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}billed_time'],
+      ),
+      billedBy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}billed_by'],
+      ),
+      paidTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}paid_time'],
+      ),
+      paidBy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}paid_by'],
+      ),
+      dataStatus: $ShopOrderTblTable.$converterdataStatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}data_status'],
+        )!,
+      ),
+      createdTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_time'],
+      )!,
+      updatedTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_time'],
+      ),
+      deviceID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}device_i_d'],
+      ),
+      appVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}app_version'],
+      ),
+    );
+  }
+
+  @override
+  $ShopOrderTblTable createAlias(String alias) {
+    return $ShopOrderTblTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<ServiceChargeMethod, String, String>
+  $converterserviceChargeMethod = const EnumNameConverter<ServiceChargeMethod>(
+    ServiceChargeMethod.values,
+  );
+  static JsonTypeConverter2<ServiceChargeMethod?, String?, String?>
+  $converterserviceChargeMethodn = JsonTypeConverter2.asNullable(
+    $converterserviceChargeMethod,
+  );
+  static JsonTypeConverter2<OrderStatus, String, String> $converterstatus =
+      const EnumNameConverter<OrderStatus>(OrderStatus.values);
+  static JsonTypeConverter2<PaymentStatus, String, String> $converterpayStatus =
+      const EnumNameConverter<PaymentStatus>(PaymentStatus.values);
+  static JsonTypeConverter2<DataStatus, String, String> $converterdataStatus =
+      const EnumNameConverter<DataStatus>(DataStatus.values);
+}
+
+class ShopOrderTblData extends DataClass
+    implements Insertable<ShopOrderTblData> {
+  final int id;
+  final int shopID;
+  final int? tableID;
+  final int? orderNo;
+  final String? orderNoChar;
+  final String? orderCode;
+  final DateTime? orderDate;
+  final int? receiptNo;
+  final String? receiptNoChar;
+  final DateTime? receiptDate;
+  final int? seatNumber;
+  final String? note;
+  final double? serviceAmount;
+  final double? totalPrice;
+  final double? discountPercent;
+  final double? discountValue;
+  final ServiceChargeMethod? serviceChargeMethod;
+  final bool serviceCalcTakehome;
+  final bool serviceCalcAll;
+  final double? servicePercent;
+  final double? serviceValue;
+  final bool vatInside;
+  final double? taxPercent;
+  final double? taxValue;
+  final double? netAmount;
+  final OrderStatus status;
+  final PaymentStatus payStatus;
+  final DateTime? requestOrderTime;
+  final String? requestOrderBy;
+  final DateTime? orderedTime;
+  final String? orderedBy;
+  final DateTime? billedTime;
+  final String? billedBy;
+  final DateTime? paidTime;
+  final String? paidBy;
+  final DataStatus dataStatus;
+  final DateTime createdTime;
+  final DateTime? updatedTime;
+  final String? deviceID;
+  final String? appVersion;
+  const ShopOrderTblData({
+    required this.id,
+    required this.shopID,
+    this.tableID,
+    this.orderNo,
+    this.orderNoChar,
+    this.orderCode,
+    this.orderDate,
+    this.receiptNo,
+    this.receiptNoChar,
+    this.receiptDate,
+    this.seatNumber,
+    this.note,
+    this.serviceAmount,
+    this.totalPrice,
+    this.discountPercent,
+    this.discountValue,
+    this.serviceChargeMethod,
+    required this.serviceCalcTakehome,
+    required this.serviceCalcAll,
+    this.servicePercent,
+    this.serviceValue,
+    required this.vatInside,
+    this.taxPercent,
+    this.taxValue,
+    this.netAmount,
+    required this.status,
+    required this.payStatus,
+    this.requestOrderTime,
+    this.requestOrderBy,
+    this.orderedTime,
+    this.orderedBy,
+    this.billedTime,
+    this.billedBy,
+    this.paidTime,
+    this.paidBy,
+    required this.dataStatus,
+    required this.createdTime,
+    this.updatedTime,
+    this.deviceID,
+    this.appVersion,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['shop_i_d'] = Variable<int>(shopID);
+    if (!nullToAbsent || tableID != null) {
+      map['table_i_d'] = Variable<int>(tableID);
+    }
+    if (!nullToAbsent || orderNo != null) {
+      map['order_no'] = Variable<int>(orderNo);
+    }
+    if (!nullToAbsent || orderNoChar != null) {
+      map['order_no_char'] = Variable<String>(orderNoChar);
+    }
+    if (!nullToAbsent || orderCode != null) {
+      map['order_code'] = Variable<String>(orderCode);
+    }
+    if (!nullToAbsent || orderDate != null) {
+      map['order_date'] = Variable<DateTime>(orderDate);
+    }
+    if (!nullToAbsent || receiptNo != null) {
+      map['receipt_no'] = Variable<int>(receiptNo);
+    }
+    if (!nullToAbsent || receiptNoChar != null) {
+      map['receipt_no_char'] = Variable<String>(receiptNoChar);
+    }
+    if (!nullToAbsent || receiptDate != null) {
+      map['receipt_date'] = Variable<DateTime>(receiptDate);
+    }
+    if (!nullToAbsent || seatNumber != null) {
+      map['seat_number'] = Variable<int>(seatNumber);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    if (!nullToAbsent || serviceAmount != null) {
+      map['service_amount'] = Variable<double>(serviceAmount);
+    }
+    if (!nullToAbsent || totalPrice != null) {
+      map['total_price'] = Variable<double>(totalPrice);
+    }
+    if (!nullToAbsent || discountPercent != null) {
+      map['discount_percent'] = Variable<double>(discountPercent);
+    }
+    if (!nullToAbsent || discountValue != null) {
+      map['discount_value'] = Variable<double>(discountValue);
+    }
+    if (!nullToAbsent || serviceChargeMethod != null) {
+      map['service_charge_method'] = Variable<String>(
+        $ShopOrderTblTable.$converterserviceChargeMethodn.toSql(
+          serviceChargeMethod,
+        ),
+      );
+    }
+    map['service_calc_takehome'] = Variable<bool>(serviceCalcTakehome);
+    map['service_calc_all'] = Variable<bool>(serviceCalcAll);
+    if (!nullToAbsent || servicePercent != null) {
+      map['service_percent'] = Variable<double>(servicePercent);
+    }
+    if (!nullToAbsent || serviceValue != null) {
+      map['service_value'] = Variable<double>(serviceValue);
+    }
+    map['vat_inside'] = Variable<bool>(vatInside);
+    if (!nullToAbsent || taxPercent != null) {
+      map['tax_percent'] = Variable<double>(taxPercent);
+    }
+    if (!nullToAbsent || taxValue != null) {
+      map['tax_value'] = Variable<double>(taxValue);
+    }
+    if (!nullToAbsent || netAmount != null) {
+      map['net_amount'] = Variable<double>(netAmount);
+    }
+    {
+      map['status'] = Variable<String>(
+        $ShopOrderTblTable.$converterstatus.toSql(status),
+      );
+    }
+    {
+      map['pay_status'] = Variable<String>(
+        $ShopOrderTblTable.$converterpayStatus.toSql(payStatus),
+      );
+    }
+    if (!nullToAbsent || requestOrderTime != null) {
+      map['request_order_time'] = Variable<DateTime>(requestOrderTime);
+    }
+    if (!nullToAbsent || requestOrderBy != null) {
+      map['request_order_by'] = Variable<String>(requestOrderBy);
+    }
+    if (!nullToAbsent || orderedTime != null) {
+      map['ordered_time'] = Variable<DateTime>(orderedTime);
+    }
+    if (!nullToAbsent || orderedBy != null) {
+      map['ordered_by'] = Variable<String>(orderedBy);
+    }
+    if (!nullToAbsent || billedTime != null) {
+      map['billed_time'] = Variable<DateTime>(billedTime);
+    }
+    if (!nullToAbsent || billedBy != null) {
+      map['billed_by'] = Variable<String>(billedBy);
+    }
+    if (!nullToAbsent || paidTime != null) {
+      map['paid_time'] = Variable<DateTime>(paidTime);
+    }
+    if (!nullToAbsent || paidBy != null) {
+      map['paid_by'] = Variable<String>(paidBy);
+    }
+    {
+      map['data_status'] = Variable<String>(
+        $ShopOrderTblTable.$converterdataStatus.toSql(dataStatus),
+      );
+    }
+    map['created_time'] = Variable<DateTime>(createdTime);
+    if (!nullToAbsent || updatedTime != null) {
+      map['updated_time'] = Variable<DateTime>(updatedTime);
+    }
+    if (!nullToAbsent || deviceID != null) {
+      map['device_i_d'] = Variable<String>(deviceID);
+    }
+    if (!nullToAbsent || appVersion != null) {
+      map['app_version'] = Variable<String>(appVersion);
+    }
+    return map;
+  }
+
+  ShopOrderTblCompanion toCompanion(bool nullToAbsent) {
+    return ShopOrderTblCompanion(
+      id: Value(id),
+      shopID: Value(shopID),
+      tableID: tableID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(tableID),
+      orderNo: orderNo == null && nullToAbsent
+          ? const Value.absent()
+          : Value(orderNo),
+      orderNoChar: orderNoChar == null && nullToAbsent
+          ? const Value.absent()
+          : Value(orderNoChar),
+      orderCode: orderCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(orderCode),
+      orderDate: orderDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(orderDate),
+      receiptNo: receiptNo == null && nullToAbsent
+          ? const Value.absent()
+          : Value(receiptNo),
+      receiptNoChar: receiptNoChar == null && nullToAbsent
+          ? const Value.absent()
+          : Value(receiptNoChar),
+      receiptDate: receiptDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(receiptDate),
+      seatNumber: seatNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(seatNumber),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+      serviceAmount: serviceAmount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serviceAmount),
+      totalPrice: totalPrice == null && nullToAbsent
+          ? const Value.absent()
+          : Value(totalPrice),
+      discountPercent: discountPercent == null && nullToAbsent
+          ? const Value.absent()
+          : Value(discountPercent),
+      discountValue: discountValue == null && nullToAbsent
+          ? const Value.absent()
+          : Value(discountValue),
+      serviceChargeMethod: serviceChargeMethod == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serviceChargeMethod),
+      serviceCalcTakehome: Value(serviceCalcTakehome),
+      serviceCalcAll: Value(serviceCalcAll),
+      servicePercent: servicePercent == null && nullToAbsent
+          ? const Value.absent()
+          : Value(servicePercent),
+      serviceValue: serviceValue == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serviceValue),
+      vatInside: Value(vatInside),
+      taxPercent: taxPercent == null && nullToAbsent
+          ? const Value.absent()
+          : Value(taxPercent),
+      taxValue: taxValue == null && nullToAbsent
+          ? const Value.absent()
+          : Value(taxValue),
+      netAmount: netAmount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(netAmount),
+      status: Value(status),
+      payStatus: Value(payStatus),
+      requestOrderTime: requestOrderTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(requestOrderTime),
+      requestOrderBy: requestOrderBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(requestOrderBy),
+      orderedTime: orderedTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(orderedTime),
+      orderedBy: orderedBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(orderedBy),
+      billedTime: billedTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(billedTime),
+      billedBy: billedBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(billedBy),
+      paidTime: paidTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(paidTime),
+      paidBy: paidBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(paidBy),
+      dataStatus: Value(dataStatus),
+      createdTime: Value(createdTime),
+      updatedTime: updatedTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedTime),
+      deviceID: deviceID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deviceID),
+      appVersion: appVersion == null && nullToAbsent
+          ? const Value.absent()
+          : Value(appVersion),
+    );
+  }
+
+  factory ShopOrderTblData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ShopOrderTblData(
+      id: serializer.fromJson<int>(json['id']),
+      shopID: serializer.fromJson<int>(json['shopID']),
+      tableID: serializer.fromJson<int?>(json['tableID']),
+      orderNo: serializer.fromJson<int?>(json['orderNo']),
+      orderNoChar: serializer.fromJson<String?>(json['orderNoChar']),
+      orderCode: serializer.fromJson<String?>(json['orderCode']),
+      orderDate: serializer.fromJson<DateTime?>(json['orderDate']),
+      receiptNo: serializer.fromJson<int?>(json['receiptNo']),
+      receiptNoChar: serializer.fromJson<String?>(json['receiptNoChar']),
+      receiptDate: serializer.fromJson<DateTime?>(json['receiptDate']),
+      seatNumber: serializer.fromJson<int?>(json['seatNumber']),
+      note: serializer.fromJson<String?>(json['note']),
+      serviceAmount: serializer.fromJson<double?>(json['serviceAmount']),
+      totalPrice: serializer.fromJson<double?>(json['totalPrice']),
+      discountPercent: serializer.fromJson<double?>(json['discountPercent']),
+      discountValue: serializer.fromJson<double?>(json['discountValue']),
+      serviceChargeMethod: $ShopOrderTblTable.$converterserviceChargeMethodn
+          .fromJson(serializer.fromJson<String?>(json['serviceChargeMethod'])),
+      serviceCalcTakehome: serializer.fromJson<bool>(
+        json['serviceCalcTakehome'],
+      ),
+      serviceCalcAll: serializer.fromJson<bool>(json['serviceCalcAll']),
+      servicePercent: serializer.fromJson<double?>(json['servicePercent']),
+      serviceValue: serializer.fromJson<double?>(json['serviceValue']),
+      vatInside: serializer.fromJson<bool>(json['vatInside']),
+      taxPercent: serializer.fromJson<double?>(json['taxPercent']),
+      taxValue: serializer.fromJson<double?>(json['taxValue']),
+      netAmount: serializer.fromJson<double?>(json['netAmount']),
+      status: $ShopOrderTblTable.$converterstatus.fromJson(
+        serializer.fromJson<String>(json['status']),
+      ),
+      payStatus: $ShopOrderTblTable.$converterpayStatus.fromJson(
+        serializer.fromJson<String>(json['payStatus']),
+      ),
+      requestOrderTime: serializer.fromJson<DateTime?>(
+        json['requestOrderTime'],
+      ),
+      requestOrderBy: serializer.fromJson<String?>(json['requestOrderBy']),
+      orderedTime: serializer.fromJson<DateTime?>(json['orderedTime']),
+      orderedBy: serializer.fromJson<String?>(json['orderedBy']),
+      billedTime: serializer.fromJson<DateTime?>(json['billedTime']),
+      billedBy: serializer.fromJson<String?>(json['billedBy']),
+      paidTime: serializer.fromJson<DateTime?>(json['paidTime']),
+      paidBy: serializer.fromJson<String?>(json['paidBy']),
+      dataStatus: $ShopOrderTblTable.$converterdataStatus.fromJson(
+        serializer.fromJson<String>(json['dataStatus']),
+      ),
+      createdTime: serializer.fromJson<DateTime>(json['createdTime']),
+      updatedTime: serializer.fromJson<DateTime?>(json['updatedTime']),
+      deviceID: serializer.fromJson<String?>(json['deviceID']),
+      appVersion: serializer.fromJson<String?>(json['appVersion']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'shopID': serializer.toJson<int>(shopID),
+      'tableID': serializer.toJson<int?>(tableID),
+      'orderNo': serializer.toJson<int?>(orderNo),
+      'orderNoChar': serializer.toJson<String?>(orderNoChar),
+      'orderCode': serializer.toJson<String?>(orderCode),
+      'orderDate': serializer.toJson<DateTime?>(orderDate),
+      'receiptNo': serializer.toJson<int?>(receiptNo),
+      'receiptNoChar': serializer.toJson<String?>(receiptNoChar),
+      'receiptDate': serializer.toJson<DateTime?>(receiptDate),
+      'seatNumber': serializer.toJson<int?>(seatNumber),
+      'note': serializer.toJson<String?>(note),
+      'serviceAmount': serializer.toJson<double?>(serviceAmount),
+      'totalPrice': serializer.toJson<double?>(totalPrice),
+      'discountPercent': serializer.toJson<double?>(discountPercent),
+      'discountValue': serializer.toJson<double?>(discountValue),
+      'serviceChargeMethod': serializer.toJson<String?>(
+        $ShopOrderTblTable.$converterserviceChargeMethodn.toJson(
+          serviceChargeMethod,
+        ),
+      ),
+      'serviceCalcTakehome': serializer.toJson<bool>(serviceCalcTakehome),
+      'serviceCalcAll': serializer.toJson<bool>(serviceCalcAll),
+      'servicePercent': serializer.toJson<double?>(servicePercent),
+      'serviceValue': serializer.toJson<double?>(serviceValue),
+      'vatInside': serializer.toJson<bool>(vatInside),
+      'taxPercent': serializer.toJson<double?>(taxPercent),
+      'taxValue': serializer.toJson<double?>(taxValue),
+      'netAmount': serializer.toJson<double?>(netAmount),
+      'status': serializer.toJson<String>(
+        $ShopOrderTblTable.$converterstatus.toJson(status),
+      ),
+      'payStatus': serializer.toJson<String>(
+        $ShopOrderTblTable.$converterpayStatus.toJson(payStatus),
+      ),
+      'requestOrderTime': serializer.toJson<DateTime?>(requestOrderTime),
+      'requestOrderBy': serializer.toJson<String?>(requestOrderBy),
+      'orderedTime': serializer.toJson<DateTime?>(orderedTime),
+      'orderedBy': serializer.toJson<String?>(orderedBy),
+      'billedTime': serializer.toJson<DateTime?>(billedTime),
+      'billedBy': serializer.toJson<String?>(billedBy),
+      'paidTime': serializer.toJson<DateTime?>(paidTime),
+      'paidBy': serializer.toJson<String?>(paidBy),
+      'dataStatus': serializer.toJson<String>(
+        $ShopOrderTblTable.$converterdataStatus.toJson(dataStatus),
+      ),
+      'createdTime': serializer.toJson<DateTime>(createdTime),
+      'updatedTime': serializer.toJson<DateTime?>(updatedTime),
+      'deviceID': serializer.toJson<String?>(deviceID),
+      'appVersion': serializer.toJson<String?>(appVersion),
+    };
+  }
+
+  ShopOrderTblData copyWith({
+    int? id,
+    int? shopID,
+    Value<int?> tableID = const Value.absent(),
+    Value<int?> orderNo = const Value.absent(),
+    Value<String?> orderNoChar = const Value.absent(),
+    Value<String?> orderCode = const Value.absent(),
+    Value<DateTime?> orderDate = const Value.absent(),
+    Value<int?> receiptNo = const Value.absent(),
+    Value<String?> receiptNoChar = const Value.absent(),
+    Value<DateTime?> receiptDate = const Value.absent(),
+    Value<int?> seatNumber = const Value.absent(),
+    Value<String?> note = const Value.absent(),
+    Value<double?> serviceAmount = const Value.absent(),
+    Value<double?> totalPrice = const Value.absent(),
+    Value<double?> discountPercent = const Value.absent(),
+    Value<double?> discountValue = const Value.absent(),
+    Value<ServiceChargeMethod?> serviceChargeMethod = const Value.absent(),
+    bool? serviceCalcTakehome,
+    bool? serviceCalcAll,
+    Value<double?> servicePercent = const Value.absent(),
+    Value<double?> serviceValue = const Value.absent(),
+    bool? vatInside,
+    Value<double?> taxPercent = const Value.absent(),
+    Value<double?> taxValue = const Value.absent(),
+    Value<double?> netAmount = const Value.absent(),
+    OrderStatus? status,
+    PaymentStatus? payStatus,
+    Value<DateTime?> requestOrderTime = const Value.absent(),
+    Value<String?> requestOrderBy = const Value.absent(),
+    Value<DateTime?> orderedTime = const Value.absent(),
+    Value<String?> orderedBy = const Value.absent(),
+    Value<DateTime?> billedTime = const Value.absent(),
+    Value<String?> billedBy = const Value.absent(),
+    Value<DateTime?> paidTime = const Value.absent(),
+    Value<String?> paidBy = const Value.absent(),
+    DataStatus? dataStatus,
+    DateTime? createdTime,
+    Value<DateTime?> updatedTime = const Value.absent(),
+    Value<String?> deviceID = const Value.absent(),
+    Value<String?> appVersion = const Value.absent(),
+  }) => ShopOrderTblData(
+    id: id ?? this.id,
+    shopID: shopID ?? this.shopID,
+    tableID: tableID.present ? tableID.value : this.tableID,
+    orderNo: orderNo.present ? orderNo.value : this.orderNo,
+    orderNoChar: orderNoChar.present ? orderNoChar.value : this.orderNoChar,
+    orderCode: orderCode.present ? orderCode.value : this.orderCode,
+    orderDate: orderDate.present ? orderDate.value : this.orderDate,
+    receiptNo: receiptNo.present ? receiptNo.value : this.receiptNo,
+    receiptNoChar: receiptNoChar.present
+        ? receiptNoChar.value
+        : this.receiptNoChar,
+    receiptDate: receiptDate.present ? receiptDate.value : this.receiptDate,
+    seatNumber: seatNumber.present ? seatNumber.value : this.seatNumber,
+    note: note.present ? note.value : this.note,
+    serviceAmount: serviceAmount.present
+        ? serviceAmount.value
+        : this.serviceAmount,
+    totalPrice: totalPrice.present ? totalPrice.value : this.totalPrice,
+    discountPercent: discountPercent.present
+        ? discountPercent.value
+        : this.discountPercent,
+    discountValue: discountValue.present
+        ? discountValue.value
+        : this.discountValue,
+    serviceChargeMethod: serviceChargeMethod.present
+        ? serviceChargeMethod.value
+        : this.serviceChargeMethod,
+    serviceCalcTakehome: serviceCalcTakehome ?? this.serviceCalcTakehome,
+    serviceCalcAll: serviceCalcAll ?? this.serviceCalcAll,
+    servicePercent: servicePercent.present
+        ? servicePercent.value
+        : this.servicePercent,
+    serviceValue: serviceValue.present ? serviceValue.value : this.serviceValue,
+    vatInside: vatInside ?? this.vatInside,
+    taxPercent: taxPercent.present ? taxPercent.value : this.taxPercent,
+    taxValue: taxValue.present ? taxValue.value : this.taxValue,
+    netAmount: netAmount.present ? netAmount.value : this.netAmount,
+    status: status ?? this.status,
+    payStatus: payStatus ?? this.payStatus,
+    requestOrderTime: requestOrderTime.present
+        ? requestOrderTime.value
+        : this.requestOrderTime,
+    requestOrderBy: requestOrderBy.present
+        ? requestOrderBy.value
+        : this.requestOrderBy,
+    orderedTime: orderedTime.present ? orderedTime.value : this.orderedTime,
+    orderedBy: orderedBy.present ? orderedBy.value : this.orderedBy,
+    billedTime: billedTime.present ? billedTime.value : this.billedTime,
+    billedBy: billedBy.present ? billedBy.value : this.billedBy,
+    paidTime: paidTime.present ? paidTime.value : this.paidTime,
+    paidBy: paidBy.present ? paidBy.value : this.paidBy,
+    dataStatus: dataStatus ?? this.dataStatus,
+    createdTime: createdTime ?? this.createdTime,
+    updatedTime: updatedTime.present ? updatedTime.value : this.updatedTime,
+    deviceID: deviceID.present ? deviceID.value : this.deviceID,
+    appVersion: appVersion.present ? appVersion.value : this.appVersion,
+  );
+  ShopOrderTblData copyWithCompanion(ShopOrderTblCompanion data) {
+    return ShopOrderTblData(
+      id: data.id.present ? data.id.value : this.id,
+      shopID: data.shopID.present ? data.shopID.value : this.shopID,
+      tableID: data.tableID.present ? data.tableID.value : this.tableID,
+      orderNo: data.orderNo.present ? data.orderNo.value : this.orderNo,
+      orderNoChar: data.orderNoChar.present
+          ? data.orderNoChar.value
+          : this.orderNoChar,
+      orderCode: data.orderCode.present ? data.orderCode.value : this.orderCode,
+      orderDate: data.orderDate.present ? data.orderDate.value : this.orderDate,
+      receiptNo: data.receiptNo.present ? data.receiptNo.value : this.receiptNo,
+      receiptNoChar: data.receiptNoChar.present
+          ? data.receiptNoChar.value
+          : this.receiptNoChar,
+      receiptDate: data.receiptDate.present
+          ? data.receiptDate.value
+          : this.receiptDate,
+      seatNumber: data.seatNumber.present
+          ? data.seatNumber.value
+          : this.seatNumber,
+      note: data.note.present ? data.note.value : this.note,
+      serviceAmount: data.serviceAmount.present
+          ? data.serviceAmount.value
+          : this.serviceAmount,
+      totalPrice: data.totalPrice.present
+          ? data.totalPrice.value
+          : this.totalPrice,
+      discountPercent: data.discountPercent.present
+          ? data.discountPercent.value
+          : this.discountPercent,
+      discountValue: data.discountValue.present
+          ? data.discountValue.value
+          : this.discountValue,
+      serviceChargeMethod: data.serviceChargeMethod.present
+          ? data.serviceChargeMethod.value
+          : this.serviceChargeMethod,
+      serviceCalcTakehome: data.serviceCalcTakehome.present
+          ? data.serviceCalcTakehome.value
+          : this.serviceCalcTakehome,
+      serviceCalcAll: data.serviceCalcAll.present
+          ? data.serviceCalcAll.value
+          : this.serviceCalcAll,
+      servicePercent: data.servicePercent.present
+          ? data.servicePercent.value
+          : this.servicePercent,
+      serviceValue: data.serviceValue.present
+          ? data.serviceValue.value
+          : this.serviceValue,
+      vatInside: data.vatInside.present ? data.vatInside.value : this.vatInside,
+      taxPercent: data.taxPercent.present
+          ? data.taxPercent.value
+          : this.taxPercent,
+      taxValue: data.taxValue.present ? data.taxValue.value : this.taxValue,
+      netAmount: data.netAmount.present ? data.netAmount.value : this.netAmount,
+      status: data.status.present ? data.status.value : this.status,
+      payStatus: data.payStatus.present ? data.payStatus.value : this.payStatus,
+      requestOrderTime: data.requestOrderTime.present
+          ? data.requestOrderTime.value
+          : this.requestOrderTime,
+      requestOrderBy: data.requestOrderBy.present
+          ? data.requestOrderBy.value
+          : this.requestOrderBy,
+      orderedTime: data.orderedTime.present
+          ? data.orderedTime.value
+          : this.orderedTime,
+      orderedBy: data.orderedBy.present ? data.orderedBy.value : this.orderedBy,
+      billedTime: data.billedTime.present
+          ? data.billedTime.value
+          : this.billedTime,
+      billedBy: data.billedBy.present ? data.billedBy.value : this.billedBy,
+      paidTime: data.paidTime.present ? data.paidTime.value : this.paidTime,
+      paidBy: data.paidBy.present ? data.paidBy.value : this.paidBy,
+      dataStatus: data.dataStatus.present
+          ? data.dataStatus.value
+          : this.dataStatus,
+      createdTime: data.createdTime.present
+          ? data.createdTime.value
+          : this.createdTime,
+      updatedTime: data.updatedTime.present
+          ? data.updatedTime.value
+          : this.updatedTime,
+      deviceID: data.deviceID.present ? data.deviceID.value : this.deviceID,
+      appVersion: data.appVersion.present
+          ? data.appVersion.value
+          : this.appVersion,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShopOrderTblData(')
+          ..write('id: $id, ')
+          ..write('shopID: $shopID, ')
+          ..write('tableID: $tableID, ')
+          ..write('orderNo: $orderNo, ')
+          ..write('orderNoChar: $orderNoChar, ')
+          ..write('orderCode: $orderCode, ')
+          ..write('orderDate: $orderDate, ')
+          ..write('receiptNo: $receiptNo, ')
+          ..write('receiptNoChar: $receiptNoChar, ')
+          ..write('receiptDate: $receiptDate, ')
+          ..write('seatNumber: $seatNumber, ')
+          ..write('note: $note, ')
+          ..write('serviceAmount: $serviceAmount, ')
+          ..write('totalPrice: $totalPrice, ')
+          ..write('discountPercent: $discountPercent, ')
+          ..write('discountValue: $discountValue, ')
+          ..write('serviceChargeMethod: $serviceChargeMethod, ')
+          ..write('serviceCalcTakehome: $serviceCalcTakehome, ')
+          ..write('serviceCalcAll: $serviceCalcAll, ')
+          ..write('servicePercent: $servicePercent, ')
+          ..write('serviceValue: $serviceValue, ')
+          ..write('vatInside: $vatInside, ')
+          ..write('taxPercent: $taxPercent, ')
+          ..write('taxValue: $taxValue, ')
+          ..write('netAmount: $netAmount, ')
+          ..write('status: $status, ')
+          ..write('payStatus: $payStatus, ')
+          ..write('requestOrderTime: $requestOrderTime, ')
+          ..write('requestOrderBy: $requestOrderBy, ')
+          ..write('orderedTime: $orderedTime, ')
+          ..write('orderedBy: $orderedBy, ')
+          ..write('billedTime: $billedTime, ')
+          ..write('billedBy: $billedBy, ')
+          ..write('paidTime: $paidTime, ')
+          ..write('paidBy: $paidBy, ')
+          ..write('dataStatus: $dataStatus, ')
+          ..write('createdTime: $createdTime, ')
+          ..write('updatedTime: $updatedTime, ')
+          ..write('deviceID: $deviceID, ')
+          ..write('appVersion: $appVersion')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hashAll([
+    id,
+    shopID,
+    tableID,
+    orderNo,
+    orderNoChar,
+    orderCode,
+    orderDate,
+    receiptNo,
+    receiptNoChar,
+    receiptDate,
+    seatNumber,
+    note,
+    serviceAmount,
+    totalPrice,
+    discountPercent,
+    discountValue,
+    serviceChargeMethod,
+    serviceCalcTakehome,
+    serviceCalcAll,
+    servicePercent,
+    serviceValue,
+    vatInside,
+    taxPercent,
+    taxValue,
+    netAmount,
+    status,
+    payStatus,
+    requestOrderTime,
+    requestOrderBy,
+    orderedTime,
+    orderedBy,
+    billedTime,
+    billedBy,
+    paidTime,
+    paidBy,
+    dataStatus,
+    createdTime,
+    updatedTime,
+    deviceID,
+    appVersion,
+  ]);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ShopOrderTblData &&
+          other.id == this.id &&
+          other.shopID == this.shopID &&
+          other.tableID == this.tableID &&
+          other.orderNo == this.orderNo &&
+          other.orderNoChar == this.orderNoChar &&
+          other.orderCode == this.orderCode &&
+          other.orderDate == this.orderDate &&
+          other.receiptNo == this.receiptNo &&
+          other.receiptNoChar == this.receiptNoChar &&
+          other.receiptDate == this.receiptDate &&
+          other.seatNumber == this.seatNumber &&
+          other.note == this.note &&
+          other.serviceAmount == this.serviceAmount &&
+          other.totalPrice == this.totalPrice &&
+          other.discountPercent == this.discountPercent &&
+          other.discountValue == this.discountValue &&
+          other.serviceChargeMethod == this.serviceChargeMethod &&
+          other.serviceCalcTakehome == this.serviceCalcTakehome &&
+          other.serviceCalcAll == this.serviceCalcAll &&
+          other.servicePercent == this.servicePercent &&
+          other.serviceValue == this.serviceValue &&
+          other.vatInside == this.vatInside &&
+          other.taxPercent == this.taxPercent &&
+          other.taxValue == this.taxValue &&
+          other.netAmount == this.netAmount &&
+          other.status == this.status &&
+          other.payStatus == this.payStatus &&
+          other.requestOrderTime == this.requestOrderTime &&
+          other.requestOrderBy == this.requestOrderBy &&
+          other.orderedTime == this.orderedTime &&
+          other.orderedBy == this.orderedBy &&
+          other.billedTime == this.billedTime &&
+          other.billedBy == this.billedBy &&
+          other.paidTime == this.paidTime &&
+          other.paidBy == this.paidBy &&
+          other.dataStatus == this.dataStatus &&
+          other.createdTime == this.createdTime &&
+          other.updatedTime == this.updatedTime &&
+          other.deviceID == this.deviceID &&
+          other.appVersion == this.appVersion);
+}
+
+class ShopOrderTblCompanion extends UpdateCompanion<ShopOrderTblData> {
+  final Value<int> id;
+  final Value<int> shopID;
+  final Value<int?> tableID;
+  final Value<int?> orderNo;
+  final Value<String?> orderNoChar;
+  final Value<String?> orderCode;
+  final Value<DateTime?> orderDate;
+  final Value<int?> receiptNo;
+  final Value<String?> receiptNoChar;
+  final Value<DateTime?> receiptDate;
+  final Value<int?> seatNumber;
+  final Value<String?> note;
+  final Value<double?> serviceAmount;
+  final Value<double?> totalPrice;
+  final Value<double?> discountPercent;
+  final Value<double?> discountValue;
+  final Value<ServiceChargeMethod?> serviceChargeMethod;
+  final Value<bool> serviceCalcTakehome;
+  final Value<bool> serviceCalcAll;
+  final Value<double?> servicePercent;
+  final Value<double?> serviceValue;
+  final Value<bool> vatInside;
+  final Value<double?> taxPercent;
+  final Value<double?> taxValue;
+  final Value<double?> netAmount;
+  final Value<OrderStatus> status;
+  final Value<PaymentStatus> payStatus;
+  final Value<DateTime?> requestOrderTime;
+  final Value<String?> requestOrderBy;
+  final Value<DateTime?> orderedTime;
+  final Value<String?> orderedBy;
+  final Value<DateTime?> billedTime;
+  final Value<String?> billedBy;
+  final Value<DateTime?> paidTime;
+  final Value<String?> paidBy;
+  final Value<DataStatus> dataStatus;
+  final Value<DateTime> createdTime;
+  final Value<DateTime?> updatedTime;
+  final Value<String?> deviceID;
+  final Value<String?> appVersion;
+  const ShopOrderTblCompanion({
+    this.id = const Value.absent(),
+    this.shopID = const Value.absent(),
+    this.tableID = const Value.absent(),
+    this.orderNo = const Value.absent(),
+    this.orderNoChar = const Value.absent(),
+    this.orderCode = const Value.absent(),
+    this.orderDate = const Value.absent(),
+    this.receiptNo = const Value.absent(),
+    this.receiptNoChar = const Value.absent(),
+    this.receiptDate = const Value.absent(),
+    this.seatNumber = const Value.absent(),
+    this.note = const Value.absent(),
+    this.serviceAmount = const Value.absent(),
+    this.totalPrice = const Value.absent(),
+    this.discountPercent = const Value.absent(),
+    this.discountValue = const Value.absent(),
+    this.serviceChargeMethod = const Value.absent(),
+    this.serviceCalcTakehome = const Value.absent(),
+    this.serviceCalcAll = const Value.absent(),
+    this.servicePercent = const Value.absent(),
+    this.serviceValue = const Value.absent(),
+    this.vatInside = const Value.absent(),
+    this.taxPercent = const Value.absent(),
+    this.taxValue = const Value.absent(),
+    this.netAmount = const Value.absent(),
+    this.status = const Value.absent(),
+    this.payStatus = const Value.absent(),
+    this.requestOrderTime = const Value.absent(),
+    this.requestOrderBy = const Value.absent(),
+    this.orderedTime = const Value.absent(),
+    this.orderedBy = const Value.absent(),
+    this.billedTime = const Value.absent(),
+    this.billedBy = const Value.absent(),
+    this.paidTime = const Value.absent(),
+    this.paidBy = const Value.absent(),
+    this.dataStatus = const Value.absent(),
+    this.createdTime = const Value.absent(),
+    this.updatedTime = const Value.absent(),
+    this.deviceID = const Value.absent(),
+    this.appVersion = const Value.absent(),
+  });
+  ShopOrderTblCompanion.insert({
+    this.id = const Value.absent(),
+    required int shopID,
+    this.tableID = const Value.absent(),
+    this.orderNo = const Value.absent(),
+    this.orderNoChar = const Value.absent(),
+    this.orderCode = const Value.absent(),
+    this.orderDate = const Value.absent(),
+    this.receiptNo = const Value.absent(),
+    this.receiptNoChar = const Value.absent(),
+    this.receiptDate = const Value.absent(),
+    this.seatNumber = const Value.absent(),
+    this.note = const Value.absent(),
+    this.serviceAmount = const Value.absent(),
+    this.totalPrice = const Value.absent(),
+    this.discountPercent = const Value.absent(),
+    this.discountValue = const Value.absent(),
+    this.serviceChargeMethod = const Value.absent(),
+    this.serviceCalcTakehome = const Value.absent(),
+    this.serviceCalcAll = const Value.absent(),
+    this.servicePercent = const Value.absent(),
+    this.serviceValue = const Value.absent(),
+    this.vatInside = const Value.absent(),
+    this.taxPercent = const Value.absent(),
+    this.taxValue = const Value.absent(),
+    this.netAmount = const Value.absent(),
+    this.status = const Value.absent(),
+    this.payStatus = const Value.absent(),
+    this.requestOrderTime = const Value.absent(),
+    this.requestOrderBy = const Value.absent(),
+    this.orderedTime = const Value.absent(),
+    this.orderedBy = const Value.absent(),
+    this.billedTime = const Value.absent(),
+    this.billedBy = const Value.absent(),
+    this.paidTime = const Value.absent(),
+    this.paidBy = const Value.absent(),
+    this.dataStatus = const Value.absent(),
+    this.createdTime = const Value.absent(),
+    this.updatedTime = const Value.absent(),
+    this.deviceID = const Value.absent(),
+    this.appVersion = const Value.absent(),
+  }) : shopID = Value(shopID);
+  static Insertable<ShopOrderTblData> custom({
+    Expression<int>? id,
+    Expression<int>? shopID,
+    Expression<int>? tableID,
+    Expression<int>? orderNo,
+    Expression<String>? orderNoChar,
+    Expression<String>? orderCode,
+    Expression<DateTime>? orderDate,
+    Expression<int>? receiptNo,
+    Expression<String>? receiptNoChar,
+    Expression<DateTime>? receiptDate,
+    Expression<int>? seatNumber,
+    Expression<String>? note,
+    Expression<double>? serviceAmount,
+    Expression<double>? totalPrice,
+    Expression<double>? discountPercent,
+    Expression<double>? discountValue,
+    Expression<String>? serviceChargeMethod,
+    Expression<bool>? serviceCalcTakehome,
+    Expression<bool>? serviceCalcAll,
+    Expression<double>? servicePercent,
+    Expression<double>? serviceValue,
+    Expression<bool>? vatInside,
+    Expression<double>? taxPercent,
+    Expression<double>? taxValue,
+    Expression<double>? netAmount,
+    Expression<String>? status,
+    Expression<String>? payStatus,
+    Expression<DateTime>? requestOrderTime,
+    Expression<String>? requestOrderBy,
+    Expression<DateTime>? orderedTime,
+    Expression<String>? orderedBy,
+    Expression<DateTime>? billedTime,
+    Expression<String>? billedBy,
+    Expression<DateTime>? paidTime,
+    Expression<String>? paidBy,
+    Expression<String>? dataStatus,
+    Expression<DateTime>? createdTime,
+    Expression<DateTime>? updatedTime,
+    Expression<String>? deviceID,
+    Expression<String>? appVersion,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (shopID != null) 'shop_i_d': shopID,
+      if (tableID != null) 'table_i_d': tableID,
+      if (orderNo != null) 'order_no': orderNo,
+      if (orderNoChar != null) 'order_no_char': orderNoChar,
+      if (orderCode != null) 'order_code': orderCode,
+      if (orderDate != null) 'order_date': orderDate,
+      if (receiptNo != null) 'receipt_no': receiptNo,
+      if (receiptNoChar != null) 'receipt_no_char': receiptNoChar,
+      if (receiptDate != null) 'receipt_date': receiptDate,
+      if (seatNumber != null) 'seat_number': seatNumber,
+      if (note != null) 'note': note,
+      if (serviceAmount != null) 'service_amount': serviceAmount,
+      if (totalPrice != null) 'total_price': totalPrice,
+      if (discountPercent != null) 'discount_percent': discountPercent,
+      if (discountValue != null) 'discount_value': discountValue,
+      if (serviceChargeMethod != null)
+        'service_charge_method': serviceChargeMethod,
+      if (serviceCalcTakehome != null)
+        'service_calc_takehome': serviceCalcTakehome,
+      if (serviceCalcAll != null) 'service_calc_all': serviceCalcAll,
+      if (servicePercent != null) 'service_percent': servicePercent,
+      if (serviceValue != null) 'service_value': serviceValue,
+      if (vatInside != null) 'vat_inside': vatInside,
+      if (taxPercent != null) 'tax_percent': taxPercent,
+      if (taxValue != null) 'tax_value': taxValue,
+      if (netAmount != null) 'net_amount': netAmount,
+      if (status != null) 'status': status,
+      if (payStatus != null) 'pay_status': payStatus,
+      if (requestOrderTime != null) 'request_order_time': requestOrderTime,
+      if (requestOrderBy != null) 'request_order_by': requestOrderBy,
+      if (orderedTime != null) 'ordered_time': orderedTime,
+      if (orderedBy != null) 'ordered_by': orderedBy,
+      if (billedTime != null) 'billed_time': billedTime,
+      if (billedBy != null) 'billed_by': billedBy,
+      if (paidTime != null) 'paid_time': paidTime,
+      if (paidBy != null) 'paid_by': paidBy,
+      if (dataStatus != null) 'data_status': dataStatus,
+      if (createdTime != null) 'created_time': createdTime,
+      if (updatedTime != null) 'updated_time': updatedTime,
+      if (deviceID != null) 'device_i_d': deviceID,
+      if (appVersion != null) 'app_version': appVersion,
+    });
+  }
+
+  ShopOrderTblCompanion copyWith({
+    Value<int>? id,
+    Value<int>? shopID,
+    Value<int?>? tableID,
+    Value<int?>? orderNo,
+    Value<String?>? orderNoChar,
+    Value<String?>? orderCode,
+    Value<DateTime?>? orderDate,
+    Value<int?>? receiptNo,
+    Value<String?>? receiptNoChar,
+    Value<DateTime?>? receiptDate,
+    Value<int?>? seatNumber,
+    Value<String?>? note,
+    Value<double?>? serviceAmount,
+    Value<double?>? totalPrice,
+    Value<double?>? discountPercent,
+    Value<double?>? discountValue,
+    Value<ServiceChargeMethod?>? serviceChargeMethod,
+    Value<bool>? serviceCalcTakehome,
+    Value<bool>? serviceCalcAll,
+    Value<double?>? servicePercent,
+    Value<double?>? serviceValue,
+    Value<bool>? vatInside,
+    Value<double?>? taxPercent,
+    Value<double?>? taxValue,
+    Value<double?>? netAmount,
+    Value<OrderStatus>? status,
+    Value<PaymentStatus>? payStatus,
+    Value<DateTime?>? requestOrderTime,
+    Value<String?>? requestOrderBy,
+    Value<DateTime?>? orderedTime,
+    Value<String?>? orderedBy,
+    Value<DateTime?>? billedTime,
+    Value<String?>? billedBy,
+    Value<DateTime?>? paidTime,
+    Value<String?>? paidBy,
+    Value<DataStatus>? dataStatus,
+    Value<DateTime>? createdTime,
+    Value<DateTime?>? updatedTime,
+    Value<String?>? deviceID,
+    Value<String?>? appVersion,
+  }) {
+    return ShopOrderTblCompanion(
+      id: id ?? this.id,
+      shopID: shopID ?? this.shopID,
+      tableID: tableID ?? this.tableID,
+      orderNo: orderNo ?? this.orderNo,
+      orderNoChar: orderNoChar ?? this.orderNoChar,
+      orderCode: orderCode ?? this.orderCode,
+      orderDate: orderDate ?? this.orderDate,
+      receiptNo: receiptNo ?? this.receiptNo,
+      receiptNoChar: receiptNoChar ?? this.receiptNoChar,
+      receiptDate: receiptDate ?? this.receiptDate,
+      seatNumber: seatNumber ?? this.seatNumber,
+      note: note ?? this.note,
+      serviceAmount: serviceAmount ?? this.serviceAmount,
+      totalPrice: totalPrice ?? this.totalPrice,
+      discountPercent: discountPercent ?? this.discountPercent,
+      discountValue: discountValue ?? this.discountValue,
+      serviceChargeMethod: serviceChargeMethod ?? this.serviceChargeMethod,
+      serviceCalcTakehome: serviceCalcTakehome ?? this.serviceCalcTakehome,
+      serviceCalcAll: serviceCalcAll ?? this.serviceCalcAll,
+      servicePercent: servicePercent ?? this.servicePercent,
+      serviceValue: serviceValue ?? this.serviceValue,
+      vatInside: vatInside ?? this.vatInside,
+      taxPercent: taxPercent ?? this.taxPercent,
+      taxValue: taxValue ?? this.taxValue,
+      netAmount: netAmount ?? this.netAmount,
+      status: status ?? this.status,
+      payStatus: payStatus ?? this.payStatus,
+      requestOrderTime: requestOrderTime ?? this.requestOrderTime,
+      requestOrderBy: requestOrderBy ?? this.requestOrderBy,
+      orderedTime: orderedTime ?? this.orderedTime,
+      orderedBy: orderedBy ?? this.orderedBy,
+      billedTime: billedTime ?? this.billedTime,
+      billedBy: billedBy ?? this.billedBy,
+      paidTime: paidTime ?? this.paidTime,
+      paidBy: paidBy ?? this.paidBy,
+      dataStatus: dataStatus ?? this.dataStatus,
+      createdTime: createdTime ?? this.createdTime,
+      updatedTime: updatedTime ?? this.updatedTime,
+      deviceID: deviceID ?? this.deviceID,
+      appVersion: appVersion ?? this.appVersion,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (shopID.present) {
+      map['shop_i_d'] = Variable<int>(shopID.value);
+    }
+    if (tableID.present) {
+      map['table_i_d'] = Variable<int>(tableID.value);
+    }
+    if (orderNo.present) {
+      map['order_no'] = Variable<int>(orderNo.value);
+    }
+    if (orderNoChar.present) {
+      map['order_no_char'] = Variable<String>(orderNoChar.value);
+    }
+    if (orderCode.present) {
+      map['order_code'] = Variable<String>(orderCode.value);
+    }
+    if (orderDate.present) {
+      map['order_date'] = Variable<DateTime>(orderDate.value);
+    }
+    if (receiptNo.present) {
+      map['receipt_no'] = Variable<int>(receiptNo.value);
+    }
+    if (receiptNoChar.present) {
+      map['receipt_no_char'] = Variable<String>(receiptNoChar.value);
+    }
+    if (receiptDate.present) {
+      map['receipt_date'] = Variable<DateTime>(receiptDate.value);
+    }
+    if (seatNumber.present) {
+      map['seat_number'] = Variable<int>(seatNumber.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (serviceAmount.present) {
+      map['service_amount'] = Variable<double>(serviceAmount.value);
+    }
+    if (totalPrice.present) {
+      map['total_price'] = Variable<double>(totalPrice.value);
+    }
+    if (discountPercent.present) {
+      map['discount_percent'] = Variable<double>(discountPercent.value);
+    }
+    if (discountValue.present) {
+      map['discount_value'] = Variable<double>(discountValue.value);
+    }
+    if (serviceChargeMethod.present) {
+      map['service_charge_method'] = Variable<String>(
+        $ShopOrderTblTable.$converterserviceChargeMethodn.toSql(
+          serviceChargeMethod.value,
+        ),
+      );
+    }
+    if (serviceCalcTakehome.present) {
+      map['service_calc_takehome'] = Variable<bool>(serviceCalcTakehome.value);
+    }
+    if (serviceCalcAll.present) {
+      map['service_calc_all'] = Variable<bool>(serviceCalcAll.value);
+    }
+    if (servicePercent.present) {
+      map['service_percent'] = Variable<double>(servicePercent.value);
+    }
+    if (serviceValue.present) {
+      map['service_value'] = Variable<double>(serviceValue.value);
+    }
+    if (vatInside.present) {
+      map['vat_inside'] = Variable<bool>(vatInside.value);
+    }
+    if (taxPercent.present) {
+      map['tax_percent'] = Variable<double>(taxPercent.value);
+    }
+    if (taxValue.present) {
+      map['tax_value'] = Variable<double>(taxValue.value);
+    }
+    if (netAmount.present) {
+      map['net_amount'] = Variable<double>(netAmount.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(
+        $ShopOrderTblTable.$converterstatus.toSql(status.value),
+      );
+    }
+    if (payStatus.present) {
+      map['pay_status'] = Variable<String>(
+        $ShopOrderTblTable.$converterpayStatus.toSql(payStatus.value),
+      );
+    }
+    if (requestOrderTime.present) {
+      map['request_order_time'] = Variable<DateTime>(requestOrderTime.value);
+    }
+    if (requestOrderBy.present) {
+      map['request_order_by'] = Variable<String>(requestOrderBy.value);
+    }
+    if (orderedTime.present) {
+      map['ordered_time'] = Variable<DateTime>(orderedTime.value);
+    }
+    if (orderedBy.present) {
+      map['ordered_by'] = Variable<String>(orderedBy.value);
+    }
+    if (billedTime.present) {
+      map['billed_time'] = Variable<DateTime>(billedTime.value);
+    }
+    if (billedBy.present) {
+      map['billed_by'] = Variable<String>(billedBy.value);
+    }
+    if (paidTime.present) {
+      map['paid_time'] = Variable<DateTime>(paidTime.value);
+    }
+    if (paidBy.present) {
+      map['paid_by'] = Variable<String>(paidBy.value);
+    }
+    if (dataStatus.present) {
+      map['data_status'] = Variable<String>(
+        $ShopOrderTblTable.$converterdataStatus.toSql(dataStatus.value),
+      );
+    }
+    if (createdTime.present) {
+      map['created_time'] = Variable<DateTime>(createdTime.value);
+    }
+    if (updatedTime.present) {
+      map['updated_time'] = Variable<DateTime>(updatedTime.value);
+    }
+    if (deviceID.present) {
+      map['device_i_d'] = Variable<String>(deviceID.value);
+    }
+    if (appVersion.present) {
+      map['app_version'] = Variable<String>(appVersion.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShopOrderTblCompanion(')
+          ..write('id: $id, ')
+          ..write('shopID: $shopID, ')
+          ..write('tableID: $tableID, ')
+          ..write('orderNo: $orderNo, ')
+          ..write('orderNoChar: $orderNoChar, ')
+          ..write('orderCode: $orderCode, ')
+          ..write('orderDate: $orderDate, ')
+          ..write('receiptNo: $receiptNo, ')
+          ..write('receiptNoChar: $receiptNoChar, ')
+          ..write('receiptDate: $receiptDate, ')
+          ..write('seatNumber: $seatNumber, ')
+          ..write('note: $note, ')
+          ..write('serviceAmount: $serviceAmount, ')
+          ..write('totalPrice: $totalPrice, ')
+          ..write('discountPercent: $discountPercent, ')
+          ..write('discountValue: $discountValue, ')
+          ..write('serviceChargeMethod: $serviceChargeMethod, ')
+          ..write('serviceCalcTakehome: $serviceCalcTakehome, ')
+          ..write('serviceCalcAll: $serviceCalcAll, ')
+          ..write('servicePercent: $servicePercent, ')
+          ..write('serviceValue: $serviceValue, ')
+          ..write('vatInside: $vatInside, ')
+          ..write('taxPercent: $taxPercent, ')
+          ..write('taxValue: $taxValue, ')
+          ..write('netAmount: $netAmount, ')
+          ..write('status: $status, ')
+          ..write('payStatus: $payStatus, ')
+          ..write('requestOrderTime: $requestOrderTime, ')
+          ..write('requestOrderBy: $requestOrderBy, ')
+          ..write('orderedTime: $orderedTime, ')
+          ..write('orderedBy: $orderedBy, ')
+          ..write('billedTime: $billedTime, ')
+          ..write('billedBy: $billedBy, ')
+          ..write('paidTime: $paidTime, ')
+          ..write('paidBy: $paidBy, ')
+          ..write('dataStatus: $dataStatus, ')
+          ..write('createdTime: $createdTime, ')
+          ..write('updatedTime: $updatedTime, ')
+          ..write('deviceID: $deviceID, ')
+          ..write('appVersion: $appVersion')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ShopOrderItemsTblTable extends ShopOrderItemsTbl
+    with TableInfo<$ShopOrderItemsTblTable, ShopOrderItemsTblData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ShopOrderItemsTblTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _shopIDMeta = const VerificationMeta('shopID');
+  @override
+  late final GeneratedColumn<int> shopID = GeneratedColumn<int>(
+    'shop_i_d',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES shop_info_tbl (id)',
+    ),
+  );
+  static const VerificationMeta _orderIDMeta = const VerificationMeta(
+    'orderID',
+  );
+  @override
+  late final GeneratedColumn<int> orderID = GeneratedColumn<int>(
+    'order_i_d',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES shop_order_tbl (id)',
+    ),
+  );
+  static const VerificationMeta _productIDMeta = const VerificationMeta(
+    'productID',
+  );
+  @override
+  late final GeneratedColumn<int> productID = GeneratedColumn<int>(
+    'product_i_d',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noMeta = const VerificationMeta('no');
+  @override
+  late final GeneratedColumn<int> no = GeneratedColumn<int>(
+    'no',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _queueNoMeta = const VerificationMeta(
+    'queueNo',
+  );
+  @override
+  late final GeneratedColumn<int> queueNo = GeneratedColumn<int>(
+    'queue_no',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _queueDateMeta = const VerificationMeta(
+    'queueDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> queueDate = GeneratedColumn<DateTime>(
+    'queue_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _qtyMeta = const VerificationMeta('qty');
+  @override
+  late final GeneratedColumn<double> qty = GeneratedColumn<double>(
+    'qty',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _wgtQtyMeta = const VerificationMeta('wgtQty');
+  @override
+  late final GeneratedColumn<double> wgtQty = GeneratedColumn<double>(
+    'wgt_qty',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _unitPriceMeta = const VerificationMeta(
+    'unitPrice',
+  );
+  @override
+  late final GeneratedColumn<double> unitPrice = GeneratedColumn<double>(
+    'unit_price',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _calcUnitMeta = const VerificationMeta(
+    'calcUnit',
+  );
+  @override
+  late final GeneratedColumn<String> calcUnit = GeneratedColumn<String>(
+    'calc_unit',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _isWeightUnitMeta = const VerificationMeta(
+    'isWeightUnit',
+  );
+  @override
+  late final GeneratedColumn<bool> isWeightUnit = GeneratedColumn<bool>(
+    'is_weight_unit',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_weight_unit" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  static const VerificationMeta _calcServiceMeta = const VerificationMeta(
+    'calcService',
+  );
+  @override
+  late final GeneratedColumn<bool> calcService = GeneratedColumn<bool>(
+    'calc_service',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("calc_service" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  static const VerificationMeta _discountPercentMeta = const VerificationMeta(
+    'discountPercent',
+  );
+  @override
+  late final GeneratedColumn<double> discountPercent = GeneratedColumn<double>(
+    'discount_percent',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _discountValueMeta = const VerificationMeta(
+    'discountValue',
+  );
+  @override
+  late final GeneratedColumn<double> discountValue = GeneratedColumn<double>(
+    'discount_value',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _amountMeta = const VerificationMeta('amount');
+  @override
+  late final GeneratedColumn<double> amount = GeneratedColumn<double>(
+    'amount',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _takehomeMeta = const VerificationMeta(
+    'takehome',
+  );
+  @override
+  late final GeneratedColumn<bool> takehome = GeneratedColumn<bool>(
+    'takehome',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("takehome" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  static const VerificationMeta _shopCreatedMeta = const VerificationMeta(
+    'shopCreated',
+  );
+  @override
+  late final GeneratedColumn<bool> shopCreated = GeneratedColumn<bool>(
+    'shop_created',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("shop_created" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  static const VerificationMeta _optionsCodeMeta = const VerificationMeta(
+    'optionsCode',
+  );
+  @override
+  late final GeneratedColumn<String> optionsCode = GeneratedColumn<String>(
+    'options_code',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _optionsPriceMeta = const VerificationMeta(
+    'optionsPrice',
+  );
+  @override
+  late final GeneratedColumn<double> optionsPrice = GeneratedColumn<double>(
+    'options_price',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<OrderItemStatus, String>
+  itemStatus =
+      GeneratedColumn<String>(
+        'item_status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: Constant(OrderItemStatus.prepared.text),
+      ).withConverter<OrderItemStatus>(
+        $ShopOrderItemsTblTable.$converteritemStatus,
+      );
+  static const VerificationMeta _outStockMeta = const VerificationMeta(
+    'outStock',
+  );
+  @override
+  late final GeneratedColumn<bool> outStock = GeneratedColumn<bool>(
+    'out_stock',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("out_stock" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  static const VerificationMeta _outStockTimeMeta = const VerificationMeta(
+    'outStockTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> outStockTime = GeneratedColumn<DateTime>(
+    'out_stock_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _hasStockTimeMeta = const VerificationMeta(
+    'hasStockTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> hasStockTime = GeneratedColumn<DateTime>(
+    'has_stock_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _preparedTimeMeta = const VerificationMeta(
+    'preparedTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> preparedTime = GeneratedColumn<DateTime>(
+    'prepared_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _requestOrderTimeMeta = const VerificationMeta(
+    'requestOrderTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> requestOrderTime =
+      GeneratedColumn<DateTime>(
+        'request_order_time',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _requestOrderByMeta = const VerificationMeta(
+    'requestOrderBy',
+  );
+  @override
+  late final GeneratedColumn<String> requestOrderBy = GeneratedColumn<String>(
+    'request_order_by',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _orderedTimeMeta = const VerificationMeta(
+    'orderedTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> orderedTime = GeneratedColumn<DateTime>(
+    'ordered_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _orderedByMeta = const VerificationMeta(
+    'orderedBy',
+  );
+  @override
+  late final GeneratedColumn<String> orderedBy = GeneratedColumn<String>(
+    'ordered_by',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _cookingTimeMeta = const VerificationMeta(
+    'cookingTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> cookingTime = GeneratedColumn<DateTime>(
+    'cooking_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _cookingByMeta = const VerificationMeta(
+    'cookingBy',
+  );
+  @override
+  late final GeneratedColumn<String> cookingBy = GeneratedColumn<String>(
+    'cooking_by',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _cookedTimeMeta = const VerificationMeta(
+    'cookedTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> cookedTime = GeneratedColumn<DateTime>(
+    'cooked_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _cookedByMeta = const VerificationMeta(
+    'cookedBy',
+  );
+  @override
+  late final GeneratedColumn<String> cookedBy = GeneratedColumn<String>(
+    'cooked_by',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _servedTimeMeta = const VerificationMeta(
+    'servedTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> servedTime = GeneratedColumn<DateTime>(
+    'served_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _servedByMeta = const VerificationMeta(
+    'servedBy',
+  );
+  @override
+  late final GeneratedColumn<String> servedBy = GeneratedColumn<String>(
+    'served_by',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _refIDMeta = const VerificationMeta('refID');
+  @override
+  late final GeneratedColumn<int> refID = GeneratedColumn<int>(
+    'ref_i_d',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _closeSaleMeta = const VerificationMeta(
+    'closeSale',
+  );
+  @override
+  late final GeneratedColumn<bool> closeSale = GeneratedColumn<bool>(
+    'close_sale',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("close_sale" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DataStatus, String> dataStatus =
+      GeneratedColumn<String>(
+        'data_status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: Constant(DataStatus.active.text),
+      ).withConverter<DataStatus>($ShopOrderItemsTblTable.$converterdataStatus);
+  static const VerificationMeta _createdTimeMeta = const VerificationMeta(
+    'createdTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdTime = GeneratedColumn<DateTime>(
+    'created_time',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedTimeMeta = const VerificationMeta(
+    'updatedTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedTime = GeneratedColumn<DateTime>(
+    'updated_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _deviceIDMeta = const VerificationMeta(
+    'deviceID',
+  );
+  @override
+  late final GeneratedColumn<String> deviceID = GeneratedColumn<String>(
+    'device_i_d',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _appVersionMeta = const VerificationMeta(
+    'appVersion',
+  );
+  @override
+  late final GeneratedColumn<String> appVersion = GeneratedColumn<String>(
+    'app_version',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    shopID,
+    orderID,
+    productID,
+    description,
+    no,
+    queueNo,
+    queueDate,
+    qty,
+    wgtQty,
+    unitPrice,
+    calcUnit,
+    isWeightUnit,
+    calcService,
+    discountPercent,
+    discountValue,
+    amount,
+    note,
+    takehome,
+    shopCreated,
+    optionsCode,
+    optionsPrice,
+    itemStatus,
+    outStock,
+    outStockTime,
+    hasStockTime,
+    preparedTime,
+    requestOrderTime,
+    requestOrderBy,
+    orderedTime,
+    orderedBy,
+    cookingTime,
+    cookingBy,
+    cookedTime,
+    cookedBy,
+    servedTime,
+    servedBy,
+    refID,
+    closeSale,
+    dataStatus,
+    createdTime,
+    updatedTime,
+    deviceID,
+    appVersion,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'shop_order_items_tbl';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ShopOrderItemsTblData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('shop_i_d')) {
+      context.handle(
+        _shopIDMeta,
+        shopID.isAcceptableOrUnknown(data['shop_i_d']!, _shopIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_shopIDMeta);
+    }
+    if (data.containsKey('order_i_d')) {
+      context.handle(
+        _orderIDMeta,
+        orderID.isAcceptableOrUnknown(data['order_i_d']!, _orderIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_orderIDMeta);
+    }
+    if (data.containsKey('product_i_d')) {
+      context.handle(
+        _productIDMeta,
+        productID.isAcceptableOrUnknown(data['product_i_d']!, _productIDMeta),
+      );
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('no')) {
+      context.handle(_noMeta, no.isAcceptableOrUnknown(data['no']!, _noMeta));
+    }
+    if (data.containsKey('queue_no')) {
+      context.handle(
+        _queueNoMeta,
+        queueNo.isAcceptableOrUnknown(data['queue_no']!, _queueNoMeta),
+      );
+    }
+    if (data.containsKey('queue_date')) {
+      context.handle(
+        _queueDateMeta,
+        queueDate.isAcceptableOrUnknown(data['queue_date']!, _queueDateMeta),
+      );
+    }
+    if (data.containsKey('qty')) {
+      context.handle(
+        _qtyMeta,
+        qty.isAcceptableOrUnknown(data['qty']!, _qtyMeta),
+      );
+    }
+    if (data.containsKey('wgt_qty')) {
+      context.handle(
+        _wgtQtyMeta,
+        wgtQty.isAcceptableOrUnknown(data['wgt_qty']!, _wgtQtyMeta),
+      );
+    }
+    if (data.containsKey('unit_price')) {
+      context.handle(
+        _unitPriceMeta,
+        unitPrice.isAcceptableOrUnknown(data['unit_price']!, _unitPriceMeta),
+      );
+    }
+    if (data.containsKey('calc_unit')) {
+      context.handle(
+        _calcUnitMeta,
+        calcUnit.isAcceptableOrUnknown(data['calc_unit']!, _calcUnitMeta),
+      );
+    }
+    if (data.containsKey('is_weight_unit')) {
+      context.handle(
+        _isWeightUnitMeta,
+        isWeightUnit.isAcceptableOrUnknown(
+          data['is_weight_unit']!,
+          _isWeightUnitMeta,
+        ),
+      );
+    }
+    if (data.containsKey('calc_service')) {
+      context.handle(
+        _calcServiceMeta,
+        calcService.isAcceptableOrUnknown(
+          data['calc_service']!,
+          _calcServiceMeta,
+        ),
+      );
+    }
+    if (data.containsKey('discount_percent')) {
+      context.handle(
+        _discountPercentMeta,
+        discountPercent.isAcceptableOrUnknown(
+          data['discount_percent']!,
+          _discountPercentMeta,
+        ),
+      );
+    }
+    if (data.containsKey('discount_value')) {
+      context.handle(
+        _discountValueMeta,
+        discountValue.isAcceptableOrUnknown(
+          data['discount_value']!,
+          _discountValueMeta,
+        ),
+      );
+    }
+    if (data.containsKey('amount')) {
+      context.handle(
+        _amountMeta,
+        amount.isAcceptableOrUnknown(data['amount']!, _amountMeta),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    if (data.containsKey('takehome')) {
+      context.handle(
+        _takehomeMeta,
+        takehome.isAcceptableOrUnknown(data['takehome']!, _takehomeMeta),
+      );
+    }
+    if (data.containsKey('shop_created')) {
+      context.handle(
+        _shopCreatedMeta,
+        shopCreated.isAcceptableOrUnknown(
+          data['shop_created']!,
+          _shopCreatedMeta,
+        ),
+      );
+    }
+    if (data.containsKey('options_code')) {
+      context.handle(
+        _optionsCodeMeta,
+        optionsCode.isAcceptableOrUnknown(
+          data['options_code']!,
+          _optionsCodeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('options_price')) {
+      context.handle(
+        _optionsPriceMeta,
+        optionsPrice.isAcceptableOrUnknown(
+          data['options_price']!,
+          _optionsPriceMeta,
+        ),
+      );
+    }
+    if (data.containsKey('out_stock')) {
+      context.handle(
+        _outStockMeta,
+        outStock.isAcceptableOrUnknown(data['out_stock']!, _outStockMeta),
+      );
+    }
+    if (data.containsKey('out_stock_time')) {
+      context.handle(
+        _outStockTimeMeta,
+        outStockTime.isAcceptableOrUnknown(
+          data['out_stock_time']!,
+          _outStockTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('has_stock_time')) {
+      context.handle(
+        _hasStockTimeMeta,
+        hasStockTime.isAcceptableOrUnknown(
+          data['has_stock_time']!,
+          _hasStockTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('prepared_time')) {
+      context.handle(
+        _preparedTimeMeta,
+        preparedTime.isAcceptableOrUnknown(
+          data['prepared_time']!,
+          _preparedTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('request_order_time')) {
+      context.handle(
+        _requestOrderTimeMeta,
+        requestOrderTime.isAcceptableOrUnknown(
+          data['request_order_time']!,
+          _requestOrderTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('request_order_by')) {
+      context.handle(
+        _requestOrderByMeta,
+        requestOrderBy.isAcceptableOrUnknown(
+          data['request_order_by']!,
+          _requestOrderByMeta,
+        ),
+      );
+    }
+    if (data.containsKey('ordered_time')) {
+      context.handle(
+        _orderedTimeMeta,
+        orderedTime.isAcceptableOrUnknown(
+          data['ordered_time']!,
+          _orderedTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('ordered_by')) {
+      context.handle(
+        _orderedByMeta,
+        orderedBy.isAcceptableOrUnknown(data['ordered_by']!, _orderedByMeta),
+      );
+    }
+    if (data.containsKey('cooking_time')) {
+      context.handle(
+        _cookingTimeMeta,
+        cookingTime.isAcceptableOrUnknown(
+          data['cooking_time']!,
+          _cookingTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('cooking_by')) {
+      context.handle(
+        _cookingByMeta,
+        cookingBy.isAcceptableOrUnknown(data['cooking_by']!, _cookingByMeta),
+      );
+    }
+    if (data.containsKey('cooked_time')) {
+      context.handle(
+        _cookedTimeMeta,
+        cookedTime.isAcceptableOrUnknown(data['cooked_time']!, _cookedTimeMeta),
+      );
+    }
+    if (data.containsKey('cooked_by')) {
+      context.handle(
+        _cookedByMeta,
+        cookedBy.isAcceptableOrUnknown(data['cooked_by']!, _cookedByMeta),
+      );
+    }
+    if (data.containsKey('served_time')) {
+      context.handle(
+        _servedTimeMeta,
+        servedTime.isAcceptableOrUnknown(data['served_time']!, _servedTimeMeta),
+      );
+    }
+    if (data.containsKey('served_by')) {
+      context.handle(
+        _servedByMeta,
+        servedBy.isAcceptableOrUnknown(data['served_by']!, _servedByMeta),
+      );
+    }
+    if (data.containsKey('ref_i_d')) {
+      context.handle(
+        _refIDMeta,
+        refID.isAcceptableOrUnknown(data['ref_i_d']!, _refIDMeta),
+      );
+    }
+    if (data.containsKey('close_sale')) {
+      context.handle(
+        _closeSaleMeta,
+        closeSale.isAcceptableOrUnknown(data['close_sale']!, _closeSaleMeta),
+      );
+    }
+    if (data.containsKey('created_time')) {
+      context.handle(
+        _createdTimeMeta,
+        createdTime.isAcceptableOrUnknown(
+          data['created_time']!,
+          _createdTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('updated_time')) {
+      context.handle(
+        _updatedTimeMeta,
+        updatedTime.isAcceptableOrUnknown(
+          data['updated_time']!,
+          _updatedTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('device_i_d')) {
+      context.handle(
+        _deviceIDMeta,
+        deviceID.isAcceptableOrUnknown(data['device_i_d']!, _deviceIDMeta),
+      );
+    }
+    if (data.containsKey('app_version')) {
+      context.handle(
+        _appVersionMeta,
+        appVersion.isAcceptableOrUnknown(data['app_version']!, _appVersionMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ShopOrderItemsTblData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ShopOrderItemsTblData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      shopID: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}shop_i_d'],
+      )!,
+      orderID: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}order_i_d'],
+      )!,
+      productID: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}product_i_d'],
+      ),
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
+      no: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}no'],
+      ),
+      queueNo: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}queue_no'],
+      ),
+      queueDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}queue_date'],
+      ),
+      qty: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}qty'],
+      ),
+      wgtQty: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}wgt_qty'],
+      ),
+      unitPrice: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}unit_price'],
+      ),
+      calcUnit: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}calc_unit'],
+      ),
+      isWeightUnit: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_weight_unit'],
+      )!,
+      calcService: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}calc_service'],
+      )!,
+      discountPercent: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}discount_percent'],
+      ),
+      discountValue: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}discount_value'],
+      ),
+      amount: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}amount'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+      takehome: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}takehome'],
+      )!,
+      shopCreated: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}shop_created'],
+      )!,
+      optionsCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}options_code'],
+      ),
+      optionsPrice: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}options_price'],
+      ),
+      itemStatus: $ShopOrderItemsTblTable.$converteritemStatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}item_status'],
+        )!,
+      ),
+      outStock: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}out_stock'],
+      )!,
+      outStockTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}out_stock_time'],
+      ),
+      hasStockTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}has_stock_time'],
+      ),
+      preparedTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}prepared_time'],
+      ),
+      requestOrderTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}request_order_time'],
+      ),
+      requestOrderBy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}request_order_by'],
+      ),
+      orderedTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}ordered_time'],
+      ),
+      orderedBy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}ordered_by'],
+      ),
+      cookingTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}cooking_time'],
+      ),
+      cookingBy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cooking_by'],
+      ),
+      cookedTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}cooked_time'],
+      ),
+      cookedBy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cooked_by'],
+      ),
+      servedTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}served_time'],
+      ),
+      servedBy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}served_by'],
+      ),
+      refID: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}ref_i_d'],
+      ),
+      closeSale: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}close_sale'],
+      )!,
+      dataStatus: $ShopOrderItemsTblTable.$converterdataStatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}data_status'],
+        )!,
+      ),
+      createdTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_time'],
+      )!,
+      updatedTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_time'],
+      ),
+      deviceID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}device_i_d'],
+      ),
+      appVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}app_version'],
+      ),
+    );
+  }
+
+  @override
+  $ShopOrderItemsTblTable createAlias(String alias) {
+    return $ShopOrderItemsTblTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<OrderItemStatus, String, String>
+  $converteritemStatus = const EnumNameConverter<OrderItemStatus>(
+    OrderItemStatus.values,
+  );
+  static JsonTypeConverter2<DataStatus, String, String> $converterdataStatus =
+      const EnumNameConverter<DataStatus>(DataStatus.values);
+}
+
+class ShopOrderItemsTblData extends DataClass
+    implements Insertable<ShopOrderItemsTblData> {
+  final int id;
+  final int shopID;
+  final int orderID;
+  final int? productID;
+  final String? description;
+  final int? no;
+  final int? queueNo;
+  final DateTime? queueDate;
+  final double? qty;
+  final double? wgtQty;
+  final double? unitPrice;
+  final String? calcUnit;
+  final bool isWeightUnit;
+  final bool calcService;
+  final double? discountPercent;
+  final double? discountValue;
+  final double? amount;
+  final String? note;
+  final bool takehome;
+  final bool shopCreated;
+  final String? optionsCode;
+  final double? optionsPrice;
+  final OrderItemStatus itemStatus;
+  final bool outStock;
+  final DateTime? outStockTime;
+  final DateTime? hasStockTime;
+  final DateTime? preparedTime;
+  final DateTime? requestOrderTime;
+  final String? requestOrderBy;
+  final DateTime? orderedTime;
+  final String? orderedBy;
+  final DateTime? cookingTime;
+  final String? cookingBy;
+  final DateTime? cookedTime;
+  final String? cookedBy;
+  final DateTime? servedTime;
+  final String? servedBy;
+  final int? refID;
+  final bool closeSale;
+  final DataStatus dataStatus;
+  final DateTime createdTime;
+  final DateTime? updatedTime;
+  final String? deviceID;
+  final String? appVersion;
+  const ShopOrderItemsTblData({
+    required this.id,
+    required this.shopID,
+    required this.orderID,
+    this.productID,
+    this.description,
+    this.no,
+    this.queueNo,
+    this.queueDate,
+    this.qty,
+    this.wgtQty,
+    this.unitPrice,
+    this.calcUnit,
+    required this.isWeightUnit,
+    required this.calcService,
+    this.discountPercent,
+    this.discountValue,
+    this.amount,
+    this.note,
+    required this.takehome,
+    required this.shopCreated,
+    this.optionsCode,
+    this.optionsPrice,
+    required this.itemStatus,
+    required this.outStock,
+    this.outStockTime,
+    this.hasStockTime,
+    this.preparedTime,
+    this.requestOrderTime,
+    this.requestOrderBy,
+    this.orderedTime,
+    this.orderedBy,
+    this.cookingTime,
+    this.cookingBy,
+    this.cookedTime,
+    this.cookedBy,
+    this.servedTime,
+    this.servedBy,
+    this.refID,
+    required this.closeSale,
+    required this.dataStatus,
+    required this.createdTime,
+    this.updatedTime,
+    this.deviceID,
+    this.appVersion,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['shop_i_d'] = Variable<int>(shopID);
+    map['order_i_d'] = Variable<int>(orderID);
+    if (!nullToAbsent || productID != null) {
+      map['product_i_d'] = Variable<int>(productID);
+    }
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    if (!nullToAbsent || no != null) {
+      map['no'] = Variable<int>(no);
+    }
+    if (!nullToAbsent || queueNo != null) {
+      map['queue_no'] = Variable<int>(queueNo);
+    }
+    if (!nullToAbsent || queueDate != null) {
+      map['queue_date'] = Variable<DateTime>(queueDate);
+    }
+    if (!nullToAbsent || qty != null) {
+      map['qty'] = Variable<double>(qty);
+    }
+    if (!nullToAbsent || wgtQty != null) {
+      map['wgt_qty'] = Variable<double>(wgtQty);
+    }
+    if (!nullToAbsent || unitPrice != null) {
+      map['unit_price'] = Variable<double>(unitPrice);
+    }
+    if (!nullToAbsent || calcUnit != null) {
+      map['calc_unit'] = Variable<String>(calcUnit);
+    }
+    map['is_weight_unit'] = Variable<bool>(isWeightUnit);
+    map['calc_service'] = Variable<bool>(calcService);
+    if (!nullToAbsent || discountPercent != null) {
+      map['discount_percent'] = Variable<double>(discountPercent);
+    }
+    if (!nullToAbsent || discountValue != null) {
+      map['discount_value'] = Variable<double>(discountValue);
+    }
+    if (!nullToAbsent || amount != null) {
+      map['amount'] = Variable<double>(amount);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    map['takehome'] = Variable<bool>(takehome);
+    map['shop_created'] = Variable<bool>(shopCreated);
+    if (!nullToAbsent || optionsCode != null) {
+      map['options_code'] = Variable<String>(optionsCode);
+    }
+    if (!nullToAbsent || optionsPrice != null) {
+      map['options_price'] = Variable<double>(optionsPrice);
+    }
+    {
+      map['item_status'] = Variable<String>(
+        $ShopOrderItemsTblTable.$converteritemStatus.toSql(itemStatus),
+      );
+    }
+    map['out_stock'] = Variable<bool>(outStock);
+    if (!nullToAbsent || outStockTime != null) {
+      map['out_stock_time'] = Variable<DateTime>(outStockTime);
+    }
+    if (!nullToAbsent || hasStockTime != null) {
+      map['has_stock_time'] = Variable<DateTime>(hasStockTime);
+    }
+    if (!nullToAbsent || preparedTime != null) {
+      map['prepared_time'] = Variable<DateTime>(preparedTime);
+    }
+    if (!nullToAbsent || requestOrderTime != null) {
+      map['request_order_time'] = Variable<DateTime>(requestOrderTime);
+    }
+    if (!nullToAbsent || requestOrderBy != null) {
+      map['request_order_by'] = Variable<String>(requestOrderBy);
+    }
+    if (!nullToAbsent || orderedTime != null) {
+      map['ordered_time'] = Variable<DateTime>(orderedTime);
+    }
+    if (!nullToAbsent || orderedBy != null) {
+      map['ordered_by'] = Variable<String>(orderedBy);
+    }
+    if (!nullToAbsent || cookingTime != null) {
+      map['cooking_time'] = Variable<DateTime>(cookingTime);
+    }
+    if (!nullToAbsent || cookingBy != null) {
+      map['cooking_by'] = Variable<String>(cookingBy);
+    }
+    if (!nullToAbsent || cookedTime != null) {
+      map['cooked_time'] = Variable<DateTime>(cookedTime);
+    }
+    if (!nullToAbsent || cookedBy != null) {
+      map['cooked_by'] = Variable<String>(cookedBy);
+    }
+    if (!nullToAbsent || servedTime != null) {
+      map['served_time'] = Variable<DateTime>(servedTime);
+    }
+    if (!nullToAbsent || servedBy != null) {
+      map['served_by'] = Variable<String>(servedBy);
+    }
+    if (!nullToAbsent || refID != null) {
+      map['ref_i_d'] = Variable<int>(refID);
+    }
+    map['close_sale'] = Variable<bool>(closeSale);
+    {
+      map['data_status'] = Variable<String>(
+        $ShopOrderItemsTblTable.$converterdataStatus.toSql(dataStatus),
+      );
+    }
+    map['created_time'] = Variable<DateTime>(createdTime);
+    if (!nullToAbsent || updatedTime != null) {
+      map['updated_time'] = Variable<DateTime>(updatedTime);
+    }
+    if (!nullToAbsent || deviceID != null) {
+      map['device_i_d'] = Variable<String>(deviceID);
+    }
+    if (!nullToAbsent || appVersion != null) {
+      map['app_version'] = Variable<String>(appVersion);
+    }
+    return map;
+  }
+
+  ShopOrderItemsTblCompanion toCompanion(bool nullToAbsent) {
+    return ShopOrderItemsTblCompanion(
+      id: Value(id),
+      shopID: Value(shopID),
+      orderID: Value(orderID),
+      productID: productID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(productID),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+      no: no == null && nullToAbsent ? const Value.absent() : Value(no),
+      queueNo: queueNo == null && nullToAbsent
+          ? const Value.absent()
+          : Value(queueNo),
+      queueDate: queueDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(queueDate),
+      qty: qty == null && nullToAbsent ? const Value.absent() : Value(qty),
+      wgtQty: wgtQty == null && nullToAbsent
+          ? const Value.absent()
+          : Value(wgtQty),
+      unitPrice: unitPrice == null && nullToAbsent
+          ? const Value.absent()
+          : Value(unitPrice),
+      calcUnit: calcUnit == null && nullToAbsent
+          ? const Value.absent()
+          : Value(calcUnit),
+      isWeightUnit: Value(isWeightUnit),
+      calcService: Value(calcService),
+      discountPercent: discountPercent == null && nullToAbsent
+          ? const Value.absent()
+          : Value(discountPercent),
+      discountValue: discountValue == null && nullToAbsent
+          ? const Value.absent()
+          : Value(discountValue),
+      amount: amount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(amount),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+      takehome: Value(takehome),
+      shopCreated: Value(shopCreated),
+      optionsCode: optionsCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(optionsCode),
+      optionsPrice: optionsPrice == null && nullToAbsent
+          ? const Value.absent()
+          : Value(optionsPrice),
+      itemStatus: Value(itemStatus),
+      outStock: Value(outStock),
+      outStockTime: outStockTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(outStockTime),
+      hasStockTime: hasStockTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(hasStockTime),
+      preparedTime: preparedTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preparedTime),
+      requestOrderTime: requestOrderTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(requestOrderTime),
+      requestOrderBy: requestOrderBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(requestOrderBy),
+      orderedTime: orderedTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(orderedTime),
+      orderedBy: orderedBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(orderedBy),
+      cookingTime: cookingTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(cookingTime),
+      cookingBy: cookingBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(cookingBy),
+      cookedTime: cookedTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(cookedTime),
+      cookedBy: cookedBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(cookedBy),
+      servedTime: servedTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(servedTime),
+      servedBy: servedBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(servedBy),
+      refID: refID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(refID),
+      closeSale: Value(closeSale),
+      dataStatus: Value(dataStatus),
+      createdTime: Value(createdTime),
+      updatedTime: updatedTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedTime),
+      deviceID: deviceID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deviceID),
+      appVersion: appVersion == null && nullToAbsent
+          ? const Value.absent()
+          : Value(appVersion),
+    );
+  }
+
+  factory ShopOrderItemsTblData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ShopOrderItemsTblData(
+      id: serializer.fromJson<int>(json['id']),
+      shopID: serializer.fromJson<int>(json['shopID']),
+      orderID: serializer.fromJson<int>(json['orderID']),
+      productID: serializer.fromJson<int?>(json['productID']),
+      description: serializer.fromJson<String?>(json['description']),
+      no: serializer.fromJson<int?>(json['no']),
+      queueNo: serializer.fromJson<int?>(json['queueNo']),
+      queueDate: serializer.fromJson<DateTime?>(json['queueDate']),
+      qty: serializer.fromJson<double?>(json['qty']),
+      wgtQty: serializer.fromJson<double?>(json['wgtQty']),
+      unitPrice: serializer.fromJson<double?>(json['unitPrice']),
+      calcUnit: serializer.fromJson<String?>(json['calcUnit']),
+      isWeightUnit: serializer.fromJson<bool>(json['isWeightUnit']),
+      calcService: serializer.fromJson<bool>(json['calcService']),
+      discountPercent: serializer.fromJson<double?>(json['discountPercent']),
+      discountValue: serializer.fromJson<double?>(json['discountValue']),
+      amount: serializer.fromJson<double?>(json['amount']),
+      note: serializer.fromJson<String?>(json['note']),
+      takehome: serializer.fromJson<bool>(json['takehome']),
+      shopCreated: serializer.fromJson<bool>(json['shopCreated']),
+      optionsCode: serializer.fromJson<String?>(json['optionsCode']),
+      optionsPrice: serializer.fromJson<double?>(json['optionsPrice']),
+      itemStatus: $ShopOrderItemsTblTable.$converteritemStatus.fromJson(
+        serializer.fromJson<String>(json['itemStatus']),
+      ),
+      outStock: serializer.fromJson<bool>(json['outStock']),
+      outStockTime: serializer.fromJson<DateTime?>(json['outStockTime']),
+      hasStockTime: serializer.fromJson<DateTime?>(json['hasStockTime']),
+      preparedTime: serializer.fromJson<DateTime?>(json['preparedTime']),
+      requestOrderTime: serializer.fromJson<DateTime?>(
+        json['requestOrderTime'],
+      ),
+      requestOrderBy: serializer.fromJson<String?>(json['requestOrderBy']),
+      orderedTime: serializer.fromJson<DateTime?>(json['orderedTime']),
+      orderedBy: serializer.fromJson<String?>(json['orderedBy']),
+      cookingTime: serializer.fromJson<DateTime?>(json['cookingTime']),
+      cookingBy: serializer.fromJson<String?>(json['cookingBy']),
+      cookedTime: serializer.fromJson<DateTime?>(json['cookedTime']),
+      cookedBy: serializer.fromJson<String?>(json['cookedBy']),
+      servedTime: serializer.fromJson<DateTime?>(json['servedTime']),
+      servedBy: serializer.fromJson<String?>(json['servedBy']),
+      refID: serializer.fromJson<int?>(json['refID']),
+      closeSale: serializer.fromJson<bool>(json['closeSale']),
+      dataStatus: $ShopOrderItemsTblTable.$converterdataStatus.fromJson(
+        serializer.fromJson<String>(json['dataStatus']),
+      ),
+      createdTime: serializer.fromJson<DateTime>(json['createdTime']),
+      updatedTime: serializer.fromJson<DateTime?>(json['updatedTime']),
+      deviceID: serializer.fromJson<String?>(json['deviceID']),
+      appVersion: serializer.fromJson<String?>(json['appVersion']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'shopID': serializer.toJson<int>(shopID),
+      'orderID': serializer.toJson<int>(orderID),
+      'productID': serializer.toJson<int?>(productID),
+      'description': serializer.toJson<String?>(description),
+      'no': serializer.toJson<int?>(no),
+      'queueNo': serializer.toJson<int?>(queueNo),
+      'queueDate': serializer.toJson<DateTime?>(queueDate),
+      'qty': serializer.toJson<double?>(qty),
+      'wgtQty': serializer.toJson<double?>(wgtQty),
+      'unitPrice': serializer.toJson<double?>(unitPrice),
+      'calcUnit': serializer.toJson<String?>(calcUnit),
+      'isWeightUnit': serializer.toJson<bool>(isWeightUnit),
+      'calcService': serializer.toJson<bool>(calcService),
+      'discountPercent': serializer.toJson<double?>(discountPercent),
+      'discountValue': serializer.toJson<double?>(discountValue),
+      'amount': serializer.toJson<double?>(amount),
+      'note': serializer.toJson<String?>(note),
+      'takehome': serializer.toJson<bool>(takehome),
+      'shopCreated': serializer.toJson<bool>(shopCreated),
+      'optionsCode': serializer.toJson<String?>(optionsCode),
+      'optionsPrice': serializer.toJson<double?>(optionsPrice),
+      'itemStatus': serializer.toJson<String>(
+        $ShopOrderItemsTblTable.$converteritemStatus.toJson(itemStatus),
+      ),
+      'outStock': serializer.toJson<bool>(outStock),
+      'outStockTime': serializer.toJson<DateTime?>(outStockTime),
+      'hasStockTime': serializer.toJson<DateTime?>(hasStockTime),
+      'preparedTime': serializer.toJson<DateTime?>(preparedTime),
+      'requestOrderTime': serializer.toJson<DateTime?>(requestOrderTime),
+      'requestOrderBy': serializer.toJson<String?>(requestOrderBy),
+      'orderedTime': serializer.toJson<DateTime?>(orderedTime),
+      'orderedBy': serializer.toJson<String?>(orderedBy),
+      'cookingTime': serializer.toJson<DateTime?>(cookingTime),
+      'cookingBy': serializer.toJson<String?>(cookingBy),
+      'cookedTime': serializer.toJson<DateTime?>(cookedTime),
+      'cookedBy': serializer.toJson<String?>(cookedBy),
+      'servedTime': serializer.toJson<DateTime?>(servedTime),
+      'servedBy': serializer.toJson<String?>(servedBy),
+      'refID': serializer.toJson<int?>(refID),
+      'closeSale': serializer.toJson<bool>(closeSale),
+      'dataStatus': serializer.toJson<String>(
+        $ShopOrderItemsTblTable.$converterdataStatus.toJson(dataStatus),
+      ),
+      'createdTime': serializer.toJson<DateTime>(createdTime),
+      'updatedTime': serializer.toJson<DateTime?>(updatedTime),
+      'deviceID': serializer.toJson<String?>(deviceID),
+      'appVersion': serializer.toJson<String?>(appVersion),
+    };
+  }
+
+  ShopOrderItemsTblData copyWith({
+    int? id,
+    int? shopID,
+    int? orderID,
+    Value<int?> productID = const Value.absent(),
+    Value<String?> description = const Value.absent(),
+    Value<int?> no = const Value.absent(),
+    Value<int?> queueNo = const Value.absent(),
+    Value<DateTime?> queueDate = const Value.absent(),
+    Value<double?> qty = const Value.absent(),
+    Value<double?> wgtQty = const Value.absent(),
+    Value<double?> unitPrice = const Value.absent(),
+    Value<String?> calcUnit = const Value.absent(),
+    bool? isWeightUnit,
+    bool? calcService,
+    Value<double?> discountPercent = const Value.absent(),
+    Value<double?> discountValue = const Value.absent(),
+    Value<double?> amount = const Value.absent(),
+    Value<String?> note = const Value.absent(),
+    bool? takehome,
+    bool? shopCreated,
+    Value<String?> optionsCode = const Value.absent(),
+    Value<double?> optionsPrice = const Value.absent(),
+    OrderItemStatus? itemStatus,
+    bool? outStock,
+    Value<DateTime?> outStockTime = const Value.absent(),
+    Value<DateTime?> hasStockTime = const Value.absent(),
+    Value<DateTime?> preparedTime = const Value.absent(),
+    Value<DateTime?> requestOrderTime = const Value.absent(),
+    Value<String?> requestOrderBy = const Value.absent(),
+    Value<DateTime?> orderedTime = const Value.absent(),
+    Value<String?> orderedBy = const Value.absent(),
+    Value<DateTime?> cookingTime = const Value.absent(),
+    Value<String?> cookingBy = const Value.absent(),
+    Value<DateTime?> cookedTime = const Value.absent(),
+    Value<String?> cookedBy = const Value.absent(),
+    Value<DateTime?> servedTime = const Value.absent(),
+    Value<String?> servedBy = const Value.absent(),
+    Value<int?> refID = const Value.absent(),
+    bool? closeSale,
+    DataStatus? dataStatus,
+    DateTime? createdTime,
+    Value<DateTime?> updatedTime = const Value.absent(),
+    Value<String?> deviceID = const Value.absent(),
+    Value<String?> appVersion = const Value.absent(),
+  }) => ShopOrderItemsTblData(
+    id: id ?? this.id,
+    shopID: shopID ?? this.shopID,
+    orderID: orderID ?? this.orderID,
+    productID: productID.present ? productID.value : this.productID,
+    description: description.present ? description.value : this.description,
+    no: no.present ? no.value : this.no,
+    queueNo: queueNo.present ? queueNo.value : this.queueNo,
+    queueDate: queueDate.present ? queueDate.value : this.queueDate,
+    qty: qty.present ? qty.value : this.qty,
+    wgtQty: wgtQty.present ? wgtQty.value : this.wgtQty,
+    unitPrice: unitPrice.present ? unitPrice.value : this.unitPrice,
+    calcUnit: calcUnit.present ? calcUnit.value : this.calcUnit,
+    isWeightUnit: isWeightUnit ?? this.isWeightUnit,
+    calcService: calcService ?? this.calcService,
+    discountPercent: discountPercent.present
+        ? discountPercent.value
+        : this.discountPercent,
+    discountValue: discountValue.present
+        ? discountValue.value
+        : this.discountValue,
+    amount: amount.present ? amount.value : this.amount,
+    note: note.present ? note.value : this.note,
+    takehome: takehome ?? this.takehome,
+    shopCreated: shopCreated ?? this.shopCreated,
+    optionsCode: optionsCode.present ? optionsCode.value : this.optionsCode,
+    optionsPrice: optionsPrice.present ? optionsPrice.value : this.optionsPrice,
+    itemStatus: itemStatus ?? this.itemStatus,
+    outStock: outStock ?? this.outStock,
+    outStockTime: outStockTime.present ? outStockTime.value : this.outStockTime,
+    hasStockTime: hasStockTime.present ? hasStockTime.value : this.hasStockTime,
+    preparedTime: preparedTime.present ? preparedTime.value : this.preparedTime,
+    requestOrderTime: requestOrderTime.present
+        ? requestOrderTime.value
+        : this.requestOrderTime,
+    requestOrderBy: requestOrderBy.present
+        ? requestOrderBy.value
+        : this.requestOrderBy,
+    orderedTime: orderedTime.present ? orderedTime.value : this.orderedTime,
+    orderedBy: orderedBy.present ? orderedBy.value : this.orderedBy,
+    cookingTime: cookingTime.present ? cookingTime.value : this.cookingTime,
+    cookingBy: cookingBy.present ? cookingBy.value : this.cookingBy,
+    cookedTime: cookedTime.present ? cookedTime.value : this.cookedTime,
+    cookedBy: cookedBy.present ? cookedBy.value : this.cookedBy,
+    servedTime: servedTime.present ? servedTime.value : this.servedTime,
+    servedBy: servedBy.present ? servedBy.value : this.servedBy,
+    refID: refID.present ? refID.value : this.refID,
+    closeSale: closeSale ?? this.closeSale,
+    dataStatus: dataStatus ?? this.dataStatus,
+    createdTime: createdTime ?? this.createdTime,
+    updatedTime: updatedTime.present ? updatedTime.value : this.updatedTime,
+    deviceID: deviceID.present ? deviceID.value : this.deviceID,
+    appVersion: appVersion.present ? appVersion.value : this.appVersion,
+  );
+  ShopOrderItemsTblData copyWithCompanion(ShopOrderItemsTblCompanion data) {
+    return ShopOrderItemsTblData(
+      id: data.id.present ? data.id.value : this.id,
+      shopID: data.shopID.present ? data.shopID.value : this.shopID,
+      orderID: data.orderID.present ? data.orderID.value : this.orderID,
+      productID: data.productID.present ? data.productID.value : this.productID,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      no: data.no.present ? data.no.value : this.no,
+      queueNo: data.queueNo.present ? data.queueNo.value : this.queueNo,
+      queueDate: data.queueDate.present ? data.queueDate.value : this.queueDate,
+      qty: data.qty.present ? data.qty.value : this.qty,
+      wgtQty: data.wgtQty.present ? data.wgtQty.value : this.wgtQty,
+      unitPrice: data.unitPrice.present ? data.unitPrice.value : this.unitPrice,
+      calcUnit: data.calcUnit.present ? data.calcUnit.value : this.calcUnit,
+      isWeightUnit: data.isWeightUnit.present
+          ? data.isWeightUnit.value
+          : this.isWeightUnit,
+      calcService: data.calcService.present
+          ? data.calcService.value
+          : this.calcService,
+      discountPercent: data.discountPercent.present
+          ? data.discountPercent.value
+          : this.discountPercent,
+      discountValue: data.discountValue.present
+          ? data.discountValue.value
+          : this.discountValue,
+      amount: data.amount.present ? data.amount.value : this.amount,
+      note: data.note.present ? data.note.value : this.note,
+      takehome: data.takehome.present ? data.takehome.value : this.takehome,
+      shopCreated: data.shopCreated.present
+          ? data.shopCreated.value
+          : this.shopCreated,
+      optionsCode: data.optionsCode.present
+          ? data.optionsCode.value
+          : this.optionsCode,
+      optionsPrice: data.optionsPrice.present
+          ? data.optionsPrice.value
+          : this.optionsPrice,
+      itemStatus: data.itemStatus.present
+          ? data.itemStatus.value
+          : this.itemStatus,
+      outStock: data.outStock.present ? data.outStock.value : this.outStock,
+      outStockTime: data.outStockTime.present
+          ? data.outStockTime.value
+          : this.outStockTime,
+      hasStockTime: data.hasStockTime.present
+          ? data.hasStockTime.value
+          : this.hasStockTime,
+      preparedTime: data.preparedTime.present
+          ? data.preparedTime.value
+          : this.preparedTime,
+      requestOrderTime: data.requestOrderTime.present
+          ? data.requestOrderTime.value
+          : this.requestOrderTime,
+      requestOrderBy: data.requestOrderBy.present
+          ? data.requestOrderBy.value
+          : this.requestOrderBy,
+      orderedTime: data.orderedTime.present
+          ? data.orderedTime.value
+          : this.orderedTime,
+      orderedBy: data.orderedBy.present ? data.orderedBy.value : this.orderedBy,
+      cookingTime: data.cookingTime.present
+          ? data.cookingTime.value
+          : this.cookingTime,
+      cookingBy: data.cookingBy.present ? data.cookingBy.value : this.cookingBy,
+      cookedTime: data.cookedTime.present
+          ? data.cookedTime.value
+          : this.cookedTime,
+      cookedBy: data.cookedBy.present ? data.cookedBy.value : this.cookedBy,
+      servedTime: data.servedTime.present
+          ? data.servedTime.value
+          : this.servedTime,
+      servedBy: data.servedBy.present ? data.servedBy.value : this.servedBy,
+      refID: data.refID.present ? data.refID.value : this.refID,
+      closeSale: data.closeSale.present ? data.closeSale.value : this.closeSale,
+      dataStatus: data.dataStatus.present
+          ? data.dataStatus.value
+          : this.dataStatus,
+      createdTime: data.createdTime.present
+          ? data.createdTime.value
+          : this.createdTime,
+      updatedTime: data.updatedTime.present
+          ? data.updatedTime.value
+          : this.updatedTime,
+      deviceID: data.deviceID.present ? data.deviceID.value : this.deviceID,
+      appVersion: data.appVersion.present
+          ? data.appVersion.value
+          : this.appVersion,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShopOrderItemsTblData(')
+          ..write('id: $id, ')
+          ..write('shopID: $shopID, ')
+          ..write('orderID: $orderID, ')
+          ..write('productID: $productID, ')
+          ..write('description: $description, ')
+          ..write('no: $no, ')
+          ..write('queueNo: $queueNo, ')
+          ..write('queueDate: $queueDate, ')
+          ..write('qty: $qty, ')
+          ..write('wgtQty: $wgtQty, ')
+          ..write('unitPrice: $unitPrice, ')
+          ..write('calcUnit: $calcUnit, ')
+          ..write('isWeightUnit: $isWeightUnit, ')
+          ..write('calcService: $calcService, ')
+          ..write('discountPercent: $discountPercent, ')
+          ..write('discountValue: $discountValue, ')
+          ..write('amount: $amount, ')
+          ..write('note: $note, ')
+          ..write('takehome: $takehome, ')
+          ..write('shopCreated: $shopCreated, ')
+          ..write('optionsCode: $optionsCode, ')
+          ..write('optionsPrice: $optionsPrice, ')
+          ..write('itemStatus: $itemStatus, ')
+          ..write('outStock: $outStock, ')
+          ..write('outStockTime: $outStockTime, ')
+          ..write('hasStockTime: $hasStockTime, ')
+          ..write('preparedTime: $preparedTime, ')
+          ..write('requestOrderTime: $requestOrderTime, ')
+          ..write('requestOrderBy: $requestOrderBy, ')
+          ..write('orderedTime: $orderedTime, ')
+          ..write('orderedBy: $orderedBy, ')
+          ..write('cookingTime: $cookingTime, ')
+          ..write('cookingBy: $cookingBy, ')
+          ..write('cookedTime: $cookedTime, ')
+          ..write('cookedBy: $cookedBy, ')
+          ..write('servedTime: $servedTime, ')
+          ..write('servedBy: $servedBy, ')
+          ..write('refID: $refID, ')
+          ..write('closeSale: $closeSale, ')
+          ..write('dataStatus: $dataStatus, ')
+          ..write('createdTime: $createdTime, ')
+          ..write('updatedTime: $updatedTime, ')
+          ..write('deviceID: $deviceID, ')
+          ..write('appVersion: $appVersion')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hashAll([
+    id,
+    shopID,
+    orderID,
+    productID,
+    description,
+    no,
+    queueNo,
+    queueDate,
+    qty,
+    wgtQty,
+    unitPrice,
+    calcUnit,
+    isWeightUnit,
+    calcService,
+    discountPercent,
+    discountValue,
+    amount,
+    note,
+    takehome,
+    shopCreated,
+    optionsCode,
+    optionsPrice,
+    itemStatus,
+    outStock,
+    outStockTime,
+    hasStockTime,
+    preparedTime,
+    requestOrderTime,
+    requestOrderBy,
+    orderedTime,
+    orderedBy,
+    cookingTime,
+    cookingBy,
+    cookedTime,
+    cookedBy,
+    servedTime,
+    servedBy,
+    refID,
+    closeSale,
+    dataStatus,
+    createdTime,
+    updatedTime,
+    deviceID,
+    appVersion,
+  ]);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ShopOrderItemsTblData &&
+          other.id == this.id &&
+          other.shopID == this.shopID &&
+          other.orderID == this.orderID &&
+          other.productID == this.productID &&
+          other.description == this.description &&
+          other.no == this.no &&
+          other.queueNo == this.queueNo &&
+          other.queueDate == this.queueDate &&
+          other.qty == this.qty &&
+          other.wgtQty == this.wgtQty &&
+          other.unitPrice == this.unitPrice &&
+          other.calcUnit == this.calcUnit &&
+          other.isWeightUnit == this.isWeightUnit &&
+          other.calcService == this.calcService &&
+          other.discountPercent == this.discountPercent &&
+          other.discountValue == this.discountValue &&
+          other.amount == this.amount &&
+          other.note == this.note &&
+          other.takehome == this.takehome &&
+          other.shopCreated == this.shopCreated &&
+          other.optionsCode == this.optionsCode &&
+          other.optionsPrice == this.optionsPrice &&
+          other.itemStatus == this.itemStatus &&
+          other.outStock == this.outStock &&
+          other.outStockTime == this.outStockTime &&
+          other.hasStockTime == this.hasStockTime &&
+          other.preparedTime == this.preparedTime &&
+          other.requestOrderTime == this.requestOrderTime &&
+          other.requestOrderBy == this.requestOrderBy &&
+          other.orderedTime == this.orderedTime &&
+          other.orderedBy == this.orderedBy &&
+          other.cookingTime == this.cookingTime &&
+          other.cookingBy == this.cookingBy &&
+          other.cookedTime == this.cookedTime &&
+          other.cookedBy == this.cookedBy &&
+          other.servedTime == this.servedTime &&
+          other.servedBy == this.servedBy &&
+          other.refID == this.refID &&
+          other.closeSale == this.closeSale &&
+          other.dataStatus == this.dataStatus &&
+          other.createdTime == this.createdTime &&
+          other.updatedTime == this.updatedTime &&
+          other.deviceID == this.deviceID &&
+          other.appVersion == this.appVersion);
+}
+
+class ShopOrderItemsTblCompanion
+    extends UpdateCompanion<ShopOrderItemsTblData> {
+  final Value<int> id;
+  final Value<int> shopID;
+  final Value<int> orderID;
+  final Value<int?> productID;
+  final Value<String?> description;
+  final Value<int?> no;
+  final Value<int?> queueNo;
+  final Value<DateTime?> queueDate;
+  final Value<double?> qty;
+  final Value<double?> wgtQty;
+  final Value<double?> unitPrice;
+  final Value<String?> calcUnit;
+  final Value<bool> isWeightUnit;
+  final Value<bool> calcService;
+  final Value<double?> discountPercent;
+  final Value<double?> discountValue;
+  final Value<double?> amount;
+  final Value<String?> note;
+  final Value<bool> takehome;
+  final Value<bool> shopCreated;
+  final Value<String?> optionsCode;
+  final Value<double?> optionsPrice;
+  final Value<OrderItemStatus> itemStatus;
+  final Value<bool> outStock;
+  final Value<DateTime?> outStockTime;
+  final Value<DateTime?> hasStockTime;
+  final Value<DateTime?> preparedTime;
+  final Value<DateTime?> requestOrderTime;
+  final Value<String?> requestOrderBy;
+  final Value<DateTime?> orderedTime;
+  final Value<String?> orderedBy;
+  final Value<DateTime?> cookingTime;
+  final Value<String?> cookingBy;
+  final Value<DateTime?> cookedTime;
+  final Value<String?> cookedBy;
+  final Value<DateTime?> servedTime;
+  final Value<String?> servedBy;
+  final Value<int?> refID;
+  final Value<bool> closeSale;
+  final Value<DataStatus> dataStatus;
+  final Value<DateTime> createdTime;
+  final Value<DateTime?> updatedTime;
+  final Value<String?> deviceID;
+  final Value<String?> appVersion;
+  const ShopOrderItemsTblCompanion({
+    this.id = const Value.absent(),
+    this.shopID = const Value.absent(),
+    this.orderID = const Value.absent(),
+    this.productID = const Value.absent(),
+    this.description = const Value.absent(),
+    this.no = const Value.absent(),
+    this.queueNo = const Value.absent(),
+    this.queueDate = const Value.absent(),
+    this.qty = const Value.absent(),
+    this.wgtQty = const Value.absent(),
+    this.unitPrice = const Value.absent(),
+    this.calcUnit = const Value.absent(),
+    this.isWeightUnit = const Value.absent(),
+    this.calcService = const Value.absent(),
+    this.discountPercent = const Value.absent(),
+    this.discountValue = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.note = const Value.absent(),
+    this.takehome = const Value.absent(),
+    this.shopCreated = const Value.absent(),
+    this.optionsCode = const Value.absent(),
+    this.optionsPrice = const Value.absent(),
+    this.itemStatus = const Value.absent(),
+    this.outStock = const Value.absent(),
+    this.outStockTime = const Value.absent(),
+    this.hasStockTime = const Value.absent(),
+    this.preparedTime = const Value.absent(),
+    this.requestOrderTime = const Value.absent(),
+    this.requestOrderBy = const Value.absent(),
+    this.orderedTime = const Value.absent(),
+    this.orderedBy = const Value.absent(),
+    this.cookingTime = const Value.absent(),
+    this.cookingBy = const Value.absent(),
+    this.cookedTime = const Value.absent(),
+    this.cookedBy = const Value.absent(),
+    this.servedTime = const Value.absent(),
+    this.servedBy = const Value.absent(),
+    this.refID = const Value.absent(),
+    this.closeSale = const Value.absent(),
+    this.dataStatus = const Value.absent(),
+    this.createdTime = const Value.absent(),
+    this.updatedTime = const Value.absent(),
+    this.deviceID = const Value.absent(),
+    this.appVersion = const Value.absent(),
+  });
+  ShopOrderItemsTblCompanion.insert({
+    this.id = const Value.absent(),
+    required int shopID,
+    required int orderID,
+    this.productID = const Value.absent(),
+    this.description = const Value.absent(),
+    this.no = const Value.absent(),
+    this.queueNo = const Value.absent(),
+    this.queueDate = const Value.absent(),
+    this.qty = const Value.absent(),
+    this.wgtQty = const Value.absent(),
+    this.unitPrice = const Value.absent(),
+    this.calcUnit = const Value.absent(),
+    this.isWeightUnit = const Value.absent(),
+    this.calcService = const Value.absent(),
+    this.discountPercent = const Value.absent(),
+    this.discountValue = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.note = const Value.absent(),
+    this.takehome = const Value.absent(),
+    this.shopCreated = const Value.absent(),
+    this.optionsCode = const Value.absent(),
+    this.optionsPrice = const Value.absent(),
+    this.itemStatus = const Value.absent(),
+    this.outStock = const Value.absent(),
+    this.outStockTime = const Value.absent(),
+    this.hasStockTime = const Value.absent(),
+    this.preparedTime = const Value.absent(),
+    this.requestOrderTime = const Value.absent(),
+    this.requestOrderBy = const Value.absent(),
+    this.orderedTime = const Value.absent(),
+    this.orderedBy = const Value.absent(),
+    this.cookingTime = const Value.absent(),
+    this.cookingBy = const Value.absent(),
+    this.cookedTime = const Value.absent(),
+    this.cookedBy = const Value.absent(),
+    this.servedTime = const Value.absent(),
+    this.servedBy = const Value.absent(),
+    this.refID = const Value.absent(),
+    this.closeSale = const Value.absent(),
+    this.dataStatus = const Value.absent(),
+    this.createdTime = const Value.absent(),
+    this.updatedTime = const Value.absent(),
+    this.deviceID = const Value.absent(),
+    this.appVersion = const Value.absent(),
+  }) : shopID = Value(shopID),
+       orderID = Value(orderID);
+  static Insertable<ShopOrderItemsTblData> custom({
+    Expression<int>? id,
+    Expression<int>? shopID,
+    Expression<int>? orderID,
+    Expression<int>? productID,
+    Expression<String>? description,
+    Expression<int>? no,
+    Expression<int>? queueNo,
+    Expression<DateTime>? queueDate,
+    Expression<double>? qty,
+    Expression<double>? wgtQty,
+    Expression<double>? unitPrice,
+    Expression<String>? calcUnit,
+    Expression<bool>? isWeightUnit,
+    Expression<bool>? calcService,
+    Expression<double>? discountPercent,
+    Expression<double>? discountValue,
+    Expression<double>? amount,
+    Expression<String>? note,
+    Expression<bool>? takehome,
+    Expression<bool>? shopCreated,
+    Expression<String>? optionsCode,
+    Expression<double>? optionsPrice,
+    Expression<String>? itemStatus,
+    Expression<bool>? outStock,
+    Expression<DateTime>? outStockTime,
+    Expression<DateTime>? hasStockTime,
+    Expression<DateTime>? preparedTime,
+    Expression<DateTime>? requestOrderTime,
+    Expression<String>? requestOrderBy,
+    Expression<DateTime>? orderedTime,
+    Expression<String>? orderedBy,
+    Expression<DateTime>? cookingTime,
+    Expression<String>? cookingBy,
+    Expression<DateTime>? cookedTime,
+    Expression<String>? cookedBy,
+    Expression<DateTime>? servedTime,
+    Expression<String>? servedBy,
+    Expression<int>? refID,
+    Expression<bool>? closeSale,
+    Expression<String>? dataStatus,
+    Expression<DateTime>? createdTime,
+    Expression<DateTime>? updatedTime,
+    Expression<String>? deviceID,
+    Expression<String>? appVersion,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (shopID != null) 'shop_i_d': shopID,
+      if (orderID != null) 'order_i_d': orderID,
+      if (productID != null) 'product_i_d': productID,
+      if (description != null) 'description': description,
+      if (no != null) 'no': no,
+      if (queueNo != null) 'queue_no': queueNo,
+      if (queueDate != null) 'queue_date': queueDate,
+      if (qty != null) 'qty': qty,
+      if (wgtQty != null) 'wgt_qty': wgtQty,
+      if (unitPrice != null) 'unit_price': unitPrice,
+      if (calcUnit != null) 'calc_unit': calcUnit,
+      if (isWeightUnit != null) 'is_weight_unit': isWeightUnit,
+      if (calcService != null) 'calc_service': calcService,
+      if (discountPercent != null) 'discount_percent': discountPercent,
+      if (discountValue != null) 'discount_value': discountValue,
+      if (amount != null) 'amount': amount,
+      if (note != null) 'note': note,
+      if (takehome != null) 'takehome': takehome,
+      if (shopCreated != null) 'shop_created': shopCreated,
+      if (optionsCode != null) 'options_code': optionsCode,
+      if (optionsPrice != null) 'options_price': optionsPrice,
+      if (itemStatus != null) 'item_status': itemStatus,
+      if (outStock != null) 'out_stock': outStock,
+      if (outStockTime != null) 'out_stock_time': outStockTime,
+      if (hasStockTime != null) 'has_stock_time': hasStockTime,
+      if (preparedTime != null) 'prepared_time': preparedTime,
+      if (requestOrderTime != null) 'request_order_time': requestOrderTime,
+      if (requestOrderBy != null) 'request_order_by': requestOrderBy,
+      if (orderedTime != null) 'ordered_time': orderedTime,
+      if (orderedBy != null) 'ordered_by': orderedBy,
+      if (cookingTime != null) 'cooking_time': cookingTime,
+      if (cookingBy != null) 'cooking_by': cookingBy,
+      if (cookedTime != null) 'cooked_time': cookedTime,
+      if (cookedBy != null) 'cooked_by': cookedBy,
+      if (servedTime != null) 'served_time': servedTime,
+      if (servedBy != null) 'served_by': servedBy,
+      if (refID != null) 'ref_i_d': refID,
+      if (closeSale != null) 'close_sale': closeSale,
+      if (dataStatus != null) 'data_status': dataStatus,
+      if (createdTime != null) 'created_time': createdTime,
+      if (updatedTime != null) 'updated_time': updatedTime,
+      if (deviceID != null) 'device_i_d': deviceID,
+      if (appVersion != null) 'app_version': appVersion,
+    });
+  }
+
+  ShopOrderItemsTblCompanion copyWith({
+    Value<int>? id,
+    Value<int>? shopID,
+    Value<int>? orderID,
+    Value<int?>? productID,
+    Value<String?>? description,
+    Value<int?>? no,
+    Value<int?>? queueNo,
+    Value<DateTime?>? queueDate,
+    Value<double?>? qty,
+    Value<double?>? wgtQty,
+    Value<double?>? unitPrice,
+    Value<String?>? calcUnit,
+    Value<bool>? isWeightUnit,
+    Value<bool>? calcService,
+    Value<double?>? discountPercent,
+    Value<double?>? discountValue,
+    Value<double?>? amount,
+    Value<String?>? note,
+    Value<bool>? takehome,
+    Value<bool>? shopCreated,
+    Value<String?>? optionsCode,
+    Value<double?>? optionsPrice,
+    Value<OrderItemStatus>? itemStatus,
+    Value<bool>? outStock,
+    Value<DateTime?>? outStockTime,
+    Value<DateTime?>? hasStockTime,
+    Value<DateTime?>? preparedTime,
+    Value<DateTime?>? requestOrderTime,
+    Value<String?>? requestOrderBy,
+    Value<DateTime?>? orderedTime,
+    Value<String?>? orderedBy,
+    Value<DateTime?>? cookingTime,
+    Value<String?>? cookingBy,
+    Value<DateTime?>? cookedTime,
+    Value<String?>? cookedBy,
+    Value<DateTime?>? servedTime,
+    Value<String?>? servedBy,
+    Value<int?>? refID,
+    Value<bool>? closeSale,
+    Value<DataStatus>? dataStatus,
+    Value<DateTime>? createdTime,
+    Value<DateTime?>? updatedTime,
+    Value<String?>? deviceID,
+    Value<String?>? appVersion,
+  }) {
+    return ShopOrderItemsTblCompanion(
+      id: id ?? this.id,
+      shopID: shopID ?? this.shopID,
+      orderID: orderID ?? this.orderID,
+      productID: productID ?? this.productID,
+      description: description ?? this.description,
+      no: no ?? this.no,
+      queueNo: queueNo ?? this.queueNo,
+      queueDate: queueDate ?? this.queueDate,
+      qty: qty ?? this.qty,
+      wgtQty: wgtQty ?? this.wgtQty,
+      unitPrice: unitPrice ?? this.unitPrice,
+      calcUnit: calcUnit ?? this.calcUnit,
+      isWeightUnit: isWeightUnit ?? this.isWeightUnit,
+      calcService: calcService ?? this.calcService,
+      discountPercent: discountPercent ?? this.discountPercent,
+      discountValue: discountValue ?? this.discountValue,
+      amount: amount ?? this.amount,
+      note: note ?? this.note,
+      takehome: takehome ?? this.takehome,
+      shopCreated: shopCreated ?? this.shopCreated,
+      optionsCode: optionsCode ?? this.optionsCode,
+      optionsPrice: optionsPrice ?? this.optionsPrice,
+      itemStatus: itemStatus ?? this.itemStatus,
+      outStock: outStock ?? this.outStock,
+      outStockTime: outStockTime ?? this.outStockTime,
+      hasStockTime: hasStockTime ?? this.hasStockTime,
+      preparedTime: preparedTime ?? this.preparedTime,
+      requestOrderTime: requestOrderTime ?? this.requestOrderTime,
+      requestOrderBy: requestOrderBy ?? this.requestOrderBy,
+      orderedTime: orderedTime ?? this.orderedTime,
+      orderedBy: orderedBy ?? this.orderedBy,
+      cookingTime: cookingTime ?? this.cookingTime,
+      cookingBy: cookingBy ?? this.cookingBy,
+      cookedTime: cookedTime ?? this.cookedTime,
+      cookedBy: cookedBy ?? this.cookedBy,
+      servedTime: servedTime ?? this.servedTime,
+      servedBy: servedBy ?? this.servedBy,
+      refID: refID ?? this.refID,
+      closeSale: closeSale ?? this.closeSale,
+      dataStatus: dataStatus ?? this.dataStatus,
+      createdTime: createdTime ?? this.createdTime,
+      updatedTime: updatedTime ?? this.updatedTime,
+      deviceID: deviceID ?? this.deviceID,
+      appVersion: appVersion ?? this.appVersion,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (shopID.present) {
+      map['shop_i_d'] = Variable<int>(shopID.value);
+    }
+    if (orderID.present) {
+      map['order_i_d'] = Variable<int>(orderID.value);
+    }
+    if (productID.present) {
+      map['product_i_d'] = Variable<int>(productID.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (no.present) {
+      map['no'] = Variable<int>(no.value);
+    }
+    if (queueNo.present) {
+      map['queue_no'] = Variable<int>(queueNo.value);
+    }
+    if (queueDate.present) {
+      map['queue_date'] = Variable<DateTime>(queueDate.value);
+    }
+    if (qty.present) {
+      map['qty'] = Variable<double>(qty.value);
+    }
+    if (wgtQty.present) {
+      map['wgt_qty'] = Variable<double>(wgtQty.value);
+    }
+    if (unitPrice.present) {
+      map['unit_price'] = Variable<double>(unitPrice.value);
+    }
+    if (calcUnit.present) {
+      map['calc_unit'] = Variable<String>(calcUnit.value);
+    }
+    if (isWeightUnit.present) {
+      map['is_weight_unit'] = Variable<bool>(isWeightUnit.value);
+    }
+    if (calcService.present) {
+      map['calc_service'] = Variable<bool>(calcService.value);
+    }
+    if (discountPercent.present) {
+      map['discount_percent'] = Variable<double>(discountPercent.value);
+    }
+    if (discountValue.present) {
+      map['discount_value'] = Variable<double>(discountValue.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<double>(amount.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (takehome.present) {
+      map['takehome'] = Variable<bool>(takehome.value);
+    }
+    if (shopCreated.present) {
+      map['shop_created'] = Variable<bool>(shopCreated.value);
+    }
+    if (optionsCode.present) {
+      map['options_code'] = Variable<String>(optionsCode.value);
+    }
+    if (optionsPrice.present) {
+      map['options_price'] = Variable<double>(optionsPrice.value);
+    }
+    if (itemStatus.present) {
+      map['item_status'] = Variable<String>(
+        $ShopOrderItemsTblTable.$converteritemStatus.toSql(itemStatus.value),
+      );
+    }
+    if (outStock.present) {
+      map['out_stock'] = Variable<bool>(outStock.value);
+    }
+    if (outStockTime.present) {
+      map['out_stock_time'] = Variable<DateTime>(outStockTime.value);
+    }
+    if (hasStockTime.present) {
+      map['has_stock_time'] = Variable<DateTime>(hasStockTime.value);
+    }
+    if (preparedTime.present) {
+      map['prepared_time'] = Variable<DateTime>(preparedTime.value);
+    }
+    if (requestOrderTime.present) {
+      map['request_order_time'] = Variable<DateTime>(requestOrderTime.value);
+    }
+    if (requestOrderBy.present) {
+      map['request_order_by'] = Variable<String>(requestOrderBy.value);
+    }
+    if (orderedTime.present) {
+      map['ordered_time'] = Variable<DateTime>(orderedTime.value);
+    }
+    if (orderedBy.present) {
+      map['ordered_by'] = Variable<String>(orderedBy.value);
+    }
+    if (cookingTime.present) {
+      map['cooking_time'] = Variable<DateTime>(cookingTime.value);
+    }
+    if (cookingBy.present) {
+      map['cooking_by'] = Variable<String>(cookingBy.value);
+    }
+    if (cookedTime.present) {
+      map['cooked_time'] = Variable<DateTime>(cookedTime.value);
+    }
+    if (cookedBy.present) {
+      map['cooked_by'] = Variable<String>(cookedBy.value);
+    }
+    if (servedTime.present) {
+      map['served_time'] = Variable<DateTime>(servedTime.value);
+    }
+    if (servedBy.present) {
+      map['served_by'] = Variable<String>(servedBy.value);
+    }
+    if (refID.present) {
+      map['ref_i_d'] = Variable<int>(refID.value);
+    }
+    if (closeSale.present) {
+      map['close_sale'] = Variable<bool>(closeSale.value);
+    }
+    if (dataStatus.present) {
+      map['data_status'] = Variable<String>(
+        $ShopOrderItemsTblTable.$converterdataStatus.toSql(dataStatus.value),
+      );
+    }
+    if (createdTime.present) {
+      map['created_time'] = Variable<DateTime>(createdTime.value);
+    }
+    if (updatedTime.present) {
+      map['updated_time'] = Variable<DateTime>(updatedTime.value);
+    }
+    if (deviceID.present) {
+      map['device_i_d'] = Variable<String>(deviceID.value);
+    }
+    if (appVersion.present) {
+      map['app_version'] = Variable<String>(appVersion.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShopOrderItemsTblCompanion(')
+          ..write('id: $id, ')
+          ..write('shopID: $shopID, ')
+          ..write('orderID: $orderID, ')
+          ..write('productID: $productID, ')
+          ..write('description: $description, ')
+          ..write('no: $no, ')
+          ..write('queueNo: $queueNo, ')
+          ..write('queueDate: $queueDate, ')
+          ..write('qty: $qty, ')
+          ..write('wgtQty: $wgtQty, ')
+          ..write('unitPrice: $unitPrice, ')
+          ..write('calcUnit: $calcUnit, ')
+          ..write('isWeightUnit: $isWeightUnit, ')
+          ..write('calcService: $calcService, ')
+          ..write('discountPercent: $discountPercent, ')
+          ..write('discountValue: $discountValue, ')
+          ..write('amount: $amount, ')
+          ..write('note: $note, ')
+          ..write('takehome: $takehome, ')
+          ..write('shopCreated: $shopCreated, ')
+          ..write('optionsCode: $optionsCode, ')
+          ..write('optionsPrice: $optionsPrice, ')
+          ..write('itemStatus: $itemStatus, ')
+          ..write('outStock: $outStock, ')
+          ..write('outStockTime: $outStockTime, ')
+          ..write('hasStockTime: $hasStockTime, ')
+          ..write('preparedTime: $preparedTime, ')
+          ..write('requestOrderTime: $requestOrderTime, ')
+          ..write('requestOrderBy: $requestOrderBy, ')
+          ..write('orderedTime: $orderedTime, ')
+          ..write('orderedBy: $orderedBy, ')
+          ..write('cookingTime: $cookingTime, ')
+          ..write('cookingBy: $cookingBy, ')
+          ..write('cookedTime: $cookedTime, ')
+          ..write('cookedBy: $cookedBy, ')
+          ..write('servedTime: $servedTime, ')
+          ..write('servedBy: $servedBy, ')
+          ..write('refID: $refID, ')
+          ..write('closeSale: $closeSale, ')
+          ..write('dataStatus: $dataStatus, ')
+          ..write('createdTime: $createdTime, ')
+          ..write('updatedTime: $updatedTime, ')
+          ..write('deviceID: $deviceID, ')
+          ..write('appVersion: $appVersion')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ShopOrderItemOptionsTblTable extends ShopOrderItemOptionsTbl
+    with TableInfo<$ShopOrderItemOptionsTblTable, ShopOrderItemOptionsTblData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ShopOrderItemOptionsTblTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _itemIDMeta = const VerificationMeta('itemID');
+  @override
+  late final GeneratedColumn<int> itemID = GeneratedColumn<int>(
+    'item_i_d',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES shop_order_items_tbl (id)',
+    ),
+  );
+  static const VerificationMeta _optionIDMeta = const VerificationMeta(
+    'optionID',
+  );
+  @override
+  late final GeneratedColumn<int> optionID = GeneratedColumn<int>(
+    'option_i_d',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES shop_product_options_tbl (id)',
+    ),
+  );
+  static const VerificationMeta _groupNameMeta = const VerificationMeta(
+    'groupName',
+  );
+  @override
+  late final GeneratedColumn<String> groupName = GeneratedColumn<String>(
+    'group_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _groupOrderMeta = const VerificationMeta(
+    'groupOrder',
+  );
+  @override
+  late final GeneratedColumn<int> groupOrder = GeneratedColumn<int>(
+    'group_order',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _optionNameMeta = const VerificationMeta(
+    'optionName',
+  );
+  @override
+  late final GeneratedColumn<String> optionName = GeneratedColumn<String>(
+    'option_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _optionDescriptionMeta = const VerificationMeta(
+    'optionDescription',
+  );
+  @override
+  late final GeneratedColumn<String> optionDescription =
+      GeneratedColumn<String>(
+        'option_description',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _optionOrderMeta = const VerificationMeta(
+    'optionOrder',
+  );
+  @override
+  late final GeneratedColumn<int> optionOrder = GeneratedColumn<int>(
+    'option_order',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _qtyMeta = const VerificationMeta('qty');
+  @override
+  late final GeneratedColumn<double> qty = GeneratedColumn<double>(
+    'qty',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _priceAddedMeta = const VerificationMeta(
+    'priceAdded',
+  );
+  @override
+  late final GeneratedColumn<double> priceAdded = GeneratedColumn<double>(
+    'price_added',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _stockItemMeta = const VerificationMeta(
+    'stockItem',
+  );
+  @override
+  late final GeneratedColumn<bool> stockItem = GeneratedColumn<bool>(
+    'stock_item',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("stock_item" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  static const VerificationMeta _closeSaleMeta = const VerificationMeta(
+    'closeSale',
+  );
+  @override
+  late final GeneratedColumn<bool> closeSale = GeneratedColumn<bool>(
+    'close_sale',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("close_sale" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  static const VerificationMeta _outStockMeta = const VerificationMeta(
+    'outStock',
+  );
+  @override
+  late final GeneratedColumn<bool> outStock = GeneratedColumn<bool>(
+    'out_stock',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("out_stock" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
+  static const VerificationMeta _outStockTimeMeta = const VerificationMeta(
+    'outStockTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> outStockTime = GeneratedColumn<DateTime>(
+    'out_stock_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _hasStockTimeMeta = const VerificationMeta(
+    'hasStockTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> hasStockTime = GeneratedColumn<DateTime>(
+    'has_stock_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DataStatus, String> dataStatus =
+      GeneratedColumn<String>(
+        'data_status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: Constant(DataStatus.active.text),
+      ).withConverter<DataStatus>(
+        $ShopOrderItemOptionsTblTable.$converterdataStatus,
+      );
+  static const VerificationMeta _createdTimeMeta = const VerificationMeta(
+    'createdTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdTime = GeneratedColumn<DateTime>(
+    'created_time',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedTimeMeta = const VerificationMeta(
+    'updatedTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedTime = GeneratedColumn<DateTime>(
+    'updated_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _deviceIDMeta = const VerificationMeta(
+    'deviceID',
+  );
+  @override
+  late final GeneratedColumn<String> deviceID = GeneratedColumn<String>(
+    'device_i_d',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _appVersionMeta = const VerificationMeta(
+    'appVersion',
+  );
+  @override
+  late final GeneratedColumn<String> appVersion = GeneratedColumn<String>(
+    'app_version',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    itemID,
+    optionID,
+    groupName,
+    groupOrder,
+    optionName,
+    optionDescription,
+    optionOrder,
+    qty,
+    priceAdded,
+    stockItem,
+    closeSale,
+    outStock,
+    outStockTime,
+    hasStockTime,
+    dataStatus,
+    createdTime,
+    updatedTime,
+    deviceID,
+    appVersion,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'shop_order_item_options_tbl';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ShopOrderItemOptionsTblData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('item_i_d')) {
+      context.handle(
+        _itemIDMeta,
+        itemID.isAcceptableOrUnknown(data['item_i_d']!, _itemIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_itemIDMeta);
+    }
+    if (data.containsKey('option_i_d')) {
+      context.handle(
+        _optionIDMeta,
+        optionID.isAcceptableOrUnknown(data['option_i_d']!, _optionIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_optionIDMeta);
+    }
+    if (data.containsKey('group_name')) {
+      context.handle(
+        _groupNameMeta,
+        groupName.isAcceptableOrUnknown(data['group_name']!, _groupNameMeta),
+      );
+    }
+    if (data.containsKey('group_order')) {
+      context.handle(
+        _groupOrderMeta,
+        groupOrder.isAcceptableOrUnknown(data['group_order']!, _groupOrderMeta),
+      );
+    }
+    if (data.containsKey('option_name')) {
+      context.handle(
+        _optionNameMeta,
+        optionName.isAcceptableOrUnknown(data['option_name']!, _optionNameMeta),
+      );
+    }
+    if (data.containsKey('option_description')) {
+      context.handle(
+        _optionDescriptionMeta,
+        optionDescription.isAcceptableOrUnknown(
+          data['option_description']!,
+          _optionDescriptionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('option_order')) {
+      context.handle(
+        _optionOrderMeta,
+        optionOrder.isAcceptableOrUnknown(
+          data['option_order']!,
+          _optionOrderMeta,
+        ),
+      );
+    }
+    if (data.containsKey('qty')) {
+      context.handle(
+        _qtyMeta,
+        qty.isAcceptableOrUnknown(data['qty']!, _qtyMeta),
+      );
+    }
+    if (data.containsKey('price_added')) {
+      context.handle(
+        _priceAddedMeta,
+        priceAdded.isAcceptableOrUnknown(data['price_added']!, _priceAddedMeta),
+      );
+    }
+    if (data.containsKey('stock_item')) {
+      context.handle(
+        _stockItemMeta,
+        stockItem.isAcceptableOrUnknown(data['stock_item']!, _stockItemMeta),
+      );
+    }
+    if (data.containsKey('close_sale')) {
+      context.handle(
+        _closeSaleMeta,
+        closeSale.isAcceptableOrUnknown(data['close_sale']!, _closeSaleMeta),
+      );
+    }
+    if (data.containsKey('out_stock')) {
+      context.handle(
+        _outStockMeta,
+        outStock.isAcceptableOrUnknown(data['out_stock']!, _outStockMeta),
+      );
+    }
+    if (data.containsKey('out_stock_time')) {
+      context.handle(
+        _outStockTimeMeta,
+        outStockTime.isAcceptableOrUnknown(
+          data['out_stock_time']!,
+          _outStockTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('has_stock_time')) {
+      context.handle(
+        _hasStockTimeMeta,
+        hasStockTime.isAcceptableOrUnknown(
+          data['has_stock_time']!,
+          _hasStockTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('created_time')) {
+      context.handle(
+        _createdTimeMeta,
+        createdTime.isAcceptableOrUnknown(
+          data['created_time']!,
+          _createdTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('updated_time')) {
+      context.handle(
+        _updatedTimeMeta,
+        updatedTime.isAcceptableOrUnknown(
+          data['updated_time']!,
+          _updatedTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('device_i_d')) {
+      context.handle(
+        _deviceIDMeta,
+        deviceID.isAcceptableOrUnknown(data['device_i_d']!, _deviceIDMeta),
+      );
+    }
+    if (data.containsKey('app_version')) {
+      context.handle(
+        _appVersionMeta,
+        appVersion.isAcceptableOrUnknown(data['app_version']!, _appVersionMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ShopOrderItemOptionsTblData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ShopOrderItemOptionsTblData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      itemID: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}item_i_d'],
+      )!,
+      optionID: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}option_i_d'],
+      )!,
+      groupName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}group_name'],
+      ),
+      groupOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}group_order'],
+      ),
+      optionName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}option_name'],
+      ),
+      optionDescription: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}option_description'],
+      ),
+      optionOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}option_order'],
+      ),
+      qty: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}qty'],
+      ),
+      priceAdded: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}price_added'],
+      ),
+      stockItem: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}stock_item'],
+      )!,
+      closeSale: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}close_sale'],
+      )!,
+      outStock: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}out_stock'],
+      )!,
+      outStockTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}out_stock_time'],
+      ),
+      hasStockTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}has_stock_time'],
+      ),
+      dataStatus: $ShopOrderItemOptionsTblTable.$converterdataStatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}data_status'],
+        )!,
+      ),
+      createdTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_time'],
+      )!,
+      updatedTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_time'],
+      ),
+      deviceID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}device_i_d'],
+      ),
+      appVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}app_version'],
+      ),
+    );
+  }
+
+  @override
+  $ShopOrderItemOptionsTblTable createAlias(String alias) {
+    return $ShopOrderItemOptionsTblTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<DataStatus, String, String> $converterdataStatus =
+      const EnumNameConverter<DataStatus>(DataStatus.values);
+}
+
+class ShopOrderItemOptionsTblData extends DataClass
+    implements Insertable<ShopOrderItemOptionsTblData> {
+  final int id;
+  final int itemID;
+  final int optionID;
+  final String? groupName;
+  final int? groupOrder;
+  final String? optionName;
+  final String? optionDescription;
+  final int? optionOrder;
+  final double? qty;
+  final double? priceAdded;
+  final bool stockItem;
+  final bool closeSale;
+  final bool outStock;
+  final DateTime? outStockTime;
+  final DateTime? hasStockTime;
+  final DataStatus dataStatus;
+  final DateTime createdTime;
+  final DateTime? updatedTime;
+  final String? deviceID;
+  final String? appVersion;
+  const ShopOrderItemOptionsTblData({
+    required this.id,
+    required this.itemID,
+    required this.optionID,
+    this.groupName,
+    this.groupOrder,
+    this.optionName,
+    this.optionDescription,
+    this.optionOrder,
+    this.qty,
+    this.priceAdded,
+    required this.stockItem,
+    required this.closeSale,
+    required this.outStock,
+    this.outStockTime,
+    this.hasStockTime,
+    required this.dataStatus,
+    required this.createdTime,
+    this.updatedTime,
+    this.deviceID,
+    this.appVersion,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['item_i_d'] = Variable<int>(itemID);
+    map['option_i_d'] = Variable<int>(optionID);
+    if (!nullToAbsent || groupName != null) {
+      map['group_name'] = Variable<String>(groupName);
+    }
+    if (!nullToAbsent || groupOrder != null) {
+      map['group_order'] = Variable<int>(groupOrder);
+    }
+    if (!nullToAbsent || optionName != null) {
+      map['option_name'] = Variable<String>(optionName);
+    }
+    if (!nullToAbsent || optionDescription != null) {
+      map['option_description'] = Variable<String>(optionDescription);
+    }
+    if (!nullToAbsent || optionOrder != null) {
+      map['option_order'] = Variable<int>(optionOrder);
+    }
+    if (!nullToAbsent || qty != null) {
+      map['qty'] = Variable<double>(qty);
+    }
+    if (!nullToAbsent || priceAdded != null) {
+      map['price_added'] = Variable<double>(priceAdded);
+    }
+    map['stock_item'] = Variable<bool>(stockItem);
+    map['close_sale'] = Variable<bool>(closeSale);
+    map['out_stock'] = Variable<bool>(outStock);
+    if (!nullToAbsent || outStockTime != null) {
+      map['out_stock_time'] = Variable<DateTime>(outStockTime);
+    }
+    if (!nullToAbsent || hasStockTime != null) {
+      map['has_stock_time'] = Variable<DateTime>(hasStockTime);
+    }
+    {
+      map['data_status'] = Variable<String>(
+        $ShopOrderItemOptionsTblTable.$converterdataStatus.toSql(dataStatus),
+      );
+    }
+    map['created_time'] = Variable<DateTime>(createdTime);
+    if (!nullToAbsent || updatedTime != null) {
+      map['updated_time'] = Variable<DateTime>(updatedTime);
+    }
+    if (!nullToAbsent || deviceID != null) {
+      map['device_i_d'] = Variable<String>(deviceID);
+    }
+    if (!nullToAbsent || appVersion != null) {
+      map['app_version'] = Variable<String>(appVersion);
+    }
+    return map;
+  }
+
+  ShopOrderItemOptionsTblCompanion toCompanion(bool nullToAbsent) {
+    return ShopOrderItemOptionsTblCompanion(
+      id: Value(id),
+      itemID: Value(itemID),
+      optionID: Value(optionID),
+      groupName: groupName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(groupName),
+      groupOrder: groupOrder == null && nullToAbsent
+          ? const Value.absent()
+          : Value(groupOrder),
+      optionName: optionName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(optionName),
+      optionDescription: optionDescription == null && nullToAbsent
+          ? const Value.absent()
+          : Value(optionDescription),
+      optionOrder: optionOrder == null && nullToAbsent
+          ? const Value.absent()
+          : Value(optionOrder),
+      qty: qty == null && nullToAbsent ? const Value.absent() : Value(qty),
+      priceAdded: priceAdded == null && nullToAbsent
+          ? const Value.absent()
+          : Value(priceAdded),
+      stockItem: Value(stockItem),
+      closeSale: Value(closeSale),
+      outStock: Value(outStock),
+      outStockTime: outStockTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(outStockTime),
+      hasStockTime: hasStockTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(hasStockTime),
+      dataStatus: Value(dataStatus),
+      createdTime: Value(createdTime),
+      updatedTime: updatedTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedTime),
+      deviceID: deviceID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deviceID),
+      appVersion: appVersion == null && nullToAbsent
+          ? const Value.absent()
+          : Value(appVersion),
+    );
+  }
+
+  factory ShopOrderItemOptionsTblData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ShopOrderItemOptionsTblData(
+      id: serializer.fromJson<int>(json['id']),
+      itemID: serializer.fromJson<int>(json['itemID']),
+      optionID: serializer.fromJson<int>(json['optionID']),
+      groupName: serializer.fromJson<String?>(json['groupName']),
+      groupOrder: serializer.fromJson<int?>(json['groupOrder']),
+      optionName: serializer.fromJson<String?>(json['optionName']),
+      optionDescription: serializer.fromJson<String?>(
+        json['optionDescription'],
+      ),
+      optionOrder: serializer.fromJson<int?>(json['optionOrder']),
+      qty: serializer.fromJson<double?>(json['qty']),
+      priceAdded: serializer.fromJson<double?>(json['priceAdded']),
+      stockItem: serializer.fromJson<bool>(json['stockItem']),
+      closeSale: serializer.fromJson<bool>(json['closeSale']),
+      outStock: serializer.fromJson<bool>(json['outStock']),
+      outStockTime: serializer.fromJson<DateTime?>(json['outStockTime']),
+      hasStockTime: serializer.fromJson<DateTime?>(json['hasStockTime']),
+      dataStatus: $ShopOrderItemOptionsTblTable.$converterdataStatus.fromJson(
+        serializer.fromJson<String>(json['dataStatus']),
+      ),
+      createdTime: serializer.fromJson<DateTime>(json['createdTime']),
+      updatedTime: serializer.fromJson<DateTime?>(json['updatedTime']),
+      deviceID: serializer.fromJson<String?>(json['deviceID']),
+      appVersion: serializer.fromJson<String?>(json['appVersion']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'itemID': serializer.toJson<int>(itemID),
+      'optionID': serializer.toJson<int>(optionID),
+      'groupName': serializer.toJson<String?>(groupName),
+      'groupOrder': serializer.toJson<int?>(groupOrder),
+      'optionName': serializer.toJson<String?>(optionName),
+      'optionDescription': serializer.toJson<String?>(optionDescription),
+      'optionOrder': serializer.toJson<int?>(optionOrder),
+      'qty': serializer.toJson<double?>(qty),
+      'priceAdded': serializer.toJson<double?>(priceAdded),
+      'stockItem': serializer.toJson<bool>(stockItem),
+      'closeSale': serializer.toJson<bool>(closeSale),
+      'outStock': serializer.toJson<bool>(outStock),
+      'outStockTime': serializer.toJson<DateTime?>(outStockTime),
+      'hasStockTime': serializer.toJson<DateTime?>(hasStockTime),
+      'dataStatus': serializer.toJson<String>(
+        $ShopOrderItemOptionsTblTable.$converterdataStatus.toJson(dataStatus),
+      ),
+      'createdTime': serializer.toJson<DateTime>(createdTime),
+      'updatedTime': serializer.toJson<DateTime?>(updatedTime),
+      'deviceID': serializer.toJson<String?>(deviceID),
+      'appVersion': serializer.toJson<String?>(appVersion),
+    };
+  }
+
+  ShopOrderItemOptionsTblData copyWith({
+    int? id,
+    int? itemID,
+    int? optionID,
+    Value<String?> groupName = const Value.absent(),
+    Value<int?> groupOrder = const Value.absent(),
+    Value<String?> optionName = const Value.absent(),
+    Value<String?> optionDescription = const Value.absent(),
+    Value<int?> optionOrder = const Value.absent(),
+    Value<double?> qty = const Value.absent(),
+    Value<double?> priceAdded = const Value.absent(),
+    bool? stockItem,
+    bool? closeSale,
+    bool? outStock,
+    Value<DateTime?> outStockTime = const Value.absent(),
+    Value<DateTime?> hasStockTime = const Value.absent(),
+    DataStatus? dataStatus,
+    DateTime? createdTime,
+    Value<DateTime?> updatedTime = const Value.absent(),
+    Value<String?> deviceID = const Value.absent(),
+    Value<String?> appVersion = const Value.absent(),
+  }) => ShopOrderItemOptionsTblData(
+    id: id ?? this.id,
+    itemID: itemID ?? this.itemID,
+    optionID: optionID ?? this.optionID,
+    groupName: groupName.present ? groupName.value : this.groupName,
+    groupOrder: groupOrder.present ? groupOrder.value : this.groupOrder,
+    optionName: optionName.present ? optionName.value : this.optionName,
+    optionDescription: optionDescription.present
+        ? optionDescription.value
+        : this.optionDescription,
+    optionOrder: optionOrder.present ? optionOrder.value : this.optionOrder,
+    qty: qty.present ? qty.value : this.qty,
+    priceAdded: priceAdded.present ? priceAdded.value : this.priceAdded,
+    stockItem: stockItem ?? this.stockItem,
+    closeSale: closeSale ?? this.closeSale,
+    outStock: outStock ?? this.outStock,
+    outStockTime: outStockTime.present ? outStockTime.value : this.outStockTime,
+    hasStockTime: hasStockTime.present ? hasStockTime.value : this.hasStockTime,
+    dataStatus: dataStatus ?? this.dataStatus,
+    createdTime: createdTime ?? this.createdTime,
+    updatedTime: updatedTime.present ? updatedTime.value : this.updatedTime,
+    deviceID: deviceID.present ? deviceID.value : this.deviceID,
+    appVersion: appVersion.present ? appVersion.value : this.appVersion,
+  );
+  ShopOrderItemOptionsTblData copyWithCompanion(
+    ShopOrderItemOptionsTblCompanion data,
+  ) {
+    return ShopOrderItemOptionsTblData(
+      id: data.id.present ? data.id.value : this.id,
+      itemID: data.itemID.present ? data.itemID.value : this.itemID,
+      optionID: data.optionID.present ? data.optionID.value : this.optionID,
+      groupName: data.groupName.present ? data.groupName.value : this.groupName,
+      groupOrder: data.groupOrder.present
+          ? data.groupOrder.value
+          : this.groupOrder,
+      optionName: data.optionName.present
+          ? data.optionName.value
+          : this.optionName,
+      optionDescription: data.optionDescription.present
+          ? data.optionDescription.value
+          : this.optionDescription,
+      optionOrder: data.optionOrder.present
+          ? data.optionOrder.value
+          : this.optionOrder,
+      qty: data.qty.present ? data.qty.value : this.qty,
+      priceAdded: data.priceAdded.present
+          ? data.priceAdded.value
+          : this.priceAdded,
+      stockItem: data.stockItem.present ? data.stockItem.value : this.stockItem,
+      closeSale: data.closeSale.present ? data.closeSale.value : this.closeSale,
+      outStock: data.outStock.present ? data.outStock.value : this.outStock,
+      outStockTime: data.outStockTime.present
+          ? data.outStockTime.value
+          : this.outStockTime,
+      hasStockTime: data.hasStockTime.present
+          ? data.hasStockTime.value
+          : this.hasStockTime,
+      dataStatus: data.dataStatus.present
+          ? data.dataStatus.value
+          : this.dataStatus,
+      createdTime: data.createdTime.present
+          ? data.createdTime.value
+          : this.createdTime,
+      updatedTime: data.updatedTime.present
+          ? data.updatedTime.value
+          : this.updatedTime,
+      deviceID: data.deviceID.present ? data.deviceID.value : this.deviceID,
+      appVersion: data.appVersion.present
+          ? data.appVersion.value
+          : this.appVersion,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShopOrderItemOptionsTblData(')
+          ..write('id: $id, ')
+          ..write('itemID: $itemID, ')
+          ..write('optionID: $optionID, ')
+          ..write('groupName: $groupName, ')
+          ..write('groupOrder: $groupOrder, ')
+          ..write('optionName: $optionName, ')
+          ..write('optionDescription: $optionDescription, ')
+          ..write('optionOrder: $optionOrder, ')
+          ..write('qty: $qty, ')
+          ..write('priceAdded: $priceAdded, ')
+          ..write('stockItem: $stockItem, ')
+          ..write('closeSale: $closeSale, ')
+          ..write('outStock: $outStock, ')
+          ..write('outStockTime: $outStockTime, ')
+          ..write('hasStockTime: $hasStockTime, ')
+          ..write('dataStatus: $dataStatus, ')
+          ..write('createdTime: $createdTime, ')
+          ..write('updatedTime: $updatedTime, ')
+          ..write('deviceID: $deviceID, ')
+          ..write('appVersion: $appVersion')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    itemID,
+    optionID,
+    groupName,
+    groupOrder,
+    optionName,
+    optionDescription,
+    optionOrder,
+    qty,
+    priceAdded,
+    stockItem,
+    closeSale,
+    outStock,
+    outStockTime,
+    hasStockTime,
+    dataStatus,
+    createdTime,
+    updatedTime,
+    deviceID,
+    appVersion,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ShopOrderItemOptionsTblData &&
+          other.id == this.id &&
+          other.itemID == this.itemID &&
+          other.optionID == this.optionID &&
+          other.groupName == this.groupName &&
+          other.groupOrder == this.groupOrder &&
+          other.optionName == this.optionName &&
+          other.optionDescription == this.optionDescription &&
+          other.optionOrder == this.optionOrder &&
+          other.qty == this.qty &&
+          other.priceAdded == this.priceAdded &&
+          other.stockItem == this.stockItem &&
+          other.closeSale == this.closeSale &&
+          other.outStock == this.outStock &&
+          other.outStockTime == this.outStockTime &&
+          other.hasStockTime == this.hasStockTime &&
+          other.dataStatus == this.dataStatus &&
+          other.createdTime == this.createdTime &&
+          other.updatedTime == this.updatedTime &&
+          other.deviceID == this.deviceID &&
+          other.appVersion == this.appVersion);
+}
+
+class ShopOrderItemOptionsTblCompanion
+    extends UpdateCompanion<ShopOrderItemOptionsTblData> {
+  final Value<int> id;
+  final Value<int> itemID;
+  final Value<int> optionID;
+  final Value<String?> groupName;
+  final Value<int?> groupOrder;
+  final Value<String?> optionName;
+  final Value<String?> optionDescription;
+  final Value<int?> optionOrder;
+  final Value<double?> qty;
+  final Value<double?> priceAdded;
+  final Value<bool> stockItem;
+  final Value<bool> closeSale;
+  final Value<bool> outStock;
+  final Value<DateTime?> outStockTime;
+  final Value<DateTime?> hasStockTime;
+  final Value<DataStatus> dataStatus;
+  final Value<DateTime> createdTime;
+  final Value<DateTime?> updatedTime;
+  final Value<String?> deviceID;
+  final Value<String?> appVersion;
+  const ShopOrderItemOptionsTblCompanion({
+    this.id = const Value.absent(),
+    this.itemID = const Value.absent(),
+    this.optionID = const Value.absent(),
+    this.groupName = const Value.absent(),
+    this.groupOrder = const Value.absent(),
+    this.optionName = const Value.absent(),
+    this.optionDescription = const Value.absent(),
+    this.optionOrder = const Value.absent(),
+    this.qty = const Value.absent(),
+    this.priceAdded = const Value.absent(),
+    this.stockItem = const Value.absent(),
+    this.closeSale = const Value.absent(),
+    this.outStock = const Value.absent(),
+    this.outStockTime = const Value.absent(),
+    this.hasStockTime = const Value.absent(),
+    this.dataStatus = const Value.absent(),
+    this.createdTime = const Value.absent(),
+    this.updatedTime = const Value.absent(),
+    this.deviceID = const Value.absent(),
+    this.appVersion = const Value.absent(),
+  });
+  ShopOrderItemOptionsTblCompanion.insert({
+    this.id = const Value.absent(),
+    required int itemID,
+    required int optionID,
+    this.groupName = const Value.absent(),
+    this.groupOrder = const Value.absent(),
+    this.optionName = const Value.absent(),
+    this.optionDescription = const Value.absent(),
+    this.optionOrder = const Value.absent(),
+    this.qty = const Value.absent(),
+    this.priceAdded = const Value.absent(),
+    this.stockItem = const Value.absent(),
+    this.closeSale = const Value.absent(),
+    this.outStock = const Value.absent(),
+    this.outStockTime = const Value.absent(),
+    this.hasStockTime = const Value.absent(),
+    this.dataStatus = const Value.absent(),
+    this.createdTime = const Value.absent(),
+    this.updatedTime = const Value.absent(),
+    this.deviceID = const Value.absent(),
+    this.appVersion = const Value.absent(),
+  }) : itemID = Value(itemID),
+       optionID = Value(optionID);
+  static Insertable<ShopOrderItemOptionsTblData> custom({
+    Expression<int>? id,
+    Expression<int>? itemID,
+    Expression<int>? optionID,
+    Expression<String>? groupName,
+    Expression<int>? groupOrder,
+    Expression<String>? optionName,
+    Expression<String>? optionDescription,
+    Expression<int>? optionOrder,
+    Expression<double>? qty,
+    Expression<double>? priceAdded,
+    Expression<bool>? stockItem,
+    Expression<bool>? closeSale,
+    Expression<bool>? outStock,
+    Expression<DateTime>? outStockTime,
+    Expression<DateTime>? hasStockTime,
+    Expression<String>? dataStatus,
+    Expression<DateTime>? createdTime,
+    Expression<DateTime>? updatedTime,
+    Expression<String>? deviceID,
+    Expression<String>? appVersion,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (itemID != null) 'item_i_d': itemID,
+      if (optionID != null) 'option_i_d': optionID,
+      if (groupName != null) 'group_name': groupName,
+      if (groupOrder != null) 'group_order': groupOrder,
+      if (optionName != null) 'option_name': optionName,
+      if (optionDescription != null) 'option_description': optionDescription,
+      if (optionOrder != null) 'option_order': optionOrder,
+      if (qty != null) 'qty': qty,
+      if (priceAdded != null) 'price_added': priceAdded,
+      if (stockItem != null) 'stock_item': stockItem,
+      if (closeSale != null) 'close_sale': closeSale,
+      if (outStock != null) 'out_stock': outStock,
+      if (outStockTime != null) 'out_stock_time': outStockTime,
+      if (hasStockTime != null) 'has_stock_time': hasStockTime,
+      if (dataStatus != null) 'data_status': dataStatus,
+      if (createdTime != null) 'created_time': createdTime,
+      if (updatedTime != null) 'updated_time': updatedTime,
+      if (deviceID != null) 'device_i_d': deviceID,
+      if (appVersion != null) 'app_version': appVersion,
+    });
+  }
+
+  ShopOrderItemOptionsTblCompanion copyWith({
+    Value<int>? id,
+    Value<int>? itemID,
+    Value<int>? optionID,
+    Value<String?>? groupName,
+    Value<int?>? groupOrder,
+    Value<String?>? optionName,
+    Value<String?>? optionDescription,
+    Value<int?>? optionOrder,
+    Value<double?>? qty,
+    Value<double?>? priceAdded,
+    Value<bool>? stockItem,
+    Value<bool>? closeSale,
+    Value<bool>? outStock,
+    Value<DateTime?>? outStockTime,
+    Value<DateTime?>? hasStockTime,
+    Value<DataStatus>? dataStatus,
+    Value<DateTime>? createdTime,
+    Value<DateTime?>? updatedTime,
+    Value<String?>? deviceID,
+    Value<String?>? appVersion,
+  }) {
+    return ShopOrderItemOptionsTblCompanion(
+      id: id ?? this.id,
+      itemID: itemID ?? this.itemID,
+      optionID: optionID ?? this.optionID,
+      groupName: groupName ?? this.groupName,
+      groupOrder: groupOrder ?? this.groupOrder,
+      optionName: optionName ?? this.optionName,
+      optionDescription: optionDescription ?? this.optionDescription,
+      optionOrder: optionOrder ?? this.optionOrder,
+      qty: qty ?? this.qty,
+      priceAdded: priceAdded ?? this.priceAdded,
+      stockItem: stockItem ?? this.stockItem,
+      closeSale: closeSale ?? this.closeSale,
+      outStock: outStock ?? this.outStock,
+      outStockTime: outStockTime ?? this.outStockTime,
+      hasStockTime: hasStockTime ?? this.hasStockTime,
+      dataStatus: dataStatus ?? this.dataStatus,
+      createdTime: createdTime ?? this.createdTime,
+      updatedTime: updatedTime ?? this.updatedTime,
+      deviceID: deviceID ?? this.deviceID,
+      appVersion: appVersion ?? this.appVersion,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (itemID.present) {
+      map['item_i_d'] = Variable<int>(itemID.value);
+    }
+    if (optionID.present) {
+      map['option_i_d'] = Variable<int>(optionID.value);
+    }
+    if (groupName.present) {
+      map['group_name'] = Variable<String>(groupName.value);
+    }
+    if (groupOrder.present) {
+      map['group_order'] = Variable<int>(groupOrder.value);
+    }
+    if (optionName.present) {
+      map['option_name'] = Variable<String>(optionName.value);
+    }
+    if (optionDescription.present) {
+      map['option_description'] = Variable<String>(optionDescription.value);
+    }
+    if (optionOrder.present) {
+      map['option_order'] = Variable<int>(optionOrder.value);
+    }
+    if (qty.present) {
+      map['qty'] = Variable<double>(qty.value);
+    }
+    if (priceAdded.present) {
+      map['price_added'] = Variable<double>(priceAdded.value);
+    }
+    if (stockItem.present) {
+      map['stock_item'] = Variable<bool>(stockItem.value);
+    }
+    if (closeSale.present) {
+      map['close_sale'] = Variable<bool>(closeSale.value);
+    }
+    if (outStock.present) {
+      map['out_stock'] = Variable<bool>(outStock.value);
+    }
+    if (outStockTime.present) {
+      map['out_stock_time'] = Variable<DateTime>(outStockTime.value);
+    }
+    if (hasStockTime.present) {
+      map['has_stock_time'] = Variable<DateTime>(hasStockTime.value);
+    }
+    if (dataStatus.present) {
+      map['data_status'] = Variable<String>(
+        $ShopOrderItemOptionsTblTable.$converterdataStatus.toSql(
+          dataStatus.value,
+        ),
+      );
+    }
+    if (createdTime.present) {
+      map['created_time'] = Variable<DateTime>(createdTime.value);
+    }
+    if (updatedTime.present) {
+      map['updated_time'] = Variable<DateTime>(updatedTime.value);
+    }
+    if (deviceID.present) {
+      map['device_i_d'] = Variable<String>(deviceID.value);
+    }
+    if (appVersion.present) {
+      map['app_version'] = Variable<String>(appVersion.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShopOrderItemOptionsTblCompanion(')
+          ..write('id: $id, ')
+          ..write('itemID: $itemID, ')
+          ..write('optionID: $optionID, ')
+          ..write('groupName: $groupName, ')
+          ..write('groupOrder: $groupOrder, ')
+          ..write('optionName: $optionName, ')
+          ..write('optionDescription: $optionDescription, ')
+          ..write('optionOrder: $optionOrder, ')
+          ..write('qty: $qty, ')
+          ..write('priceAdded: $priceAdded, ')
+          ..write('stockItem: $stockItem, ')
+          ..write('closeSale: $closeSale, ')
+          ..write('outStock: $outStock, ')
+          ..write('outStockTime: $outStockTime, ')
+          ..write('hasStockTime: $hasStockTime, ')
           ..write('dataStatus: $dataStatus, ')
           ..write('createdTime: $createdTime, ')
           ..write('updatedTime: $updatedTime, ')
@@ -8445,6 +16039,14 @@ abstract class _$Database extends GeneratedDatabase {
   late final $ShopBankAccountTblTable shopBankAccountTbl =
       $ShopBankAccountTblTable(this);
   late final $ShopProductTblTable shopProductTbl = $ShopProductTblTable(this);
+  late final $ShopImageTblTable shopImageTbl = $ShopImageTblTable(this);
+  late final $ShopProductOptionsTblTable shopProductOptionsTbl =
+      $ShopProductOptionsTblTable(this);
+  late final $ShopOrderTblTable shopOrderTbl = $ShopOrderTblTable(this);
+  late final $ShopOrderItemsTblTable shopOrderItemsTbl =
+      $ShopOrderItemsTblTable(this);
+  late final $ShopOrderItemOptionsTblTable shopOrderItemOptionsTbl =
+      $ShopOrderItemOptionsTblTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -8459,6 +16061,11 @@ abstract class _$Database extends GeneratedDatabase {
     shopProductOptionsGroupDetailTbl,
     shopBankAccountTbl,
     shopProductTbl,
+    shopImageTbl,
+    shopProductOptionsTbl,
+    shopOrderTbl,
+    shopOrderItemsTbl,
+    shopOrderItemOptionsTbl,
   ];
 }
 
@@ -8693,6 +16300,68 @@ final class $$ShopInfoTblTableReferences
     ).filter((f) => f.shopID.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_shopProductTblRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$ShopImageTblTable, List<ShopImageTblData>>
+  _shopImageTblRefsTable(_$Database db) => MultiTypedResultKey.fromTable(
+    db.shopImageTbl,
+    aliasName: $_aliasNameGenerator(db.shopInfoTbl.id, db.shopImageTbl.shopID),
+  );
+
+  $$ShopImageTblTableProcessedTableManager get shopImageTblRefs {
+    final manager = $$ShopImageTblTableTableManager(
+      $_db,
+      $_db.shopImageTbl,
+    ).filter((f) => f.shopID.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_shopImageTblRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$ShopOrderTblTable, List<ShopOrderTblData>>
+  _shopOrderTblRefsTable(_$Database db) => MultiTypedResultKey.fromTable(
+    db.shopOrderTbl,
+    aliasName: $_aliasNameGenerator(db.shopInfoTbl.id, db.shopOrderTbl.shopID),
+  );
+
+  $$ShopOrderTblTableProcessedTableManager get shopOrderTblRefs {
+    final manager = $$ShopOrderTblTableTableManager(
+      $_db,
+      $_db.shopOrderTbl,
+    ).filter((f) => f.shopID.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_shopOrderTblRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $ShopOrderItemsTblTable,
+    List<ShopOrderItemsTblData>
+  >
+  _shopOrderItemsTblRefsTable(_$Database db) => MultiTypedResultKey.fromTable(
+    db.shopOrderItemsTbl,
+    aliasName: $_aliasNameGenerator(
+      db.shopInfoTbl.id,
+      db.shopOrderItemsTbl.shopID,
+    ),
+  );
+
+  $$ShopOrderItemsTblTableProcessedTableManager get shopOrderItemsTblRefs {
+    final manager = $$ShopOrderItemsTblTableTableManager(
+      $_db,
+      $_db.shopOrderItemsTbl,
+    ).filter((f) => f.shopID.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _shopOrderItemsTblRefsTable($_db),
+    );
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -9037,6 +16706,81 @@ class $$ShopInfoTblTableFilterComposer
           }) => $$ShopProductTblTableFilterComposer(
             $db: $db,
             $table: $db.shopProductTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> shopImageTblRefs(
+    Expression<bool> Function($$ShopImageTblTableFilterComposer f) f,
+  ) {
+    final $$ShopImageTblTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.shopImageTbl,
+      getReferencedColumn: (t) => t.shopID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopImageTblTableFilterComposer(
+            $db: $db,
+            $table: $db.shopImageTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> shopOrderTblRefs(
+    Expression<bool> Function($$ShopOrderTblTableFilterComposer f) f,
+  ) {
+    final $$ShopOrderTblTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.shopOrderTbl,
+      getReferencedColumn: (t) => t.shopID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopOrderTblTableFilterComposer(
+            $db: $db,
+            $table: $db.shopOrderTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> shopOrderItemsTblRefs(
+    Expression<bool> Function($$ShopOrderItemsTblTableFilterComposer f) f,
+  ) {
+    final $$ShopOrderItemsTblTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.shopOrderItemsTbl,
+      getReferencedColumn: (t) => t.shopID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopOrderItemsTblTableFilterComposer(
+            $db: $db,
+            $table: $db.shopOrderItemsTbl,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -9543,6 +17287,82 @@ class $$ShopInfoTblTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> shopImageTblRefs<T extends Object>(
+    Expression<T> Function($$ShopImageTblTableAnnotationComposer a) f,
+  ) {
+    final $$ShopImageTblTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.shopImageTbl,
+      getReferencedColumn: (t) => t.shopID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopImageTblTableAnnotationComposer(
+            $db: $db,
+            $table: $db.shopImageTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> shopOrderTblRefs<T extends Object>(
+    Expression<T> Function($$ShopOrderTblTableAnnotationComposer a) f,
+  ) {
+    final $$ShopOrderTblTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.shopOrderTbl,
+      getReferencedColumn: (t) => t.shopID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopOrderTblTableAnnotationComposer(
+            $db: $db,
+            $table: $db.shopOrderTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> shopOrderItemsTblRefs<T extends Object>(
+    Expression<T> Function($$ShopOrderItemsTblTableAnnotationComposer a) f,
+  ) {
+    final $$ShopOrderItemsTblTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.shopOrderItemsTbl,
+          getReferencedColumn: (t) => t.shopID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopOrderItemsTblTableAnnotationComposer(
+                $db: $db,
+                $table: $db.shopOrderItemsTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$ShopInfoTblTableTableManager
@@ -9566,6 +17386,9 @@ class $$ShopInfoTblTableTableManager
             bool shopProductOptionsGroupTblRefs,
             bool shopBankAccountTblRefs,
             bool shopProductTblRefs,
+            bool shopImageTblRefs,
+            bool shopOrderTblRefs,
+            bool shopOrderItemsTblRefs,
           })
         > {
   $$ShopInfoTblTableTableManager(_$Database db, $ShopInfoTblTable table)
@@ -9730,6 +17553,9 @@ class $$ShopInfoTblTableTableManager
                 shopProductOptionsGroupTblRefs = false,
                 shopBankAccountTblRefs = false,
                 shopProductTblRefs = false,
+                shopImageTblRefs = false,
+                shopOrderTblRefs = false,
+                shopOrderItemsTblRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -9742,6 +17568,9 @@ class $$ShopInfoTblTableTableManager
                       db.shopProductOptionsGroupTbl,
                     if (shopBankAccountTblRefs) db.shopBankAccountTbl,
                     if (shopProductTblRefs) db.shopProductTbl,
+                    if (shopImageTblRefs) db.shopImageTbl,
+                    if (shopOrderTblRefs) db.shopOrderTbl,
+                    if (shopOrderItemsTblRefs) db.shopOrderItemsTbl,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -9893,6 +17722,69 @@ class $$ShopInfoTblTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (shopImageTblRefs)
+                        await $_getPrefetchedData<
+                          ShopInfoTblData,
+                          $ShopInfoTblTable,
+                          ShopImageTblData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ShopInfoTblTableReferences
+                              ._shopImageTblRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ShopInfoTblTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).shopImageTblRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.shopID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (shopOrderTblRefs)
+                        await $_getPrefetchedData<
+                          ShopInfoTblData,
+                          $ShopInfoTblTable,
+                          ShopOrderTblData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ShopInfoTblTableReferences
+                              ._shopOrderTblRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ShopInfoTblTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).shopOrderTblRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.shopID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (shopOrderItemsTblRefs)
+                        await $_getPrefetchedData<
+                          ShopInfoTblData,
+                          $ShopInfoTblTable,
+                          ShopOrderItemsTblData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ShopInfoTblTableReferences
+                              ._shopOrderItemsTblRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ShopInfoTblTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).shopOrderItemsTblRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.shopID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -9921,6 +17813,9 @@ typedef $$ShopInfoTblTableProcessedTableManager =
         bool shopProductOptionsGroupTblRefs,
         bool shopBankAccountTblRefs,
         bool shopProductTblRefs,
+        bool shopImageTblRefs,
+        bool shopOrderTblRefs,
+        bool shopOrderItemsTblRefs,
       })
     >;
 typedef $$ShopPhoneTblTableCreateCompanionBuilder =
@@ -12323,6 +20218,34 @@ final class $$ShopProductOptionsGroupDetailTblTableReferences
       manager.$state.copyWith(prefetchedData: [item]),
     );
   }
+
+  static MultiTypedResultKey<
+    $ShopProductOptionsTblTable,
+    List<ShopProductOptionsTblData>
+  >
+  _shopProductOptionsTblRefsTable(_$Database db) =>
+      MultiTypedResultKey.fromTable(
+        db.shopProductOptionsTbl,
+        aliasName: $_aliasNameGenerator(
+          db.shopProductOptionsGroupDetailTbl.id,
+          db.shopProductOptionsTbl.optionID,
+        ),
+      );
+
+  $$ShopProductOptionsTblTableProcessedTableManager
+  get shopProductOptionsTblRefs {
+    final manager = $$ShopProductOptionsTblTableTableManager(
+      $_db,
+      $_db.shopProductOptionsTbl,
+    ).filter((f) => f.optionID.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _shopProductOptionsTblRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$ShopProductOptionsGroupDetailTblTableFilterComposer
@@ -12442,6 +20365,32 @@ class $$ShopProductOptionsGroupDetailTblTableFilterComposer
               ),
         );
     return composer;
+  }
+
+  Expression<bool> shopProductOptionsTblRefs(
+    Expression<bool> Function($$ShopProductOptionsTblTableFilterComposer f) f,
+  ) {
+    final $$ShopProductOptionsTblTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.shopProductOptionsTbl,
+          getReferencedColumn: (t) => t.optionID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopProductOptionsTblTableFilterComposer(
+                $db: $db,
+                $table: $db.shopProductOptionsTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
   }
 }
 
@@ -12666,6 +20615,32 @@ class $$ShopProductOptionsGroupDetailTblTableAnnotationComposer
         );
     return composer;
   }
+
+  Expression<T> shopProductOptionsTblRefs<T extends Object>(
+    Expression<T> Function($$ShopProductOptionsTblTableAnnotationComposer a) f,
+  ) {
+    final $$ShopProductOptionsTblTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.shopProductOptionsTbl,
+          getReferencedColumn: (t) => t.optionID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopProductOptionsTblTableAnnotationComposer(
+                $db: $db,
+                $table: $db.shopProductOptionsTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$ShopProductOptionsGroupDetailTblTableTableManager
@@ -12684,7 +20659,7 @@ class $$ShopProductOptionsGroupDetailTblTableTableManager
             $$ShopProductOptionsGroupDetailTblTableReferences,
           ),
           ShopProductOptionsGroupDetailTblData,
-          PrefetchHooks Function({bool groupID})
+          PrefetchHooks Function({bool groupID, bool shopProductOptionsTblRefs})
         > {
   $$ShopProductOptionsGroupDetailTblTableTableManager(
     _$Database db,
@@ -12800,49 +20775,75 @@ class $$ShopProductOptionsGroupDetailTblTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({groupID = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (groupID) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.groupID,
-                                referencedTable:
-                                    $$ShopProductOptionsGroupDetailTblTableReferences
-                                        ._groupIDTable(db),
-                                referencedColumn:
-                                    $$ShopProductOptionsGroupDetailTblTableReferences
-                                        ._groupIDTable(db)
-                                        .id,
-                              )
-                              as T;
-                    }
+          prefetchHooksCallback:
+              ({groupID = false, shopProductOptionsTblRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (shopProductOptionsTblRefs) db.shopProductOptionsTbl,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (groupID) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.groupID,
+                                    referencedTable:
+                                        $$ShopProductOptionsGroupDetailTblTableReferences
+                                            ._groupIDTable(db),
+                                    referencedColumn:
+                                        $$ShopProductOptionsGroupDetailTblTableReferences
+                                            ._groupIDTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
 
-                    return state;
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (shopProductOptionsTblRefs)
+                        await $_getPrefetchedData<
+                          ShopProductOptionsGroupDetailTblData,
+                          $ShopProductOptionsGroupDetailTblTable,
+                          ShopProductOptionsTblData
+                        >(
+                          currentTable: table,
+                          referencedTable:
+                              $$ShopProductOptionsGroupDetailTblTableReferences
+                                  ._shopProductOptionsTblRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ShopProductOptionsGroupDetailTblTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).shopProductOptionsTblRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.optionID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
                   },
-              getPrefetchedDataCallback: (items) async {
-                return [];
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -12862,7 +20863,7 @@ typedef $$ShopProductOptionsGroupDetailTblTableProcessedTableManager =
         $$ShopProductOptionsGroupDetailTblTableReferences,
       ),
       ShopProductOptionsGroupDetailTblData,
-      PrefetchHooks Function({bool groupID})
+      PrefetchHooks Function({bool groupID, bool shopProductOptionsTblRefs})
     >;
 typedef $$ShopBankAccountTblTableCreateCompanionBuilder =
     ShopBankAccountTblCompanion Function({
@@ -13405,6 +21406,7 @@ typedef $$ShopProductTblTableCreateCompanionBuilder =
       Value<DateTime?> outStockTime,
       Value<DateTime?> hasStockTime,
       Value<int?> order,
+      Value<String?> imagePath,
       Value<DataStatus> dataStatus,
       Value<DateTime> createdTime,
       Value<DateTime?> updatedTime,
@@ -13436,6 +21438,7 @@ typedef $$ShopProductTblTableUpdateCompanionBuilder =
       Value<DateTime?> outStockTime,
       Value<DateTime?> hasStockTime,
       Value<int?> order,
+      Value<String?> imagePath,
       Value<DataStatus> dataStatus,
       Value<DateTime> createdTime,
       Value<DateTime?> updatedTime,
@@ -13468,6 +21471,34 @@ final class $$ShopProductTblTableReferences
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $ShopProductOptionsTblTable,
+    List<ShopProductOptionsTblData>
+  >
+  _shopProductOptionsTblRefsTable(_$Database db) =>
+      MultiTypedResultKey.fromTable(
+        db.shopProductOptionsTbl,
+        aliasName: $_aliasNameGenerator(
+          db.shopProductTbl.id,
+          db.shopProductOptionsTbl.productID,
+        ),
+      );
+
+  $$ShopProductOptionsTblTableProcessedTableManager
+  get shopProductOptionsTblRefs {
+    final manager = $$ShopProductOptionsTblTableTableManager(
+      $_db,
+      $_db.shopProductOptionsTbl,
+    ).filter((f) => f.productID.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _shopProductOptionsTblRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
     );
   }
 }
@@ -13591,6 +21622,11 @@ class $$ShopProductTblTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get imagePath => $composableBuilder(
+    column: $table.imagePath,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnWithTypeConverterFilters<DataStatus, DataStatus, String>
   get dataStatus => $composableBuilder(
     column: $table.dataStatus,
@@ -13638,6 +21674,32 @@ class $$ShopProductTblTableFilterComposer
           ),
     );
     return composer;
+  }
+
+  Expression<bool> shopProductOptionsTblRefs(
+    Expression<bool> Function($$ShopProductOptionsTblTableFilterComposer f) f,
+  ) {
+    final $$ShopProductOptionsTblTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.shopProductOptionsTbl,
+          getReferencedColumn: (t) => t.productID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopProductOptionsTblTableFilterComposer(
+                $db: $db,
+                $table: $db.shopProductOptionsTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
   }
 }
 
@@ -13757,6 +21819,11 @@ class $$ShopProductTblTableOrderingComposer
 
   ColumnOrderings<int> get order => $composableBuilder(
     column: $table.order,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get imagePath => $composableBuilder(
+    column: $table.imagePath,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -13906,6 +21973,620 @@ class $$ShopProductTblTableAnnotationComposer
   GeneratedColumn<int> get order =>
       $composableBuilder(column: $table.order, builder: (column) => column);
 
+  GeneratedColumn<String> get imagePath =>
+      $composableBuilder(column: $table.imagePath, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DataStatus, String> get dataStatus =>
+      $composableBuilder(
+        column: $table.dataStatus,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get deviceID =>
+      $composableBuilder(column: $table.deviceID, builder: (column) => column);
+
+  GeneratedColumn<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => column,
+  );
+
+  $$ShopInfoTblTableAnnotationComposer get shopID {
+    final $$ShopInfoTblTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.shopID,
+      referencedTable: $db.shopInfoTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopInfoTblTableAnnotationComposer(
+            $db: $db,
+            $table: $db.shopInfoTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> shopProductOptionsTblRefs<T extends Object>(
+    Expression<T> Function($$ShopProductOptionsTblTableAnnotationComposer a) f,
+  ) {
+    final $$ShopProductOptionsTblTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.shopProductOptionsTbl,
+          getReferencedColumn: (t) => t.productID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopProductOptionsTblTableAnnotationComposer(
+                $db: $db,
+                $table: $db.shopProductOptionsTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$ShopProductTblTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $ShopProductTblTable,
+          ShopProductTblData,
+          $$ShopProductTblTableFilterComposer,
+          $$ShopProductTblTableOrderingComposer,
+          $$ShopProductTblTableAnnotationComposer,
+          $$ShopProductTblTableCreateCompanionBuilder,
+          $$ShopProductTblTableUpdateCompanionBuilder,
+          (ShopProductTblData, $$ShopProductTblTableReferences),
+          ShopProductTblData,
+          PrefetchHooks Function({bool shopID, bool shopProductOptionsTblRefs})
+        > {
+  $$ShopProductTblTableTableManager(_$Database db, $ShopProductTblTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ShopProductTblTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ShopProductTblTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ShopProductTblTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> shopID = const Value.absent(),
+                Value<String?> name = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<String?> mainGroup = const Value.absent(),
+                Value<String?> subGroup = const Value.absent(),
+                Value<double?> unitPrice = const Value.absent(),
+                Value<String?> calcUnit = const Value.absent(),
+                Value<double?> unitPriceHome = const Value.absent(),
+                Value<String?> calcUnitHome = const Value.absent(),
+                Value<bool> allowTakeHome = const Value.absent(),
+                Value<bool> recommended = const Value.absent(),
+                Value<bool> cookItem = const Value.absent(),
+                Value<bool> isJFood = const Value.absent(),
+                Value<bool> isVegetFood = const Value.absent(),
+                Value<bool> isVeganFood = const Value.absent(),
+                Value<bool> glutenFree = const Value.absent(),
+                Value<bool> calcService = const Value.absent(),
+                Value<bool> closeSale = const Value.absent(),
+                Value<bool> outStock = const Value.absent(),
+                Value<DateTime?> outStockTime = const Value.absent(),
+                Value<DateTime?> hasStockTime = const Value.absent(),
+                Value<int?> order = const Value.absent(),
+                Value<String?> imagePath = const Value.absent(),
+                Value<DataStatus> dataStatus = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
+                Value<DateTime?> updatedTime = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
+                Value<String?> appVersion = const Value.absent(),
+              }) => ShopProductTblCompanion(
+                id: id,
+                shopID: shopID,
+                name: name,
+                description: description,
+                mainGroup: mainGroup,
+                subGroup: subGroup,
+                unitPrice: unitPrice,
+                calcUnit: calcUnit,
+                unitPriceHome: unitPriceHome,
+                calcUnitHome: calcUnitHome,
+                allowTakeHome: allowTakeHome,
+                recommended: recommended,
+                cookItem: cookItem,
+                isJFood: isJFood,
+                isVegetFood: isVegetFood,
+                isVeganFood: isVeganFood,
+                glutenFree: glutenFree,
+                calcService: calcService,
+                closeSale: closeSale,
+                outStock: outStock,
+                outStockTime: outStockTime,
+                hasStockTime: hasStockTime,
+                order: order,
+                imagePath: imagePath,
+                dataStatus: dataStatus,
+                createdTime: createdTime,
+                updatedTime: updatedTime,
+                deviceID: deviceID,
+                appVersion: appVersion,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int shopID,
+                Value<String?> name = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<String?> mainGroup = const Value.absent(),
+                Value<String?> subGroup = const Value.absent(),
+                Value<double?> unitPrice = const Value.absent(),
+                Value<String?> calcUnit = const Value.absent(),
+                Value<double?> unitPriceHome = const Value.absent(),
+                Value<String?> calcUnitHome = const Value.absent(),
+                Value<bool> allowTakeHome = const Value.absent(),
+                Value<bool> recommended = const Value.absent(),
+                Value<bool> cookItem = const Value.absent(),
+                Value<bool> isJFood = const Value.absent(),
+                Value<bool> isVegetFood = const Value.absent(),
+                Value<bool> isVeganFood = const Value.absent(),
+                Value<bool> glutenFree = const Value.absent(),
+                Value<bool> calcService = const Value.absent(),
+                Value<bool> closeSale = const Value.absent(),
+                Value<bool> outStock = const Value.absent(),
+                Value<DateTime?> outStockTime = const Value.absent(),
+                Value<DateTime?> hasStockTime = const Value.absent(),
+                Value<int?> order = const Value.absent(),
+                Value<String?> imagePath = const Value.absent(),
+                Value<DataStatus> dataStatus = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
+                Value<DateTime?> updatedTime = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
+                Value<String?> appVersion = const Value.absent(),
+              }) => ShopProductTblCompanion.insert(
+                id: id,
+                shopID: shopID,
+                name: name,
+                description: description,
+                mainGroup: mainGroup,
+                subGroup: subGroup,
+                unitPrice: unitPrice,
+                calcUnit: calcUnit,
+                unitPriceHome: unitPriceHome,
+                calcUnitHome: calcUnitHome,
+                allowTakeHome: allowTakeHome,
+                recommended: recommended,
+                cookItem: cookItem,
+                isJFood: isJFood,
+                isVegetFood: isVegetFood,
+                isVeganFood: isVeganFood,
+                glutenFree: glutenFree,
+                calcService: calcService,
+                closeSale: closeSale,
+                outStock: outStock,
+                outStockTime: outStockTime,
+                hasStockTime: hasStockTime,
+                order: order,
+                imagePath: imagePath,
+                dataStatus: dataStatus,
+                createdTime: createdTime,
+                updatedTime: updatedTime,
+                deviceID: deviceID,
+                appVersion: appVersion,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ShopProductTblTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({shopID = false, shopProductOptionsTblRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (shopProductOptionsTblRefs) db.shopProductOptionsTbl,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (shopID) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.shopID,
+                                    referencedTable:
+                                        $$ShopProductTblTableReferences
+                                            ._shopIDTable(db),
+                                    referencedColumn:
+                                        $$ShopProductTblTableReferences
+                                            ._shopIDTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (shopProductOptionsTblRefs)
+                        await $_getPrefetchedData<
+                          ShopProductTblData,
+                          $ShopProductTblTable,
+                          ShopProductOptionsTblData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ShopProductTblTableReferences
+                              ._shopProductOptionsTblRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ShopProductTblTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).shopProductOptionsTblRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.productID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$ShopProductTblTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $ShopProductTblTable,
+      ShopProductTblData,
+      $$ShopProductTblTableFilterComposer,
+      $$ShopProductTblTableOrderingComposer,
+      $$ShopProductTblTableAnnotationComposer,
+      $$ShopProductTblTableCreateCompanionBuilder,
+      $$ShopProductTblTableUpdateCompanionBuilder,
+      (ShopProductTblData, $$ShopProductTblTableReferences),
+      ShopProductTblData,
+      PrefetchHooks Function({bool shopID, bool shopProductOptionsTblRefs})
+    >;
+typedef $$ShopImageTblTableCreateCompanionBuilder =
+    ShopImageTblCompanion Function({
+      Value<int> id,
+      required int shopID,
+      Value<int?> refID,
+      Value<String?> bucket,
+      Value<String?> folder,
+      Value<String?> imageName,
+      Value<String?> imageVersion,
+      Value<int?> imageOrder,
+      Value<bool> isDefault,
+      Value<DataStatus> dataStatus,
+      Value<DateTime> createdTime,
+      Value<DateTime?> updatedTime,
+      Value<String?> deviceID,
+      Value<String?> appVersion,
+    });
+typedef $$ShopImageTblTableUpdateCompanionBuilder =
+    ShopImageTblCompanion Function({
+      Value<int> id,
+      Value<int> shopID,
+      Value<int?> refID,
+      Value<String?> bucket,
+      Value<String?> folder,
+      Value<String?> imageName,
+      Value<String?> imageVersion,
+      Value<int?> imageOrder,
+      Value<bool> isDefault,
+      Value<DataStatus> dataStatus,
+      Value<DateTime> createdTime,
+      Value<DateTime?> updatedTime,
+      Value<String?> deviceID,
+      Value<String?> appVersion,
+    });
+
+final class $$ShopImageTblTableReferences
+    extends BaseReferences<_$Database, $ShopImageTblTable, ShopImageTblData> {
+  $$ShopImageTblTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $ShopInfoTblTable _shopIDTable(_$Database db) =>
+      db.shopInfoTbl.createAlias(
+        $_aliasNameGenerator(db.shopImageTbl.shopID, db.shopInfoTbl.id),
+      );
+
+  $$ShopInfoTblTableProcessedTableManager get shopID {
+    final $_column = $_itemColumn<int>('shop_i_d')!;
+
+    final manager = $$ShopInfoTblTableTableManager(
+      $_db,
+      $_db.shopInfoTbl,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_shopIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$ShopImageTblTableFilterComposer
+    extends Composer<_$Database, $ShopImageTblTable> {
+  $$ShopImageTblTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get refID => $composableBuilder(
+    column: $table.refID,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get bucket => $composableBuilder(
+    column: $table.bucket,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get folder => $composableBuilder(
+    column: $table.folder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get imageName => $composableBuilder(
+    column: $table.imageName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get imageVersion => $composableBuilder(
+    column: $table.imageVersion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get imageOrder => $composableBuilder(
+    column: $table.imageOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isDefault => $composableBuilder(
+    column: $table.isDefault,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DataStatus, DataStatus, String>
+  get dataStatus => $composableBuilder(
+    column: $table.dataStatus,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$ShopInfoTblTableFilterComposer get shopID {
+    final $$ShopInfoTblTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.shopID,
+      referencedTable: $db.shopInfoTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopInfoTblTableFilterComposer(
+            $db: $db,
+            $table: $db.shopInfoTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ShopImageTblTableOrderingComposer
+    extends Composer<_$Database, $ShopImageTblTable> {
+  $$ShopImageTblTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get refID => $composableBuilder(
+    column: $table.refID,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get bucket => $composableBuilder(
+    column: $table.bucket,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get folder => $composableBuilder(
+    column: $table.folder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get imageName => $composableBuilder(
+    column: $table.imageName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get imageVersion => $composableBuilder(
+    column: $table.imageVersion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get imageOrder => $composableBuilder(
+    column: $table.imageOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isDefault => $composableBuilder(
+    column: $table.isDefault,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get dataStatus => $composableBuilder(
+    column: $table.dataStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$ShopInfoTblTableOrderingComposer get shopID {
+    final $$ShopInfoTblTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.shopID,
+      referencedTable: $db.shopInfoTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopInfoTblTableOrderingComposer(
+            $db: $db,
+            $table: $db.shopInfoTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ShopImageTblTableAnnotationComposer
+    extends Composer<_$Database, $ShopImageTblTable> {
+  $$ShopImageTblTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get refID =>
+      $composableBuilder(column: $table.refID, builder: (column) => column);
+
+  GeneratedColumn<String> get bucket =>
+      $composableBuilder(column: $table.bucket, builder: (column) => column);
+
+  GeneratedColumn<String> get folder =>
+      $composableBuilder(column: $table.folder, builder: (column) => column);
+
+  GeneratedColumn<String> get imageName =>
+      $composableBuilder(column: $table.imageName, builder: (column) => column);
+
+  GeneratedColumn<String> get imageVersion => $composableBuilder(
+    column: $table.imageVersion,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get imageOrder => $composableBuilder(
+    column: $table.imageOrder,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isDefault =>
+      $composableBuilder(column: $table.isDefault, builder: (column) => column);
+
   GeneratedColumnWithTypeConverter<DataStatus, String> get dataStatus =>
       $composableBuilder(
         column: $table.dataStatus,
@@ -13954,86 +22635,58 @@ class $$ShopProductTblTableAnnotationComposer
   }
 }
 
-class $$ShopProductTblTableTableManager
+class $$ShopImageTblTableTableManager
     extends
         RootTableManager<
           _$Database,
-          $ShopProductTblTable,
-          ShopProductTblData,
-          $$ShopProductTblTableFilterComposer,
-          $$ShopProductTblTableOrderingComposer,
-          $$ShopProductTblTableAnnotationComposer,
-          $$ShopProductTblTableCreateCompanionBuilder,
-          $$ShopProductTblTableUpdateCompanionBuilder,
-          (ShopProductTblData, $$ShopProductTblTableReferences),
-          ShopProductTblData,
+          $ShopImageTblTable,
+          ShopImageTblData,
+          $$ShopImageTblTableFilterComposer,
+          $$ShopImageTblTableOrderingComposer,
+          $$ShopImageTblTableAnnotationComposer,
+          $$ShopImageTblTableCreateCompanionBuilder,
+          $$ShopImageTblTableUpdateCompanionBuilder,
+          (ShopImageTblData, $$ShopImageTblTableReferences),
+          ShopImageTblData,
           PrefetchHooks Function({bool shopID})
         > {
-  $$ShopProductTblTableTableManager(_$Database db, $ShopProductTblTable table)
+  $$ShopImageTblTableTableManager(_$Database db, $ShopImageTblTable table)
     : super(
         TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$ShopProductTblTableFilterComposer($db: db, $table: table),
+              $$ShopImageTblTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$ShopProductTblTableOrderingComposer($db: db, $table: table),
+              $$ShopImageTblTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$ShopProductTblTableAnnotationComposer($db: db, $table: table),
+              $$ShopImageTblTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
                 Value<int> shopID = const Value.absent(),
-                Value<String?> name = const Value.absent(),
-                Value<String?> description = const Value.absent(),
-                Value<String?> mainGroup = const Value.absent(),
-                Value<String?> subGroup = const Value.absent(),
-                Value<double?> unitPrice = const Value.absent(),
-                Value<String?> calcUnit = const Value.absent(),
-                Value<double?> unitPriceHome = const Value.absent(),
-                Value<String?> calcUnitHome = const Value.absent(),
-                Value<bool> allowTakeHome = const Value.absent(),
-                Value<bool> recommended = const Value.absent(),
-                Value<bool> cookItem = const Value.absent(),
-                Value<bool> isJFood = const Value.absent(),
-                Value<bool> isVegetFood = const Value.absent(),
-                Value<bool> isVeganFood = const Value.absent(),
-                Value<bool> glutenFree = const Value.absent(),
-                Value<bool> calcService = const Value.absent(),
-                Value<bool> closeSale = const Value.absent(),
-                Value<bool> outStock = const Value.absent(),
-                Value<DateTime?> outStockTime = const Value.absent(),
-                Value<DateTime?> hasStockTime = const Value.absent(),
-                Value<int?> order = const Value.absent(),
+                Value<int?> refID = const Value.absent(),
+                Value<String?> bucket = const Value.absent(),
+                Value<String?> folder = const Value.absent(),
+                Value<String?> imageName = const Value.absent(),
+                Value<String?> imageVersion = const Value.absent(),
+                Value<int?> imageOrder = const Value.absent(),
+                Value<bool> isDefault = const Value.absent(),
                 Value<DataStatus> dataStatus = const Value.absent(),
                 Value<DateTime> createdTime = const Value.absent(),
                 Value<DateTime?> updatedTime = const Value.absent(),
                 Value<String?> deviceID = const Value.absent(),
                 Value<String?> appVersion = const Value.absent(),
-              }) => ShopProductTblCompanion(
+              }) => ShopImageTblCompanion(
                 id: id,
                 shopID: shopID,
-                name: name,
-                description: description,
-                mainGroup: mainGroup,
-                subGroup: subGroup,
-                unitPrice: unitPrice,
-                calcUnit: calcUnit,
-                unitPriceHome: unitPriceHome,
-                calcUnitHome: calcUnitHome,
-                allowTakeHome: allowTakeHome,
-                recommended: recommended,
-                cookItem: cookItem,
-                isJFood: isJFood,
-                isVegetFood: isVegetFood,
-                isVeganFood: isVeganFood,
-                glutenFree: glutenFree,
-                calcService: calcService,
-                closeSale: closeSale,
-                outStock: outStock,
-                outStockTime: outStockTime,
-                hasStockTime: hasStockTime,
-                order: order,
+                refID: refID,
+                bucket: bucket,
+                folder: folder,
+                imageName: imageName,
+                imageVersion: imageVersion,
+                imageOrder: imageOrder,
+                isDefault: isDefault,
                 dataStatus: dataStatus,
                 createdTime: createdTime,
                 updatedTime: updatedTime,
@@ -14044,56 +22697,28 @@ class $$ShopProductTblTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 required int shopID,
-                Value<String?> name = const Value.absent(),
-                Value<String?> description = const Value.absent(),
-                Value<String?> mainGroup = const Value.absent(),
-                Value<String?> subGroup = const Value.absent(),
-                Value<double?> unitPrice = const Value.absent(),
-                Value<String?> calcUnit = const Value.absent(),
-                Value<double?> unitPriceHome = const Value.absent(),
-                Value<String?> calcUnitHome = const Value.absent(),
-                Value<bool> allowTakeHome = const Value.absent(),
-                Value<bool> recommended = const Value.absent(),
-                Value<bool> cookItem = const Value.absent(),
-                Value<bool> isJFood = const Value.absent(),
-                Value<bool> isVegetFood = const Value.absent(),
-                Value<bool> isVeganFood = const Value.absent(),
-                Value<bool> glutenFree = const Value.absent(),
-                Value<bool> calcService = const Value.absent(),
-                Value<bool> closeSale = const Value.absent(),
-                Value<bool> outStock = const Value.absent(),
-                Value<DateTime?> outStockTime = const Value.absent(),
-                Value<DateTime?> hasStockTime = const Value.absent(),
-                Value<int?> order = const Value.absent(),
+                Value<int?> refID = const Value.absent(),
+                Value<String?> bucket = const Value.absent(),
+                Value<String?> folder = const Value.absent(),
+                Value<String?> imageName = const Value.absent(),
+                Value<String?> imageVersion = const Value.absent(),
+                Value<int?> imageOrder = const Value.absent(),
+                Value<bool> isDefault = const Value.absent(),
                 Value<DataStatus> dataStatus = const Value.absent(),
                 Value<DateTime> createdTime = const Value.absent(),
                 Value<DateTime?> updatedTime = const Value.absent(),
                 Value<String?> deviceID = const Value.absent(),
                 Value<String?> appVersion = const Value.absent(),
-              }) => ShopProductTblCompanion.insert(
+              }) => ShopImageTblCompanion.insert(
                 id: id,
                 shopID: shopID,
-                name: name,
-                description: description,
-                mainGroup: mainGroup,
-                subGroup: subGroup,
-                unitPrice: unitPrice,
-                calcUnit: calcUnit,
-                unitPriceHome: unitPriceHome,
-                calcUnitHome: calcUnitHome,
-                allowTakeHome: allowTakeHome,
-                recommended: recommended,
-                cookItem: cookItem,
-                isJFood: isJFood,
-                isVegetFood: isVegetFood,
-                isVeganFood: isVeganFood,
-                glutenFree: glutenFree,
-                calcService: calcService,
-                closeSale: closeSale,
-                outStock: outStock,
-                outStockTime: outStockTime,
-                hasStockTime: hasStockTime,
-                order: order,
+                refID: refID,
+                bucket: bucket,
+                folder: folder,
+                imageName: imageName,
+                imageVersion: imageVersion,
+                imageOrder: imageOrder,
+                isDefault: isDefault,
                 dataStatus: dataStatus,
                 createdTime: createdTime,
                 updatedTime: updatedTime,
@@ -14104,7 +22729,7 @@ class $$ShopProductTblTableTableManager
               .map(
                 (e) => (
                   e.readTable(table),
-                  $$ShopProductTblTableReferences(db, table, e),
+                  $$ShopImageTblTableReferences(db, table, e),
                 ),
               )
               .toList(),
@@ -14133,11 +22758,4020 @@ class $$ShopProductTblTableTableManager
                           state.withJoin(
                                 currentTable: table,
                                 currentColumn: table.shopID,
-                                referencedTable: $$ShopProductTblTableReferences
+                                referencedTable: $$ShopImageTblTableReferences
                                     ._shopIDTable(db),
+                                referencedColumn: $$ShopImageTblTableReferences
+                                    ._shopIDTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$ShopImageTblTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $ShopImageTblTable,
+      ShopImageTblData,
+      $$ShopImageTblTableFilterComposer,
+      $$ShopImageTblTableOrderingComposer,
+      $$ShopImageTblTableAnnotationComposer,
+      $$ShopImageTblTableCreateCompanionBuilder,
+      $$ShopImageTblTableUpdateCompanionBuilder,
+      (ShopImageTblData, $$ShopImageTblTableReferences),
+      ShopImageTblData,
+      PrefetchHooks Function({bool shopID})
+    >;
+typedef $$ShopProductOptionsTblTableCreateCompanionBuilder =
+    ShopProductOptionsTblCompanion Function({
+      Value<int> id,
+      required int productID,
+      required int optionID,
+      Value<int?> order,
+      Value<double?> priceAdded,
+      Value<bool> closeSale,
+      Value<bool> stockItem,
+      Value<bool> mustDefineQty,
+      Value<double?> maxQty,
+      Value<bool> outStock,
+      Value<DateTime?> outStockTime,
+      Value<DateTime?> hasStockTime,
+      Value<DataStatus> dataStatus,
+      Value<DateTime> createdTime,
+      Value<DateTime?> updatedTime,
+      Value<String?> deviceID,
+      Value<String?> appVersion,
+    });
+typedef $$ShopProductOptionsTblTableUpdateCompanionBuilder =
+    ShopProductOptionsTblCompanion Function({
+      Value<int> id,
+      Value<int> productID,
+      Value<int> optionID,
+      Value<int?> order,
+      Value<double?> priceAdded,
+      Value<bool> closeSale,
+      Value<bool> stockItem,
+      Value<bool> mustDefineQty,
+      Value<double?> maxQty,
+      Value<bool> outStock,
+      Value<DateTime?> outStockTime,
+      Value<DateTime?> hasStockTime,
+      Value<DataStatus> dataStatus,
+      Value<DateTime> createdTime,
+      Value<DateTime?> updatedTime,
+      Value<String?> deviceID,
+      Value<String?> appVersion,
+    });
+
+final class $$ShopProductOptionsTblTableReferences
+    extends
+        BaseReferences<
+          _$Database,
+          $ShopProductOptionsTblTable,
+          ShopProductOptionsTblData
+        > {
+  $$ShopProductOptionsTblTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ShopProductTblTable _productIDTable(_$Database db) =>
+      db.shopProductTbl.createAlias(
+        $_aliasNameGenerator(
+          db.shopProductOptionsTbl.productID,
+          db.shopProductTbl.id,
+        ),
+      );
+
+  $$ShopProductTblTableProcessedTableManager get productID {
+    final $_column = $_itemColumn<int>('product_i_d')!;
+
+    final manager = $$ShopProductTblTableTableManager(
+      $_db,
+      $_db.shopProductTbl,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_productIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $ShopProductOptionsGroupDetailTblTable _optionIDTable(_$Database db) =>
+      db.shopProductOptionsGroupDetailTbl.createAlias(
+        $_aliasNameGenerator(
+          db.shopProductOptionsTbl.optionID,
+          db.shopProductOptionsGroupDetailTbl.id,
+        ),
+      );
+
+  $$ShopProductOptionsGroupDetailTblTableProcessedTableManager get optionID {
+    final $_column = $_itemColumn<int>('option_i_d')!;
+
+    final manager = $$ShopProductOptionsGroupDetailTblTableTableManager(
+      $_db,
+      $_db.shopProductOptionsGroupDetailTbl,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_optionIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $ShopOrderItemOptionsTblTable,
+    List<ShopOrderItemOptionsTblData>
+  >
+  _shopOrderItemOptionsTblRefsTable(_$Database db) =>
+      MultiTypedResultKey.fromTable(
+        db.shopOrderItemOptionsTbl,
+        aliasName: $_aliasNameGenerator(
+          db.shopProductOptionsTbl.id,
+          db.shopOrderItemOptionsTbl.optionID,
+        ),
+      );
+
+  $$ShopOrderItemOptionsTblTableProcessedTableManager
+  get shopOrderItemOptionsTblRefs {
+    final manager = $$ShopOrderItemOptionsTblTableTableManager(
+      $_db,
+      $_db.shopOrderItemOptionsTbl,
+    ).filter((f) => f.optionID.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _shopOrderItemOptionsTblRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$ShopProductOptionsTblTableFilterComposer
+    extends Composer<_$Database, $ShopProductOptionsTblTable> {
+  $$ShopProductOptionsTblTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get order => $composableBuilder(
+    column: $table.order,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get priceAdded => $composableBuilder(
+    column: $table.priceAdded,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get closeSale => $composableBuilder(
+    column: $table.closeSale,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get stockItem => $composableBuilder(
+    column: $table.stockItem,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get mustDefineQty => $composableBuilder(
+    column: $table.mustDefineQty,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get maxQty => $composableBuilder(
+    column: $table.maxQty,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get outStock => $composableBuilder(
+    column: $table.outStock,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get outStockTime => $composableBuilder(
+    column: $table.outStockTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get hasStockTime => $composableBuilder(
+    column: $table.hasStockTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DataStatus, DataStatus, String>
+  get dataStatus => $composableBuilder(
+    column: $table.dataStatus,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$ShopProductTblTableFilterComposer get productID {
+    final $$ShopProductTblTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.productID,
+      referencedTable: $db.shopProductTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopProductTblTableFilterComposer(
+            $db: $db,
+            $table: $db.shopProductTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$ShopProductOptionsGroupDetailTblTableFilterComposer get optionID {
+    final $$ShopProductOptionsGroupDetailTblTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.optionID,
+          referencedTable: $db.shopProductOptionsGroupDetailTbl,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopProductOptionsGroupDetailTblTableFilterComposer(
+                $db: $db,
+                $table: $db.shopProductOptionsGroupDetailTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+
+  Expression<bool> shopOrderItemOptionsTblRefs(
+    Expression<bool> Function($$ShopOrderItemOptionsTblTableFilterComposer f) f,
+  ) {
+    final $$ShopOrderItemOptionsTblTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.shopOrderItemOptionsTbl,
+          getReferencedColumn: (t) => t.optionID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopOrderItemOptionsTblTableFilterComposer(
+                $db: $db,
+                $table: $db.shopOrderItemOptionsTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$ShopProductOptionsTblTableOrderingComposer
+    extends Composer<_$Database, $ShopProductOptionsTblTable> {
+  $$ShopProductOptionsTblTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get order => $composableBuilder(
+    column: $table.order,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get priceAdded => $composableBuilder(
+    column: $table.priceAdded,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get closeSale => $composableBuilder(
+    column: $table.closeSale,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get stockItem => $composableBuilder(
+    column: $table.stockItem,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get mustDefineQty => $composableBuilder(
+    column: $table.mustDefineQty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get maxQty => $composableBuilder(
+    column: $table.maxQty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get outStock => $composableBuilder(
+    column: $table.outStock,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get outStockTime => $composableBuilder(
+    column: $table.outStockTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get hasStockTime => $composableBuilder(
+    column: $table.hasStockTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get dataStatus => $composableBuilder(
+    column: $table.dataStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$ShopProductTblTableOrderingComposer get productID {
+    final $$ShopProductTblTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.productID,
+      referencedTable: $db.shopProductTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopProductTblTableOrderingComposer(
+            $db: $db,
+            $table: $db.shopProductTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$ShopProductOptionsGroupDetailTblTableOrderingComposer get optionID {
+    final $$ShopProductOptionsGroupDetailTblTableOrderingComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.optionID,
+          referencedTable: $db.shopProductOptionsGroupDetailTbl,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopProductOptionsGroupDetailTblTableOrderingComposer(
+                $db: $db,
+                $table: $db.shopProductOptionsGroupDetailTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+}
+
+class $$ShopProductOptionsTblTableAnnotationComposer
+    extends Composer<_$Database, $ShopProductOptionsTblTable> {
+  $$ShopProductOptionsTblTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get order =>
+      $composableBuilder(column: $table.order, builder: (column) => column);
+
+  GeneratedColumn<double> get priceAdded => $composableBuilder(
+    column: $table.priceAdded,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get closeSale =>
+      $composableBuilder(column: $table.closeSale, builder: (column) => column);
+
+  GeneratedColumn<bool> get stockItem =>
+      $composableBuilder(column: $table.stockItem, builder: (column) => column);
+
+  GeneratedColumn<bool> get mustDefineQty => $composableBuilder(
+    column: $table.mustDefineQty,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get maxQty =>
+      $composableBuilder(column: $table.maxQty, builder: (column) => column);
+
+  GeneratedColumn<bool> get outStock =>
+      $composableBuilder(column: $table.outStock, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get outStockTime => $composableBuilder(
+    column: $table.outStockTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get hasStockTime => $composableBuilder(
+    column: $table.hasStockTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<DataStatus, String> get dataStatus =>
+      $composableBuilder(
+        column: $table.dataStatus,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get deviceID =>
+      $composableBuilder(column: $table.deviceID, builder: (column) => column);
+
+  GeneratedColumn<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => column,
+  );
+
+  $$ShopProductTblTableAnnotationComposer get productID {
+    final $$ShopProductTblTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.productID,
+      referencedTable: $db.shopProductTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopProductTblTableAnnotationComposer(
+            $db: $db,
+            $table: $db.shopProductTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$ShopProductOptionsGroupDetailTblTableAnnotationComposer get optionID {
+    final $$ShopProductOptionsGroupDetailTblTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.optionID,
+          referencedTable: $db.shopProductOptionsGroupDetailTbl,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopProductOptionsGroupDetailTblTableAnnotationComposer(
+                $db: $db,
+                $table: $db.shopProductOptionsGroupDetailTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+
+  Expression<T> shopOrderItemOptionsTblRefs<T extends Object>(
+    Expression<T> Function($$ShopOrderItemOptionsTblTableAnnotationComposer a)
+    f,
+  ) {
+    final $$ShopOrderItemOptionsTblTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.shopOrderItemOptionsTbl,
+          getReferencedColumn: (t) => t.optionID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopOrderItemOptionsTblTableAnnotationComposer(
+                $db: $db,
+                $table: $db.shopOrderItemOptionsTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$ShopProductOptionsTblTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $ShopProductOptionsTblTable,
+          ShopProductOptionsTblData,
+          $$ShopProductOptionsTblTableFilterComposer,
+          $$ShopProductOptionsTblTableOrderingComposer,
+          $$ShopProductOptionsTblTableAnnotationComposer,
+          $$ShopProductOptionsTblTableCreateCompanionBuilder,
+          $$ShopProductOptionsTblTableUpdateCompanionBuilder,
+          (ShopProductOptionsTblData, $$ShopProductOptionsTblTableReferences),
+          ShopProductOptionsTblData,
+          PrefetchHooks Function({
+            bool productID,
+            bool optionID,
+            bool shopOrderItemOptionsTblRefs,
+          })
+        > {
+  $$ShopProductOptionsTblTableTableManager(
+    _$Database db,
+    $ShopProductOptionsTblTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ShopProductOptionsTblTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$ShopProductOptionsTblTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$ShopProductOptionsTblTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> productID = const Value.absent(),
+                Value<int> optionID = const Value.absent(),
+                Value<int?> order = const Value.absent(),
+                Value<double?> priceAdded = const Value.absent(),
+                Value<bool> closeSale = const Value.absent(),
+                Value<bool> stockItem = const Value.absent(),
+                Value<bool> mustDefineQty = const Value.absent(),
+                Value<double?> maxQty = const Value.absent(),
+                Value<bool> outStock = const Value.absent(),
+                Value<DateTime?> outStockTime = const Value.absent(),
+                Value<DateTime?> hasStockTime = const Value.absent(),
+                Value<DataStatus> dataStatus = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
+                Value<DateTime?> updatedTime = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
+                Value<String?> appVersion = const Value.absent(),
+              }) => ShopProductOptionsTblCompanion(
+                id: id,
+                productID: productID,
+                optionID: optionID,
+                order: order,
+                priceAdded: priceAdded,
+                closeSale: closeSale,
+                stockItem: stockItem,
+                mustDefineQty: mustDefineQty,
+                maxQty: maxQty,
+                outStock: outStock,
+                outStockTime: outStockTime,
+                hasStockTime: hasStockTime,
+                dataStatus: dataStatus,
+                createdTime: createdTime,
+                updatedTime: updatedTime,
+                deviceID: deviceID,
+                appVersion: appVersion,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int productID,
+                required int optionID,
+                Value<int?> order = const Value.absent(),
+                Value<double?> priceAdded = const Value.absent(),
+                Value<bool> closeSale = const Value.absent(),
+                Value<bool> stockItem = const Value.absent(),
+                Value<bool> mustDefineQty = const Value.absent(),
+                Value<double?> maxQty = const Value.absent(),
+                Value<bool> outStock = const Value.absent(),
+                Value<DateTime?> outStockTime = const Value.absent(),
+                Value<DateTime?> hasStockTime = const Value.absent(),
+                Value<DataStatus> dataStatus = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
+                Value<DateTime?> updatedTime = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
+                Value<String?> appVersion = const Value.absent(),
+              }) => ShopProductOptionsTblCompanion.insert(
+                id: id,
+                productID: productID,
+                optionID: optionID,
+                order: order,
+                priceAdded: priceAdded,
+                closeSale: closeSale,
+                stockItem: stockItem,
+                mustDefineQty: mustDefineQty,
+                maxQty: maxQty,
+                outStock: outStock,
+                outStockTime: outStockTime,
+                hasStockTime: hasStockTime,
+                dataStatus: dataStatus,
+                createdTime: createdTime,
+                updatedTime: updatedTime,
+                deviceID: deviceID,
+                appVersion: appVersion,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ShopProductOptionsTblTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({
+                productID = false,
+                optionID = false,
+                shopOrderItemOptionsTblRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (shopOrderItemOptionsTblRefs) db.shopOrderItemOptionsTbl,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (productID) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.productID,
+                                    referencedTable:
+                                        $$ShopProductOptionsTblTableReferences
+                                            ._productIDTable(db),
+                                    referencedColumn:
+                                        $$ShopProductOptionsTblTableReferences
+                                            ._productIDTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (optionID) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.optionID,
+                                    referencedTable:
+                                        $$ShopProductOptionsTblTableReferences
+                                            ._optionIDTable(db),
+                                    referencedColumn:
+                                        $$ShopProductOptionsTblTableReferences
+                                            ._optionIDTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (shopOrderItemOptionsTblRefs)
+                        await $_getPrefetchedData<
+                          ShopProductOptionsTblData,
+                          $ShopProductOptionsTblTable,
+                          ShopOrderItemOptionsTblData
+                        >(
+                          currentTable: table,
+                          referencedTable:
+                              $$ShopProductOptionsTblTableReferences
+                                  ._shopOrderItemOptionsTblRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ShopProductOptionsTblTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).shopOrderItemOptionsTblRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.optionID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$ShopProductOptionsTblTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $ShopProductOptionsTblTable,
+      ShopProductOptionsTblData,
+      $$ShopProductOptionsTblTableFilterComposer,
+      $$ShopProductOptionsTblTableOrderingComposer,
+      $$ShopProductOptionsTblTableAnnotationComposer,
+      $$ShopProductOptionsTblTableCreateCompanionBuilder,
+      $$ShopProductOptionsTblTableUpdateCompanionBuilder,
+      (ShopProductOptionsTblData, $$ShopProductOptionsTblTableReferences),
+      ShopProductOptionsTblData,
+      PrefetchHooks Function({
+        bool productID,
+        bool optionID,
+        bool shopOrderItemOptionsTblRefs,
+      })
+    >;
+typedef $$ShopOrderTblTableCreateCompanionBuilder =
+    ShopOrderTblCompanion Function({
+      Value<int> id,
+      required int shopID,
+      Value<int?> tableID,
+      Value<int?> orderNo,
+      Value<String?> orderNoChar,
+      Value<String?> orderCode,
+      Value<DateTime?> orderDate,
+      Value<int?> receiptNo,
+      Value<String?> receiptNoChar,
+      Value<DateTime?> receiptDate,
+      Value<int?> seatNumber,
+      Value<String?> note,
+      Value<double?> serviceAmount,
+      Value<double?> totalPrice,
+      Value<double?> discountPercent,
+      Value<double?> discountValue,
+      Value<ServiceChargeMethod?> serviceChargeMethod,
+      Value<bool> serviceCalcTakehome,
+      Value<bool> serviceCalcAll,
+      Value<double?> servicePercent,
+      Value<double?> serviceValue,
+      Value<bool> vatInside,
+      Value<double?> taxPercent,
+      Value<double?> taxValue,
+      Value<double?> netAmount,
+      Value<OrderStatus> status,
+      Value<PaymentStatus> payStatus,
+      Value<DateTime?> requestOrderTime,
+      Value<String?> requestOrderBy,
+      Value<DateTime?> orderedTime,
+      Value<String?> orderedBy,
+      Value<DateTime?> billedTime,
+      Value<String?> billedBy,
+      Value<DateTime?> paidTime,
+      Value<String?> paidBy,
+      Value<DataStatus> dataStatus,
+      Value<DateTime> createdTime,
+      Value<DateTime?> updatedTime,
+      Value<String?> deviceID,
+      Value<String?> appVersion,
+    });
+typedef $$ShopOrderTblTableUpdateCompanionBuilder =
+    ShopOrderTblCompanion Function({
+      Value<int> id,
+      Value<int> shopID,
+      Value<int?> tableID,
+      Value<int?> orderNo,
+      Value<String?> orderNoChar,
+      Value<String?> orderCode,
+      Value<DateTime?> orderDate,
+      Value<int?> receiptNo,
+      Value<String?> receiptNoChar,
+      Value<DateTime?> receiptDate,
+      Value<int?> seatNumber,
+      Value<String?> note,
+      Value<double?> serviceAmount,
+      Value<double?> totalPrice,
+      Value<double?> discountPercent,
+      Value<double?> discountValue,
+      Value<ServiceChargeMethod?> serviceChargeMethod,
+      Value<bool> serviceCalcTakehome,
+      Value<bool> serviceCalcAll,
+      Value<double?> servicePercent,
+      Value<double?> serviceValue,
+      Value<bool> vatInside,
+      Value<double?> taxPercent,
+      Value<double?> taxValue,
+      Value<double?> netAmount,
+      Value<OrderStatus> status,
+      Value<PaymentStatus> payStatus,
+      Value<DateTime?> requestOrderTime,
+      Value<String?> requestOrderBy,
+      Value<DateTime?> orderedTime,
+      Value<String?> orderedBy,
+      Value<DateTime?> billedTime,
+      Value<String?> billedBy,
+      Value<DateTime?> paidTime,
+      Value<String?> paidBy,
+      Value<DataStatus> dataStatus,
+      Value<DateTime> createdTime,
+      Value<DateTime?> updatedTime,
+      Value<String?> deviceID,
+      Value<String?> appVersion,
+    });
+
+final class $$ShopOrderTblTableReferences
+    extends BaseReferences<_$Database, $ShopOrderTblTable, ShopOrderTblData> {
+  $$ShopOrderTblTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $ShopInfoTblTable _shopIDTable(_$Database db) =>
+      db.shopInfoTbl.createAlias(
+        $_aliasNameGenerator(db.shopOrderTbl.shopID, db.shopInfoTbl.id),
+      );
+
+  $$ShopInfoTblTableProcessedTableManager get shopID {
+    final $_column = $_itemColumn<int>('shop_i_d')!;
+
+    final manager = $$ShopInfoTblTableTableManager(
+      $_db,
+      $_db.shopInfoTbl,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_shopIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $ShopOrderItemsTblTable,
+    List<ShopOrderItemsTblData>
+  >
+  _shopOrderItemsTblRefsTable(_$Database db) => MultiTypedResultKey.fromTable(
+    db.shopOrderItemsTbl,
+    aliasName: $_aliasNameGenerator(
+      db.shopOrderTbl.id,
+      db.shopOrderItemsTbl.orderID,
+    ),
+  );
+
+  $$ShopOrderItemsTblTableProcessedTableManager get shopOrderItemsTblRefs {
+    final manager = $$ShopOrderItemsTblTableTableManager(
+      $_db,
+      $_db.shopOrderItemsTbl,
+    ).filter((f) => f.orderID.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _shopOrderItemsTblRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$ShopOrderTblTableFilterComposer
+    extends Composer<_$Database, $ShopOrderTblTable> {
+  $$ShopOrderTblTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get tableID => $composableBuilder(
+    column: $table.tableID,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get orderNo => $composableBuilder(
+    column: $table.orderNo,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get orderNoChar => $composableBuilder(
+    column: $table.orderNoChar,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get orderCode => $composableBuilder(
+    column: $table.orderCode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get orderDate => $composableBuilder(
+    column: $table.orderDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get receiptNo => $composableBuilder(
+    column: $table.receiptNo,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get receiptNoChar => $composableBuilder(
+    column: $table.receiptNoChar,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get receiptDate => $composableBuilder(
+    column: $table.receiptDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get seatNumber => $composableBuilder(
+    column: $table.seatNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get serviceAmount => $composableBuilder(
+    column: $table.serviceAmount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get totalPrice => $composableBuilder(
+    column: $table.totalPrice,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get discountPercent => $composableBuilder(
+    column: $table.discountPercent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get discountValue => $composableBuilder(
+    column: $table.discountValue,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    ServiceChargeMethod?,
+    ServiceChargeMethod,
+    String
+  >
+  get serviceChargeMethod => $composableBuilder(
+    column: $table.serviceChargeMethod,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<bool> get serviceCalcTakehome => $composableBuilder(
+    column: $table.serviceCalcTakehome,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get serviceCalcAll => $composableBuilder(
+    column: $table.serviceCalcAll,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get servicePercent => $composableBuilder(
+    column: $table.servicePercent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get serviceValue => $composableBuilder(
+    column: $table.serviceValue,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get vatInside => $composableBuilder(
+    column: $table.vatInside,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get taxPercent => $composableBuilder(
+    column: $table.taxPercent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get taxValue => $composableBuilder(
+    column: $table.taxValue,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get netAmount => $composableBuilder(
+    column: $table.netAmount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<OrderStatus, OrderStatus, String> get status =>
+      $composableBuilder(
+        column: $table.status,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnWithTypeConverterFilters<PaymentStatus, PaymentStatus, String>
+  get payStatus => $composableBuilder(
+    column: $table.payStatus,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<DateTime> get requestOrderTime => $composableBuilder(
+    column: $table.requestOrderTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get requestOrderBy => $composableBuilder(
+    column: $table.requestOrderBy,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get orderedTime => $composableBuilder(
+    column: $table.orderedTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get orderedBy => $composableBuilder(
+    column: $table.orderedBy,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get billedTime => $composableBuilder(
+    column: $table.billedTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get billedBy => $composableBuilder(
+    column: $table.billedBy,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get paidTime => $composableBuilder(
+    column: $table.paidTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get paidBy => $composableBuilder(
+    column: $table.paidBy,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DataStatus, DataStatus, String>
+  get dataStatus => $composableBuilder(
+    column: $table.dataStatus,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$ShopInfoTblTableFilterComposer get shopID {
+    final $$ShopInfoTblTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.shopID,
+      referencedTable: $db.shopInfoTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopInfoTblTableFilterComposer(
+            $db: $db,
+            $table: $db.shopInfoTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> shopOrderItemsTblRefs(
+    Expression<bool> Function($$ShopOrderItemsTblTableFilterComposer f) f,
+  ) {
+    final $$ShopOrderItemsTblTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.shopOrderItemsTbl,
+      getReferencedColumn: (t) => t.orderID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopOrderItemsTblTableFilterComposer(
+            $db: $db,
+            $table: $db.shopOrderItemsTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$ShopOrderTblTableOrderingComposer
+    extends Composer<_$Database, $ShopOrderTblTable> {
+  $$ShopOrderTblTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get tableID => $composableBuilder(
+    column: $table.tableID,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get orderNo => $composableBuilder(
+    column: $table.orderNo,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get orderNoChar => $composableBuilder(
+    column: $table.orderNoChar,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get orderCode => $composableBuilder(
+    column: $table.orderCode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get orderDate => $composableBuilder(
+    column: $table.orderDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get receiptNo => $composableBuilder(
+    column: $table.receiptNo,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get receiptNoChar => $composableBuilder(
+    column: $table.receiptNoChar,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get receiptDate => $composableBuilder(
+    column: $table.receiptDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get seatNumber => $composableBuilder(
+    column: $table.seatNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get serviceAmount => $composableBuilder(
+    column: $table.serviceAmount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get totalPrice => $composableBuilder(
+    column: $table.totalPrice,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get discountPercent => $composableBuilder(
+    column: $table.discountPercent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get discountValue => $composableBuilder(
+    column: $table.discountValue,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get serviceChargeMethod => $composableBuilder(
+    column: $table.serviceChargeMethod,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get serviceCalcTakehome => $composableBuilder(
+    column: $table.serviceCalcTakehome,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get serviceCalcAll => $composableBuilder(
+    column: $table.serviceCalcAll,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get servicePercent => $composableBuilder(
+    column: $table.servicePercent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get serviceValue => $composableBuilder(
+    column: $table.serviceValue,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get vatInside => $composableBuilder(
+    column: $table.vatInside,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get taxPercent => $composableBuilder(
+    column: $table.taxPercent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get taxValue => $composableBuilder(
+    column: $table.taxValue,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get netAmount => $composableBuilder(
+    column: $table.netAmount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get payStatus => $composableBuilder(
+    column: $table.payStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get requestOrderTime => $composableBuilder(
+    column: $table.requestOrderTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get requestOrderBy => $composableBuilder(
+    column: $table.requestOrderBy,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get orderedTime => $composableBuilder(
+    column: $table.orderedTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get orderedBy => $composableBuilder(
+    column: $table.orderedBy,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get billedTime => $composableBuilder(
+    column: $table.billedTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get billedBy => $composableBuilder(
+    column: $table.billedBy,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get paidTime => $composableBuilder(
+    column: $table.paidTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get paidBy => $composableBuilder(
+    column: $table.paidBy,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get dataStatus => $composableBuilder(
+    column: $table.dataStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$ShopInfoTblTableOrderingComposer get shopID {
+    final $$ShopInfoTblTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.shopID,
+      referencedTable: $db.shopInfoTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopInfoTblTableOrderingComposer(
+            $db: $db,
+            $table: $db.shopInfoTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ShopOrderTblTableAnnotationComposer
+    extends Composer<_$Database, $ShopOrderTblTable> {
+  $$ShopOrderTblTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get tableID =>
+      $composableBuilder(column: $table.tableID, builder: (column) => column);
+
+  GeneratedColumn<int> get orderNo =>
+      $composableBuilder(column: $table.orderNo, builder: (column) => column);
+
+  GeneratedColumn<String> get orderNoChar => $composableBuilder(
+    column: $table.orderNoChar,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get orderCode =>
+      $composableBuilder(column: $table.orderCode, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get orderDate =>
+      $composableBuilder(column: $table.orderDate, builder: (column) => column);
+
+  GeneratedColumn<int> get receiptNo =>
+      $composableBuilder(column: $table.receiptNo, builder: (column) => column);
+
+  GeneratedColumn<String> get receiptNoChar => $composableBuilder(
+    column: $table.receiptNoChar,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get receiptDate => $composableBuilder(
+    column: $table.receiptDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get seatNumber => $composableBuilder(
+    column: $table.seatNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<double> get serviceAmount => $composableBuilder(
+    column: $table.serviceAmount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get totalPrice => $composableBuilder(
+    column: $table.totalPrice,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get discountPercent => $composableBuilder(
+    column: $table.discountPercent,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get discountValue => $composableBuilder(
+    column: $table.discountValue,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<ServiceChargeMethod?, String>
+  get serviceChargeMethod => $composableBuilder(
+    column: $table.serviceChargeMethod,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get serviceCalcTakehome => $composableBuilder(
+    column: $table.serviceCalcTakehome,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get serviceCalcAll => $composableBuilder(
+    column: $table.serviceCalcAll,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get servicePercent => $composableBuilder(
+    column: $table.servicePercent,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get serviceValue => $composableBuilder(
+    column: $table.serviceValue,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get vatInside =>
+      $composableBuilder(column: $table.vatInside, builder: (column) => column);
+
+  GeneratedColumn<double> get taxPercent => $composableBuilder(
+    column: $table.taxPercent,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get taxValue =>
+      $composableBuilder(column: $table.taxValue, builder: (column) => column);
+
+  GeneratedColumn<double> get netAmount =>
+      $composableBuilder(column: $table.netAmount, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<OrderStatus, String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<PaymentStatus, String> get payStatus =>
+      $composableBuilder(column: $table.payStatus, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get requestOrderTime => $composableBuilder(
+    column: $table.requestOrderTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get requestOrderBy => $composableBuilder(
+    column: $table.requestOrderBy,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get orderedTime => $composableBuilder(
+    column: $table.orderedTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get orderedBy =>
+      $composableBuilder(column: $table.orderedBy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get billedTime => $composableBuilder(
+    column: $table.billedTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get billedBy =>
+      $composableBuilder(column: $table.billedBy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get paidTime =>
+      $composableBuilder(column: $table.paidTime, builder: (column) => column);
+
+  GeneratedColumn<String> get paidBy =>
+      $composableBuilder(column: $table.paidBy, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DataStatus, String> get dataStatus =>
+      $composableBuilder(
+        column: $table.dataStatus,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get deviceID =>
+      $composableBuilder(column: $table.deviceID, builder: (column) => column);
+
+  GeneratedColumn<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => column,
+  );
+
+  $$ShopInfoTblTableAnnotationComposer get shopID {
+    final $$ShopInfoTblTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.shopID,
+      referencedTable: $db.shopInfoTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopInfoTblTableAnnotationComposer(
+            $db: $db,
+            $table: $db.shopInfoTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> shopOrderItemsTblRefs<T extends Object>(
+    Expression<T> Function($$ShopOrderItemsTblTableAnnotationComposer a) f,
+  ) {
+    final $$ShopOrderItemsTblTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.shopOrderItemsTbl,
+          getReferencedColumn: (t) => t.orderID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopOrderItemsTblTableAnnotationComposer(
+                $db: $db,
+                $table: $db.shopOrderItemsTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$ShopOrderTblTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $ShopOrderTblTable,
+          ShopOrderTblData,
+          $$ShopOrderTblTableFilterComposer,
+          $$ShopOrderTblTableOrderingComposer,
+          $$ShopOrderTblTableAnnotationComposer,
+          $$ShopOrderTblTableCreateCompanionBuilder,
+          $$ShopOrderTblTableUpdateCompanionBuilder,
+          (ShopOrderTblData, $$ShopOrderTblTableReferences),
+          ShopOrderTblData,
+          PrefetchHooks Function({bool shopID, bool shopOrderItemsTblRefs})
+        > {
+  $$ShopOrderTblTableTableManager(_$Database db, $ShopOrderTblTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ShopOrderTblTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ShopOrderTblTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ShopOrderTblTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> shopID = const Value.absent(),
+                Value<int?> tableID = const Value.absent(),
+                Value<int?> orderNo = const Value.absent(),
+                Value<String?> orderNoChar = const Value.absent(),
+                Value<String?> orderCode = const Value.absent(),
+                Value<DateTime?> orderDate = const Value.absent(),
+                Value<int?> receiptNo = const Value.absent(),
+                Value<String?> receiptNoChar = const Value.absent(),
+                Value<DateTime?> receiptDate = const Value.absent(),
+                Value<int?> seatNumber = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<double?> serviceAmount = const Value.absent(),
+                Value<double?> totalPrice = const Value.absent(),
+                Value<double?> discountPercent = const Value.absent(),
+                Value<double?> discountValue = const Value.absent(),
+                Value<ServiceChargeMethod?> serviceChargeMethod =
+                    const Value.absent(),
+                Value<bool> serviceCalcTakehome = const Value.absent(),
+                Value<bool> serviceCalcAll = const Value.absent(),
+                Value<double?> servicePercent = const Value.absent(),
+                Value<double?> serviceValue = const Value.absent(),
+                Value<bool> vatInside = const Value.absent(),
+                Value<double?> taxPercent = const Value.absent(),
+                Value<double?> taxValue = const Value.absent(),
+                Value<double?> netAmount = const Value.absent(),
+                Value<OrderStatus> status = const Value.absent(),
+                Value<PaymentStatus> payStatus = const Value.absent(),
+                Value<DateTime?> requestOrderTime = const Value.absent(),
+                Value<String?> requestOrderBy = const Value.absent(),
+                Value<DateTime?> orderedTime = const Value.absent(),
+                Value<String?> orderedBy = const Value.absent(),
+                Value<DateTime?> billedTime = const Value.absent(),
+                Value<String?> billedBy = const Value.absent(),
+                Value<DateTime?> paidTime = const Value.absent(),
+                Value<String?> paidBy = const Value.absent(),
+                Value<DataStatus> dataStatus = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
+                Value<DateTime?> updatedTime = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
+                Value<String?> appVersion = const Value.absent(),
+              }) => ShopOrderTblCompanion(
+                id: id,
+                shopID: shopID,
+                tableID: tableID,
+                orderNo: orderNo,
+                orderNoChar: orderNoChar,
+                orderCode: orderCode,
+                orderDate: orderDate,
+                receiptNo: receiptNo,
+                receiptNoChar: receiptNoChar,
+                receiptDate: receiptDate,
+                seatNumber: seatNumber,
+                note: note,
+                serviceAmount: serviceAmount,
+                totalPrice: totalPrice,
+                discountPercent: discountPercent,
+                discountValue: discountValue,
+                serviceChargeMethod: serviceChargeMethod,
+                serviceCalcTakehome: serviceCalcTakehome,
+                serviceCalcAll: serviceCalcAll,
+                servicePercent: servicePercent,
+                serviceValue: serviceValue,
+                vatInside: vatInside,
+                taxPercent: taxPercent,
+                taxValue: taxValue,
+                netAmount: netAmount,
+                status: status,
+                payStatus: payStatus,
+                requestOrderTime: requestOrderTime,
+                requestOrderBy: requestOrderBy,
+                orderedTime: orderedTime,
+                orderedBy: orderedBy,
+                billedTime: billedTime,
+                billedBy: billedBy,
+                paidTime: paidTime,
+                paidBy: paidBy,
+                dataStatus: dataStatus,
+                createdTime: createdTime,
+                updatedTime: updatedTime,
+                deviceID: deviceID,
+                appVersion: appVersion,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int shopID,
+                Value<int?> tableID = const Value.absent(),
+                Value<int?> orderNo = const Value.absent(),
+                Value<String?> orderNoChar = const Value.absent(),
+                Value<String?> orderCode = const Value.absent(),
+                Value<DateTime?> orderDate = const Value.absent(),
+                Value<int?> receiptNo = const Value.absent(),
+                Value<String?> receiptNoChar = const Value.absent(),
+                Value<DateTime?> receiptDate = const Value.absent(),
+                Value<int?> seatNumber = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<double?> serviceAmount = const Value.absent(),
+                Value<double?> totalPrice = const Value.absent(),
+                Value<double?> discountPercent = const Value.absent(),
+                Value<double?> discountValue = const Value.absent(),
+                Value<ServiceChargeMethod?> serviceChargeMethod =
+                    const Value.absent(),
+                Value<bool> serviceCalcTakehome = const Value.absent(),
+                Value<bool> serviceCalcAll = const Value.absent(),
+                Value<double?> servicePercent = const Value.absent(),
+                Value<double?> serviceValue = const Value.absent(),
+                Value<bool> vatInside = const Value.absent(),
+                Value<double?> taxPercent = const Value.absent(),
+                Value<double?> taxValue = const Value.absent(),
+                Value<double?> netAmount = const Value.absent(),
+                Value<OrderStatus> status = const Value.absent(),
+                Value<PaymentStatus> payStatus = const Value.absent(),
+                Value<DateTime?> requestOrderTime = const Value.absent(),
+                Value<String?> requestOrderBy = const Value.absent(),
+                Value<DateTime?> orderedTime = const Value.absent(),
+                Value<String?> orderedBy = const Value.absent(),
+                Value<DateTime?> billedTime = const Value.absent(),
+                Value<String?> billedBy = const Value.absent(),
+                Value<DateTime?> paidTime = const Value.absent(),
+                Value<String?> paidBy = const Value.absent(),
+                Value<DataStatus> dataStatus = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
+                Value<DateTime?> updatedTime = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
+                Value<String?> appVersion = const Value.absent(),
+              }) => ShopOrderTblCompanion.insert(
+                id: id,
+                shopID: shopID,
+                tableID: tableID,
+                orderNo: orderNo,
+                orderNoChar: orderNoChar,
+                orderCode: orderCode,
+                orderDate: orderDate,
+                receiptNo: receiptNo,
+                receiptNoChar: receiptNoChar,
+                receiptDate: receiptDate,
+                seatNumber: seatNumber,
+                note: note,
+                serviceAmount: serviceAmount,
+                totalPrice: totalPrice,
+                discountPercent: discountPercent,
+                discountValue: discountValue,
+                serviceChargeMethod: serviceChargeMethod,
+                serviceCalcTakehome: serviceCalcTakehome,
+                serviceCalcAll: serviceCalcAll,
+                servicePercent: servicePercent,
+                serviceValue: serviceValue,
+                vatInside: vatInside,
+                taxPercent: taxPercent,
+                taxValue: taxValue,
+                netAmount: netAmount,
+                status: status,
+                payStatus: payStatus,
+                requestOrderTime: requestOrderTime,
+                requestOrderBy: requestOrderBy,
+                orderedTime: orderedTime,
+                orderedBy: orderedBy,
+                billedTime: billedTime,
+                billedBy: billedBy,
+                paidTime: paidTime,
+                paidBy: paidBy,
+                dataStatus: dataStatus,
+                createdTime: createdTime,
+                updatedTime: updatedTime,
+                deviceID: deviceID,
+                appVersion: appVersion,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ShopOrderTblTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({shopID = false, shopOrderItemsTblRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (shopOrderItemsTblRefs) db.shopOrderItemsTbl,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (shopID) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.shopID,
+                                    referencedTable:
+                                        $$ShopOrderTblTableReferences
+                                            ._shopIDTable(db),
+                                    referencedColumn:
+                                        $$ShopOrderTblTableReferences
+                                            ._shopIDTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (shopOrderItemsTblRefs)
+                        await $_getPrefetchedData<
+                          ShopOrderTblData,
+                          $ShopOrderTblTable,
+                          ShopOrderItemsTblData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ShopOrderTblTableReferences
+                              ._shopOrderItemsTblRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ShopOrderTblTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).shopOrderItemsTblRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.orderID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$ShopOrderTblTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $ShopOrderTblTable,
+      ShopOrderTblData,
+      $$ShopOrderTblTableFilterComposer,
+      $$ShopOrderTblTableOrderingComposer,
+      $$ShopOrderTblTableAnnotationComposer,
+      $$ShopOrderTblTableCreateCompanionBuilder,
+      $$ShopOrderTblTableUpdateCompanionBuilder,
+      (ShopOrderTblData, $$ShopOrderTblTableReferences),
+      ShopOrderTblData,
+      PrefetchHooks Function({bool shopID, bool shopOrderItemsTblRefs})
+    >;
+typedef $$ShopOrderItemsTblTableCreateCompanionBuilder =
+    ShopOrderItemsTblCompanion Function({
+      Value<int> id,
+      required int shopID,
+      required int orderID,
+      Value<int?> productID,
+      Value<String?> description,
+      Value<int?> no,
+      Value<int?> queueNo,
+      Value<DateTime?> queueDate,
+      Value<double?> qty,
+      Value<double?> wgtQty,
+      Value<double?> unitPrice,
+      Value<String?> calcUnit,
+      Value<bool> isWeightUnit,
+      Value<bool> calcService,
+      Value<double?> discountPercent,
+      Value<double?> discountValue,
+      Value<double?> amount,
+      Value<String?> note,
+      Value<bool> takehome,
+      Value<bool> shopCreated,
+      Value<String?> optionsCode,
+      Value<double?> optionsPrice,
+      Value<OrderItemStatus> itemStatus,
+      Value<bool> outStock,
+      Value<DateTime?> outStockTime,
+      Value<DateTime?> hasStockTime,
+      Value<DateTime?> preparedTime,
+      Value<DateTime?> requestOrderTime,
+      Value<String?> requestOrderBy,
+      Value<DateTime?> orderedTime,
+      Value<String?> orderedBy,
+      Value<DateTime?> cookingTime,
+      Value<String?> cookingBy,
+      Value<DateTime?> cookedTime,
+      Value<String?> cookedBy,
+      Value<DateTime?> servedTime,
+      Value<String?> servedBy,
+      Value<int?> refID,
+      Value<bool> closeSale,
+      Value<DataStatus> dataStatus,
+      Value<DateTime> createdTime,
+      Value<DateTime?> updatedTime,
+      Value<String?> deviceID,
+      Value<String?> appVersion,
+    });
+typedef $$ShopOrderItemsTblTableUpdateCompanionBuilder =
+    ShopOrderItemsTblCompanion Function({
+      Value<int> id,
+      Value<int> shopID,
+      Value<int> orderID,
+      Value<int?> productID,
+      Value<String?> description,
+      Value<int?> no,
+      Value<int?> queueNo,
+      Value<DateTime?> queueDate,
+      Value<double?> qty,
+      Value<double?> wgtQty,
+      Value<double?> unitPrice,
+      Value<String?> calcUnit,
+      Value<bool> isWeightUnit,
+      Value<bool> calcService,
+      Value<double?> discountPercent,
+      Value<double?> discountValue,
+      Value<double?> amount,
+      Value<String?> note,
+      Value<bool> takehome,
+      Value<bool> shopCreated,
+      Value<String?> optionsCode,
+      Value<double?> optionsPrice,
+      Value<OrderItemStatus> itemStatus,
+      Value<bool> outStock,
+      Value<DateTime?> outStockTime,
+      Value<DateTime?> hasStockTime,
+      Value<DateTime?> preparedTime,
+      Value<DateTime?> requestOrderTime,
+      Value<String?> requestOrderBy,
+      Value<DateTime?> orderedTime,
+      Value<String?> orderedBy,
+      Value<DateTime?> cookingTime,
+      Value<String?> cookingBy,
+      Value<DateTime?> cookedTime,
+      Value<String?> cookedBy,
+      Value<DateTime?> servedTime,
+      Value<String?> servedBy,
+      Value<int?> refID,
+      Value<bool> closeSale,
+      Value<DataStatus> dataStatus,
+      Value<DateTime> createdTime,
+      Value<DateTime?> updatedTime,
+      Value<String?> deviceID,
+      Value<String?> appVersion,
+    });
+
+final class $$ShopOrderItemsTblTableReferences
+    extends
+        BaseReferences<
+          _$Database,
+          $ShopOrderItemsTblTable,
+          ShopOrderItemsTblData
+        > {
+  $$ShopOrderItemsTblTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ShopInfoTblTable _shopIDTable(_$Database db) =>
+      db.shopInfoTbl.createAlias(
+        $_aliasNameGenerator(db.shopOrderItemsTbl.shopID, db.shopInfoTbl.id),
+      );
+
+  $$ShopInfoTblTableProcessedTableManager get shopID {
+    final $_column = $_itemColumn<int>('shop_i_d')!;
+
+    final manager = $$ShopInfoTblTableTableManager(
+      $_db,
+      $_db.shopInfoTbl,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_shopIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $ShopOrderTblTable _orderIDTable(_$Database db) =>
+      db.shopOrderTbl.createAlias(
+        $_aliasNameGenerator(db.shopOrderItemsTbl.orderID, db.shopOrderTbl.id),
+      );
+
+  $$ShopOrderTblTableProcessedTableManager get orderID {
+    final $_column = $_itemColumn<int>('order_i_d')!;
+
+    final manager = $$ShopOrderTblTableTableManager(
+      $_db,
+      $_db.shopOrderTbl,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_orderIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $ShopOrderItemOptionsTblTable,
+    List<ShopOrderItemOptionsTblData>
+  >
+  _shopOrderItemOptionsTblRefsTable(_$Database db) =>
+      MultiTypedResultKey.fromTable(
+        db.shopOrderItemOptionsTbl,
+        aliasName: $_aliasNameGenerator(
+          db.shopOrderItemsTbl.id,
+          db.shopOrderItemOptionsTbl.itemID,
+        ),
+      );
+
+  $$ShopOrderItemOptionsTblTableProcessedTableManager
+  get shopOrderItemOptionsTblRefs {
+    final manager = $$ShopOrderItemOptionsTblTableTableManager(
+      $_db,
+      $_db.shopOrderItemOptionsTbl,
+    ).filter((f) => f.itemID.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _shopOrderItemOptionsTblRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$ShopOrderItemsTblTableFilterComposer
+    extends Composer<_$Database, $ShopOrderItemsTblTable> {
+  $$ShopOrderItemsTblTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get productID => $composableBuilder(
+    column: $table.productID,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get no => $composableBuilder(
+    column: $table.no,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get queueNo => $composableBuilder(
+    column: $table.queueNo,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get queueDate => $composableBuilder(
+    column: $table.queueDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get qty => $composableBuilder(
+    column: $table.qty,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get wgtQty => $composableBuilder(
+    column: $table.wgtQty,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get unitPrice => $composableBuilder(
+    column: $table.unitPrice,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get calcUnit => $composableBuilder(
+    column: $table.calcUnit,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isWeightUnit => $composableBuilder(
+    column: $table.isWeightUnit,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get calcService => $composableBuilder(
+    column: $table.calcService,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get discountPercent => $composableBuilder(
+    column: $table.discountPercent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get discountValue => $composableBuilder(
+    column: $table.discountValue,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get amount => $composableBuilder(
+    column: $table.amount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get takehome => $composableBuilder(
+    column: $table.takehome,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get shopCreated => $composableBuilder(
+    column: $table.shopCreated,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get optionsCode => $composableBuilder(
+    column: $table.optionsCode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get optionsPrice => $composableBuilder(
+    column: $table.optionsPrice,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<OrderItemStatus, OrderItemStatus, String>
+  get itemStatus => $composableBuilder(
+    column: $table.itemStatus,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<bool> get outStock => $composableBuilder(
+    column: $table.outStock,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get outStockTime => $composableBuilder(
+    column: $table.outStockTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get hasStockTime => $composableBuilder(
+    column: $table.hasStockTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get preparedTime => $composableBuilder(
+    column: $table.preparedTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get requestOrderTime => $composableBuilder(
+    column: $table.requestOrderTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get requestOrderBy => $composableBuilder(
+    column: $table.requestOrderBy,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get orderedTime => $composableBuilder(
+    column: $table.orderedTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get orderedBy => $composableBuilder(
+    column: $table.orderedBy,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get cookingTime => $composableBuilder(
+    column: $table.cookingTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get cookingBy => $composableBuilder(
+    column: $table.cookingBy,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get cookedTime => $composableBuilder(
+    column: $table.cookedTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get cookedBy => $composableBuilder(
+    column: $table.cookedBy,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get servedTime => $composableBuilder(
+    column: $table.servedTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get servedBy => $composableBuilder(
+    column: $table.servedBy,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get refID => $composableBuilder(
+    column: $table.refID,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get closeSale => $composableBuilder(
+    column: $table.closeSale,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DataStatus, DataStatus, String>
+  get dataStatus => $composableBuilder(
+    column: $table.dataStatus,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$ShopInfoTblTableFilterComposer get shopID {
+    final $$ShopInfoTblTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.shopID,
+      referencedTable: $db.shopInfoTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopInfoTblTableFilterComposer(
+            $db: $db,
+            $table: $db.shopInfoTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$ShopOrderTblTableFilterComposer get orderID {
+    final $$ShopOrderTblTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.orderID,
+      referencedTable: $db.shopOrderTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopOrderTblTableFilterComposer(
+            $db: $db,
+            $table: $db.shopOrderTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> shopOrderItemOptionsTblRefs(
+    Expression<bool> Function($$ShopOrderItemOptionsTblTableFilterComposer f) f,
+  ) {
+    final $$ShopOrderItemOptionsTblTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.shopOrderItemOptionsTbl,
+          getReferencedColumn: (t) => t.itemID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopOrderItemOptionsTblTableFilterComposer(
+                $db: $db,
+                $table: $db.shopOrderItemOptionsTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$ShopOrderItemsTblTableOrderingComposer
+    extends Composer<_$Database, $ShopOrderItemsTblTable> {
+  $$ShopOrderItemsTblTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get productID => $composableBuilder(
+    column: $table.productID,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get no => $composableBuilder(
+    column: $table.no,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get queueNo => $composableBuilder(
+    column: $table.queueNo,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get queueDate => $composableBuilder(
+    column: $table.queueDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get qty => $composableBuilder(
+    column: $table.qty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get wgtQty => $composableBuilder(
+    column: $table.wgtQty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get unitPrice => $composableBuilder(
+    column: $table.unitPrice,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get calcUnit => $composableBuilder(
+    column: $table.calcUnit,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isWeightUnit => $composableBuilder(
+    column: $table.isWeightUnit,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get calcService => $composableBuilder(
+    column: $table.calcService,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get discountPercent => $composableBuilder(
+    column: $table.discountPercent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get discountValue => $composableBuilder(
+    column: $table.discountValue,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get amount => $composableBuilder(
+    column: $table.amount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get takehome => $composableBuilder(
+    column: $table.takehome,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get shopCreated => $composableBuilder(
+    column: $table.shopCreated,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get optionsCode => $composableBuilder(
+    column: $table.optionsCode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get optionsPrice => $composableBuilder(
+    column: $table.optionsPrice,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get itemStatus => $composableBuilder(
+    column: $table.itemStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get outStock => $composableBuilder(
+    column: $table.outStock,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get outStockTime => $composableBuilder(
+    column: $table.outStockTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get hasStockTime => $composableBuilder(
+    column: $table.hasStockTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get preparedTime => $composableBuilder(
+    column: $table.preparedTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get requestOrderTime => $composableBuilder(
+    column: $table.requestOrderTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get requestOrderBy => $composableBuilder(
+    column: $table.requestOrderBy,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get orderedTime => $composableBuilder(
+    column: $table.orderedTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get orderedBy => $composableBuilder(
+    column: $table.orderedBy,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get cookingTime => $composableBuilder(
+    column: $table.cookingTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get cookingBy => $composableBuilder(
+    column: $table.cookingBy,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get cookedTime => $composableBuilder(
+    column: $table.cookedTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get cookedBy => $composableBuilder(
+    column: $table.cookedBy,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get servedTime => $composableBuilder(
+    column: $table.servedTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get servedBy => $composableBuilder(
+    column: $table.servedBy,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get refID => $composableBuilder(
+    column: $table.refID,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get closeSale => $composableBuilder(
+    column: $table.closeSale,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get dataStatus => $composableBuilder(
+    column: $table.dataStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$ShopInfoTblTableOrderingComposer get shopID {
+    final $$ShopInfoTblTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.shopID,
+      referencedTable: $db.shopInfoTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopInfoTblTableOrderingComposer(
+            $db: $db,
+            $table: $db.shopInfoTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$ShopOrderTblTableOrderingComposer get orderID {
+    final $$ShopOrderTblTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.orderID,
+      referencedTable: $db.shopOrderTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopOrderTblTableOrderingComposer(
+            $db: $db,
+            $table: $db.shopOrderTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ShopOrderItemsTblTableAnnotationComposer
+    extends Composer<_$Database, $ShopOrderItemsTblTable> {
+  $$ShopOrderItemsTblTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get productID =>
+      $composableBuilder(column: $table.productID, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get no =>
+      $composableBuilder(column: $table.no, builder: (column) => column);
+
+  GeneratedColumn<int> get queueNo =>
+      $composableBuilder(column: $table.queueNo, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get queueDate =>
+      $composableBuilder(column: $table.queueDate, builder: (column) => column);
+
+  GeneratedColumn<double> get qty =>
+      $composableBuilder(column: $table.qty, builder: (column) => column);
+
+  GeneratedColumn<double> get wgtQty =>
+      $composableBuilder(column: $table.wgtQty, builder: (column) => column);
+
+  GeneratedColumn<double> get unitPrice =>
+      $composableBuilder(column: $table.unitPrice, builder: (column) => column);
+
+  GeneratedColumn<String> get calcUnit =>
+      $composableBuilder(column: $table.calcUnit, builder: (column) => column);
+
+  GeneratedColumn<bool> get isWeightUnit => $composableBuilder(
+    column: $table.isWeightUnit,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get calcService => $composableBuilder(
+    column: $table.calcService,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get discountPercent => $composableBuilder(
+    column: $table.discountPercent,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get discountValue => $composableBuilder(
+    column: $table.discountValue,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get amount =>
+      $composableBuilder(column: $table.amount, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<bool> get takehome =>
+      $composableBuilder(column: $table.takehome, builder: (column) => column);
+
+  GeneratedColumn<bool> get shopCreated => $composableBuilder(
+    column: $table.shopCreated,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get optionsCode => $composableBuilder(
+    column: $table.optionsCode,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get optionsPrice => $composableBuilder(
+    column: $table.optionsPrice,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<OrderItemStatus, String> get itemStatus =>
+      $composableBuilder(
+        column: $table.itemStatus,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<bool> get outStock =>
+      $composableBuilder(column: $table.outStock, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get outStockTime => $composableBuilder(
+    column: $table.outStockTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get hasStockTime => $composableBuilder(
+    column: $table.hasStockTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get preparedTime => $composableBuilder(
+    column: $table.preparedTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get requestOrderTime => $composableBuilder(
+    column: $table.requestOrderTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get requestOrderBy => $composableBuilder(
+    column: $table.requestOrderBy,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get orderedTime => $composableBuilder(
+    column: $table.orderedTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get orderedBy =>
+      $composableBuilder(column: $table.orderedBy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get cookingTime => $composableBuilder(
+    column: $table.cookingTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get cookingBy =>
+      $composableBuilder(column: $table.cookingBy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get cookedTime => $composableBuilder(
+    column: $table.cookedTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get cookedBy =>
+      $composableBuilder(column: $table.cookedBy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get servedTime => $composableBuilder(
+    column: $table.servedTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get servedBy =>
+      $composableBuilder(column: $table.servedBy, builder: (column) => column);
+
+  GeneratedColumn<int> get refID =>
+      $composableBuilder(column: $table.refID, builder: (column) => column);
+
+  GeneratedColumn<bool> get closeSale =>
+      $composableBuilder(column: $table.closeSale, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DataStatus, String> get dataStatus =>
+      $composableBuilder(
+        column: $table.dataStatus,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get deviceID =>
+      $composableBuilder(column: $table.deviceID, builder: (column) => column);
+
+  GeneratedColumn<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => column,
+  );
+
+  $$ShopInfoTblTableAnnotationComposer get shopID {
+    final $$ShopInfoTblTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.shopID,
+      referencedTable: $db.shopInfoTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopInfoTblTableAnnotationComposer(
+            $db: $db,
+            $table: $db.shopInfoTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$ShopOrderTblTableAnnotationComposer get orderID {
+    final $$ShopOrderTblTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.orderID,
+      referencedTable: $db.shopOrderTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopOrderTblTableAnnotationComposer(
+            $db: $db,
+            $table: $db.shopOrderTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> shopOrderItemOptionsTblRefs<T extends Object>(
+    Expression<T> Function($$ShopOrderItemOptionsTblTableAnnotationComposer a)
+    f,
+  ) {
+    final $$ShopOrderItemOptionsTblTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.shopOrderItemOptionsTbl,
+          getReferencedColumn: (t) => t.itemID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopOrderItemOptionsTblTableAnnotationComposer(
+                $db: $db,
+                $table: $db.shopOrderItemOptionsTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$ShopOrderItemsTblTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $ShopOrderItemsTblTable,
+          ShopOrderItemsTblData,
+          $$ShopOrderItemsTblTableFilterComposer,
+          $$ShopOrderItemsTblTableOrderingComposer,
+          $$ShopOrderItemsTblTableAnnotationComposer,
+          $$ShopOrderItemsTblTableCreateCompanionBuilder,
+          $$ShopOrderItemsTblTableUpdateCompanionBuilder,
+          (ShopOrderItemsTblData, $$ShopOrderItemsTblTableReferences),
+          ShopOrderItemsTblData,
+          PrefetchHooks Function({
+            bool shopID,
+            bool orderID,
+            bool shopOrderItemOptionsTblRefs,
+          })
+        > {
+  $$ShopOrderItemsTblTableTableManager(
+    _$Database db,
+    $ShopOrderItemsTblTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ShopOrderItemsTblTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ShopOrderItemsTblTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ShopOrderItemsTblTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> shopID = const Value.absent(),
+                Value<int> orderID = const Value.absent(),
+                Value<int?> productID = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<int?> no = const Value.absent(),
+                Value<int?> queueNo = const Value.absent(),
+                Value<DateTime?> queueDate = const Value.absent(),
+                Value<double?> qty = const Value.absent(),
+                Value<double?> wgtQty = const Value.absent(),
+                Value<double?> unitPrice = const Value.absent(),
+                Value<String?> calcUnit = const Value.absent(),
+                Value<bool> isWeightUnit = const Value.absent(),
+                Value<bool> calcService = const Value.absent(),
+                Value<double?> discountPercent = const Value.absent(),
+                Value<double?> discountValue = const Value.absent(),
+                Value<double?> amount = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<bool> takehome = const Value.absent(),
+                Value<bool> shopCreated = const Value.absent(),
+                Value<String?> optionsCode = const Value.absent(),
+                Value<double?> optionsPrice = const Value.absent(),
+                Value<OrderItemStatus> itemStatus = const Value.absent(),
+                Value<bool> outStock = const Value.absent(),
+                Value<DateTime?> outStockTime = const Value.absent(),
+                Value<DateTime?> hasStockTime = const Value.absent(),
+                Value<DateTime?> preparedTime = const Value.absent(),
+                Value<DateTime?> requestOrderTime = const Value.absent(),
+                Value<String?> requestOrderBy = const Value.absent(),
+                Value<DateTime?> orderedTime = const Value.absent(),
+                Value<String?> orderedBy = const Value.absent(),
+                Value<DateTime?> cookingTime = const Value.absent(),
+                Value<String?> cookingBy = const Value.absent(),
+                Value<DateTime?> cookedTime = const Value.absent(),
+                Value<String?> cookedBy = const Value.absent(),
+                Value<DateTime?> servedTime = const Value.absent(),
+                Value<String?> servedBy = const Value.absent(),
+                Value<int?> refID = const Value.absent(),
+                Value<bool> closeSale = const Value.absent(),
+                Value<DataStatus> dataStatus = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
+                Value<DateTime?> updatedTime = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
+                Value<String?> appVersion = const Value.absent(),
+              }) => ShopOrderItemsTblCompanion(
+                id: id,
+                shopID: shopID,
+                orderID: orderID,
+                productID: productID,
+                description: description,
+                no: no,
+                queueNo: queueNo,
+                queueDate: queueDate,
+                qty: qty,
+                wgtQty: wgtQty,
+                unitPrice: unitPrice,
+                calcUnit: calcUnit,
+                isWeightUnit: isWeightUnit,
+                calcService: calcService,
+                discountPercent: discountPercent,
+                discountValue: discountValue,
+                amount: amount,
+                note: note,
+                takehome: takehome,
+                shopCreated: shopCreated,
+                optionsCode: optionsCode,
+                optionsPrice: optionsPrice,
+                itemStatus: itemStatus,
+                outStock: outStock,
+                outStockTime: outStockTime,
+                hasStockTime: hasStockTime,
+                preparedTime: preparedTime,
+                requestOrderTime: requestOrderTime,
+                requestOrderBy: requestOrderBy,
+                orderedTime: orderedTime,
+                orderedBy: orderedBy,
+                cookingTime: cookingTime,
+                cookingBy: cookingBy,
+                cookedTime: cookedTime,
+                cookedBy: cookedBy,
+                servedTime: servedTime,
+                servedBy: servedBy,
+                refID: refID,
+                closeSale: closeSale,
+                dataStatus: dataStatus,
+                createdTime: createdTime,
+                updatedTime: updatedTime,
+                deviceID: deviceID,
+                appVersion: appVersion,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int shopID,
+                required int orderID,
+                Value<int?> productID = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<int?> no = const Value.absent(),
+                Value<int?> queueNo = const Value.absent(),
+                Value<DateTime?> queueDate = const Value.absent(),
+                Value<double?> qty = const Value.absent(),
+                Value<double?> wgtQty = const Value.absent(),
+                Value<double?> unitPrice = const Value.absent(),
+                Value<String?> calcUnit = const Value.absent(),
+                Value<bool> isWeightUnit = const Value.absent(),
+                Value<bool> calcService = const Value.absent(),
+                Value<double?> discountPercent = const Value.absent(),
+                Value<double?> discountValue = const Value.absent(),
+                Value<double?> amount = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<bool> takehome = const Value.absent(),
+                Value<bool> shopCreated = const Value.absent(),
+                Value<String?> optionsCode = const Value.absent(),
+                Value<double?> optionsPrice = const Value.absent(),
+                Value<OrderItemStatus> itemStatus = const Value.absent(),
+                Value<bool> outStock = const Value.absent(),
+                Value<DateTime?> outStockTime = const Value.absent(),
+                Value<DateTime?> hasStockTime = const Value.absent(),
+                Value<DateTime?> preparedTime = const Value.absent(),
+                Value<DateTime?> requestOrderTime = const Value.absent(),
+                Value<String?> requestOrderBy = const Value.absent(),
+                Value<DateTime?> orderedTime = const Value.absent(),
+                Value<String?> orderedBy = const Value.absent(),
+                Value<DateTime?> cookingTime = const Value.absent(),
+                Value<String?> cookingBy = const Value.absent(),
+                Value<DateTime?> cookedTime = const Value.absent(),
+                Value<String?> cookedBy = const Value.absent(),
+                Value<DateTime?> servedTime = const Value.absent(),
+                Value<String?> servedBy = const Value.absent(),
+                Value<int?> refID = const Value.absent(),
+                Value<bool> closeSale = const Value.absent(),
+                Value<DataStatus> dataStatus = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
+                Value<DateTime?> updatedTime = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
+                Value<String?> appVersion = const Value.absent(),
+              }) => ShopOrderItemsTblCompanion.insert(
+                id: id,
+                shopID: shopID,
+                orderID: orderID,
+                productID: productID,
+                description: description,
+                no: no,
+                queueNo: queueNo,
+                queueDate: queueDate,
+                qty: qty,
+                wgtQty: wgtQty,
+                unitPrice: unitPrice,
+                calcUnit: calcUnit,
+                isWeightUnit: isWeightUnit,
+                calcService: calcService,
+                discountPercent: discountPercent,
+                discountValue: discountValue,
+                amount: amount,
+                note: note,
+                takehome: takehome,
+                shopCreated: shopCreated,
+                optionsCode: optionsCode,
+                optionsPrice: optionsPrice,
+                itemStatus: itemStatus,
+                outStock: outStock,
+                outStockTime: outStockTime,
+                hasStockTime: hasStockTime,
+                preparedTime: preparedTime,
+                requestOrderTime: requestOrderTime,
+                requestOrderBy: requestOrderBy,
+                orderedTime: orderedTime,
+                orderedBy: orderedBy,
+                cookingTime: cookingTime,
+                cookingBy: cookingBy,
+                cookedTime: cookedTime,
+                cookedBy: cookedBy,
+                servedTime: servedTime,
+                servedBy: servedBy,
+                refID: refID,
+                closeSale: closeSale,
+                dataStatus: dataStatus,
+                createdTime: createdTime,
+                updatedTime: updatedTime,
+                deviceID: deviceID,
+                appVersion: appVersion,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ShopOrderItemsTblTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({
+                shopID = false,
+                orderID = false,
+                shopOrderItemOptionsTblRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (shopOrderItemOptionsTblRefs) db.shopOrderItemOptionsTbl,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (shopID) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.shopID,
+                                    referencedTable:
+                                        $$ShopOrderItemsTblTableReferences
+                                            ._shopIDTable(db),
+                                    referencedColumn:
+                                        $$ShopOrderItemsTblTableReferences
+                                            ._shopIDTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (orderID) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.orderID,
+                                    referencedTable:
+                                        $$ShopOrderItemsTblTableReferences
+                                            ._orderIDTable(db),
+                                    referencedColumn:
+                                        $$ShopOrderItemsTblTableReferences
+                                            ._orderIDTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (shopOrderItemOptionsTblRefs)
+                        await $_getPrefetchedData<
+                          ShopOrderItemsTblData,
+                          $ShopOrderItemsTblTable,
+                          ShopOrderItemOptionsTblData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ShopOrderItemsTblTableReferences
+                              ._shopOrderItemOptionsTblRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ShopOrderItemsTblTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).shopOrderItemOptionsTblRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.itemID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$ShopOrderItemsTblTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $ShopOrderItemsTblTable,
+      ShopOrderItemsTblData,
+      $$ShopOrderItemsTblTableFilterComposer,
+      $$ShopOrderItemsTblTableOrderingComposer,
+      $$ShopOrderItemsTblTableAnnotationComposer,
+      $$ShopOrderItemsTblTableCreateCompanionBuilder,
+      $$ShopOrderItemsTblTableUpdateCompanionBuilder,
+      (ShopOrderItemsTblData, $$ShopOrderItemsTblTableReferences),
+      ShopOrderItemsTblData,
+      PrefetchHooks Function({
+        bool shopID,
+        bool orderID,
+        bool shopOrderItemOptionsTblRefs,
+      })
+    >;
+typedef $$ShopOrderItemOptionsTblTableCreateCompanionBuilder =
+    ShopOrderItemOptionsTblCompanion Function({
+      Value<int> id,
+      required int itemID,
+      required int optionID,
+      Value<String?> groupName,
+      Value<int?> groupOrder,
+      Value<String?> optionName,
+      Value<String?> optionDescription,
+      Value<int?> optionOrder,
+      Value<double?> qty,
+      Value<double?> priceAdded,
+      Value<bool> stockItem,
+      Value<bool> closeSale,
+      Value<bool> outStock,
+      Value<DateTime?> outStockTime,
+      Value<DateTime?> hasStockTime,
+      Value<DataStatus> dataStatus,
+      Value<DateTime> createdTime,
+      Value<DateTime?> updatedTime,
+      Value<String?> deviceID,
+      Value<String?> appVersion,
+    });
+typedef $$ShopOrderItemOptionsTblTableUpdateCompanionBuilder =
+    ShopOrderItemOptionsTblCompanion Function({
+      Value<int> id,
+      Value<int> itemID,
+      Value<int> optionID,
+      Value<String?> groupName,
+      Value<int?> groupOrder,
+      Value<String?> optionName,
+      Value<String?> optionDescription,
+      Value<int?> optionOrder,
+      Value<double?> qty,
+      Value<double?> priceAdded,
+      Value<bool> stockItem,
+      Value<bool> closeSale,
+      Value<bool> outStock,
+      Value<DateTime?> outStockTime,
+      Value<DateTime?> hasStockTime,
+      Value<DataStatus> dataStatus,
+      Value<DateTime> createdTime,
+      Value<DateTime?> updatedTime,
+      Value<String?> deviceID,
+      Value<String?> appVersion,
+    });
+
+final class $$ShopOrderItemOptionsTblTableReferences
+    extends
+        BaseReferences<
+          _$Database,
+          $ShopOrderItemOptionsTblTable,
+          ShopOrderItemOptionsTblData
+        > {
+  $$ShopOrderItemOptionsTblTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ShopOrderItemsTblTable _itemIDTable(_$Database db) =>
+      db.shopOrderItemsTbl.createAlias(
+        $_aliasNameGenerator(
+          db.shopOrderItemOptionsTbl.itemID,
+          db.shopOrderItemsTbl.id,
+        ),
+      );
+
+  $$ShopOrderItemsTblTableProcessedTableManager get itemID {
+    final $_column = $_itemColumn<int>('item_i_d')!;
+
+    final manager = $$ShopOrderItemsTblTableTableManager(
+      $_db,
+      $_db.shopOrderItemsTbl,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_itemIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $ShopProductOptionsTblTable _optionIDTable(_$Database db) =>
+      db.shopProductOptionsTbl.createAlias(
+        $_aliasNameGenerator(
+          db.shopOrderItemOptionsTbl.optionID,
+          db.shopProductOptionsTbl.id,
+        ),
+      );
+
+  $$ShopProductOptionsTblTableProcessedTableManager get optionID {
+    final $_column = $_itemColumn<int>('option_i_d')!;
+
+    final manager = $$ShopProductOptionsTblTableTableManager(
+      $_db,
+      $_db.shopProductOptionsTbl,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_optionIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$ShopOrderItemOptionsTblTableFilterComposer
+    extends Composer<_$Database, $ShopOrderItemOptionsTblTable> {
+  $$ShopOrderItemOptionsTblTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get groupName => $composableBuilder(
+    column: $table.groupName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get groupOrder => $composableBuilder(
+    column: $table.groupOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get optionName => $composableBuilder(
+    column: $table.optionName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get optionDescription => $composableBuilder(
+    column: $table.optionDescription,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get optionOrder => $composableBuilder(
+    column: $table.optionOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get qty => $composableBuilder(
+    column: $table.qty,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get priceAdded => $composableBuilder(
+    column: $table.priceAdded,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get stockItem => $composableBuilder(
+    column: $table.stockItem,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get closeSale => $composableBuilder(
+    column: $table.closeSale,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get outStock => $composableBuilder(
+    column: $table.outStock,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get outStockTime => $composableBuilder(
+    column: $table.outStockTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get hasStockTime => $composableBuilder(
+    column: $table.hasStockTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DataStatus, DataStatus, String>
+  get dataStatus => $composableBuilder(
+    column: $table.dataStatus,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$ShopOrderItemsTblTableFilterComposer get itemID {
+    final $$ShopOrderItemsTblTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.itemID,
+      referencedTable: $db.shopOrderItemsTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopOrderItemsTblTableFilterComposer(
+            $db: $db,
+            $table: $db.shopOrderItemsTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$ShopProductOptionsTblTableFilterComposer get optionID {
+    final $$ShopProductOptionsTblTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.optionID,
+          referencedTable: $db.shopProductOptionsTbl,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopProductOptionsTblTableFilterComposer(
+                $db: $db,
+                $table: $db.shopProductOptionsTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+}
+
+class $$ShopOrderItemOptionsTblTableOrderingComposer
+    extends Composer<_$Database, $ShopOrderItemOptionsTblTable> {
+  $$ShopOrderItemOptionsTblTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get groupName => $composableBuilder(
+    column: $table.groupName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get groupOrder => $composableBuilder(
+    column: $table.groupOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get optionName => $composableBuilder(
+    column: $table.optionName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get optionDescription => $composableBuilder(
+    column: $table.optionDescription,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get optionOrder => $composableBuilder(
+    column: $table.optionOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get qty => $composableBuilder(
+    column: $table.qty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get priceAdded => $composableBuilder(
+    column: $table.priceAdded,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get stockItem => $composableBuilder(
+    column: $table.stockItem,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get closeSale => $composableBuilder(
+    column: $table.closeSale,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get outStock => $composableBuilder(
+    column: $table.outStock,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get outStockTime => $composableBuilder(
+    column: $table.outStockTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get hasStockTime => $composableBuilder(
+    column: $table.hasStockTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get dataStatus => $composableBuilder(
+    column: $table.dataStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deviceID => $composableBuilder(
+    column: $table.deviceID,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$ShopOrderItemsTblTableOrderingComposer get itemID {
+    final $$ShopOrderItemsTblTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.itemID,
+      referencedTable: $db.shopOrderItemsTbl,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShopOrderItemsTblTableOrderingComposer(
+            $db: $db,
+            $table: $db.shopOrderItemsTbl,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$ShopProductOptionsTblTableOrderingComposer get optionID {
+    final $$ShopProductOptionsTblTableOrderingComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.optionID,
+          referencedTable: $db.shopProductOptionsTbl,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopProductOptionsTblTableOrderingComposer(
+                $db: $db,
+                $table: $db.shopProductOptionsTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+}
+
+class $$ShopOrderItemOptionsTblTableAnnotationComposer
+    extends Composer<_$Database, $ShopOrderItemOptionsTblTable> {
+  $$ShopOrderItemOptionsTblTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get groupName =>
+      $composableBuilder(column: $table.groupName, builder: (column) => column);
+
+  GeneratedColumn<int> get groupOrder => $composableBuilder(
+    column: $table.groupOrder,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get optionName => $composableBuilder(
+    column: $table.optionName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get optionDescription => $composableBuilder(
+    column: $table.optionDescription,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get optionOrder => $composableBuilder(
+    column: $table.optionOrder,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get qty =>
+      $composableBuilder(column: $table.qty, builder: (column) => column);
+
+  GeneratedColumn<double> get priceAdded => $composableBuilder(
+    column: $table.priceAdded,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get stockItem =>
+      $composableBuilder(column: $table.stockItem, builder: (column) => column);
+
+  GeneratedColumn<bool> get closeSale =>
+      $composableBuilder(column: $table.closeSale, builder: (column) => column);
+
+  GeneratedColumn<bool> get outStock =>
+      $composableBuilder(column: $table.outStock, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get outStockTime => $composableBuilder(
+    column: $table.outStockTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get hasStockTime => $composableBuilder(
+    column: $table.hasStockTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<DataStatus, String> get dataStatus =>
+      $composableBuilder(
+        column: $table.dataStatus,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<DateTime> get createdTime => $composableBuilder(
+    column: $table.createdTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get updatedTime => $composableBuilder(
+    column: $table.updatedTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get deviceID =>
+      $composableBuilder(column: $table.deviceID, builder: (column) => column);
+
+  GeneratedColumn<String> get appVersion => $composableBuilder(
+    column: $table.appVersion,
+    builder: (column) => column,
+  );
+
+  $$ShopOrderItemsTblTableAnnotationComposer get itemID {
+    final $$ShopOrderItemsTblTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.itemID,
+          referencedTable: $db.shopOrderItemsTbl,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopOrderItemsTblTableAnnotationComposer(
+                $db: $db,
+                $table: $db.shopOrderItemsTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+
+  $$ShopProductOptionsTblTableAnnotationComposer get optionID {
+    final $$ShopProductOptionsTblTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.optionID,
+          referencedTable: $db.shopProductOptionsTbl,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShopProductOptionsTblTableAnnotationComposer(
+                $db: $db,
+                $table: $db.shopProductOptionsTbl,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+}
+
+class $$ShopOrderItemOptionsTblTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $ShopOrderItemOptionsTblTable,
+          ShopOrderItemOptionsTblData,
+          $$ShopOrderItemOptionsTblTableFilterComposer,
+          $$ShopOrderItemOptionsTblTableOrderingComposer,
+          $$ShopOrderItemOptionsTblTableAnnotationComposer,
+          $$ShopOrderItemOptionsTblTableCreateCompanionBuilder,
+          $$ShopOrderItemOptionsTblTableUpdateCompanionBuilder,
+          (
+            ShopOrderItemOptionsTblData,
+            $$ShopOrderItemOptionsTblTableReferences,
+          ),
+          ShopOrderItemOptionsTblData,
+          PrefetchHooks Function({bool itemID, bool optionID})
+        > {
+  $$ShopOrderItemOptionsTblTableTableManager(
+    _$Database db,
+    $ShopOrderItemOptionsTblTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ShopOrderItemOptionsTblTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$ShopOrderItemOptionsTblTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$ShopOrderItemOptionsTblTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> itemID = const Value.absent(),
+                Value<int> optionID = const Value.absent(),
+                Value<String?> groupName = const Value.absent(),
+                Value<int?> groupOrder = const Value.absent(),
+                Value<String?> optionName = const Value.absent(),
+                Value<String?> optionDescription = const Value.absent(),
+                Value<int?> optionOrder = const Value.absent(),
+                Value<double?> qty = const Value.absent(),
+                Value<double?> priceAdded = const Value.absent(),
+                Value<bool> stockItem = const Value.absent(),
+                Value<bool> closeSale = const Value.absent(),
+                Value<bool> outStock = const Value.absent(),
+                Value<DateTime?> outStockTime = const Value.absent(),
+                Value<DateTime?> hasStockTime = const Value.absent(),
+                Value<DataStatus> dataStatus = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
+                Value<DateTime?> updatedTime = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
+                Value<String?> appVersion = const Value.absent(),
+              }) => ShopOrderItemOptionsTblCompanion(
+                id: id,
+                itemID: itemID,
+                optionID: optionID,
+                groupName: groupName,
+                groupOrder: groupOrder,
+                optionName: optionName,
+                optionDescription: optionDescription,
+                optionOrder: optionOrder,
+                qty: qty,
+                priceAdded: priceAdded,
+                stockItem: stockItem,
+                closeSale: closeSale,
+                outStock: outStock,
+                outStockTime: outStockTime,
+                hasStockTime: hasStockTime,
+                dataStatus: dataStatus,
+                createdTime: createdTime,
+                updatedTime: updatedTime,
+                deviceID: deviceID,
+                appVersion: appVersion,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int itemID,
+                required int optionID,
+                Value<String?> groupName = const Value.absent(),
+                Value<int?> groupOrder = const Value.absent(),
+                Value<String?> optionName = const Value.absent(),
+                Value<String?> optionDescription = const Value.absent(),
+                Value<int?> optionOrder = const Value.absent(),
+                Value<double?> qty = const Value.absent(),
+                Value<double?> priceAdded = const Value.absent(),
+                Value<bool> stockItem = const Value.absent(),
+                Value<bool> closeSale = const Value.absent(),
+                Value<bool> outStock = const Value.absent(),
+                Value<DateTime?> outStockTime = const Value.absent(),
+                Value<DateTime?> hasStockTime = const Value.absent(),
+                Value<DataStatus> dataStatus = const Value.absent(),
+                Value<DateTime> createdTime = const Value.absent(),
+                Value<DateTime?> updatedTime = const Value.absent(),
+                Value<String?> deviceID = const Value.absent(),
+                Value<String?> appVersion = const Value.absent(),
+              }) => ShopOrderItemOptionsTblCompanion.insert(
+                id: id,
+                itemID: itemID,
+                optionID: optionID,
+                groupName: groupName,
+                groupOrder: groupOrder,
+                optionName: optionName,
+                optionDescription: optionDescription,
+                optionOrder: optionOrder,
+                qty: qty,
+                priceAdded: priceAdded,
+                stockItem: stockItem,
+                closeSale: closeSale,
+                outStock: outStock,
+                outStockTime: outStockTime,
+                hasStockTime: hasStockTime,
+                dataStatus: dataStatus,
+                createdTime: createdTime,
+                updatedTime: updatedTime,
+                deviceID: deviceID,
+                appVersion: appVersion,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ShopOrderItemOptionsTblTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({itemID = false, optionID = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (itemID) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.itemID,
+                                referencedTable:
+                                    $$ShopOrderItemOptionsTblTableReferences
+                                        ._itemIDTable(db),
                                 referencedColumn:
-                                    $$ShopProductTblTableReferences
-                                        ._shopIDTable(db)
+                                    $$ShopOrderItemOptionsTblTableReferences
+                                        ._itemIDTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+                    if (optionID) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.optionID,
+                                referencedTable:
+                                    $$ShopOrderItemOptionsTblTableReferences
+                                        ._optionIDTable(db),
+                                referencedColumn:
+                                    $$ShopOrderItemOptionsTblTableReferences
+                                        ._optionIDTable(db)
                                         .id,
                               )
                               as T;
@@ -14154,19 +26788,19 @@ class $$ShopProductTblTableTableManager
       );
 }
 
-typedef $$ShopProductTblTableProcessedTableManager =
+typedef $$ShopOrderItemOptionsTblTableProcessedTableManager =
     ProcessedTableManager<
       _$Database,
-      $ShopProductTblTable,
-      ShopProductTblData,
-      $$ShopProductTblTableFilterComposer,
-      $$ShopProductTblTableOrderingComposer,
-      $$ShopProductTblTableAnnotationComposer,
-      $$ShopProductTblTableCreateCompanionBuilder,
-      $$ShopProductTblTableUpdateCompanionBuilder,
-      (ShopProductTblData, $$ShopProductTblTableReferences),
-      ShopProductTblData,
-      PrefetchHooks Function({bool shopID})
+      $ShopOrderItemOptionsTblTable,
+      ShopOrderItemOptionsTblData,
+      $$ShopOrderItemOptionsTblTableFilterComposer,
+      $$ShopOrderItemOptionsTblTableOrderingComposer,
+      $$ShopOrderItemOptionsTblTableAnnotationComposer,
+      $$ShopOrderItemOptionsTblTableCreateCompanionBuilder,
+      $$ShopOrderItemOptionsTblTableUpdateCompanionBuilder,
+      (ShopOrderItemOptionsTblData, $$ShopOrderItemOptionsTblTableReferences),
+      ShopOrderItemOptionsTblData,
+      PrefetchHooks Function({bool itemID, bool optionID})
     >;
 
 class $DatabaseManager {
@@ -14198,4 +26832,17 @@ class $DatabaseManager {
       $$ShopBankAccountTblTableTableManager(_db, _db.shopBankAccountTbl);
   $$ShopProductTblTableTableManager get shopProductTbl =>
       $$ShopProductTblTableTableManager(_db, _db.shopProductTbl);
+  $$ShopImageTblTableTableManager get shopImageTbl =>
+      $$ShopImageTblTableTableManager(_db, _db.shopImageTbl);
+  $$ShopProductOptionsTblTableTableManager get shopProductOptionsTbl =>
+      $$ShopProductOptionsTblTableTableManager(_db, _db.shopProductOptionsTbl);
+  $$ShopOrderTblTableTableManager get shopOrderTbl =>
+      $$ShopOrderTblTableTableManager(_db, _db.shopOrderTbl);
+  $$ShopOrderItemsTblTableTableManager get shopOrderItemsTbl =>
+      $$ShopOrderItemsTblTableTableManager(_db, _db.shopOrderItemsTbl);
+  $$ShopOrderItemOptionsTblTableTableManager get shopOrderItemOptionsTbl =>
+      $$ShopOrderItemOptionsTblTableTableManager(
+        _db,
+        _db.shopOrderItemOptionsTbl,
+      );
 }
