@@ -202,10 +202,10 @@ class _ShopProductGroupEntryState extends ConsumerState<ShopProductGroupEntry> {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          IconButton(
-            onPressed: enabled ? onPressedDelete : null,
-            icon: Icon(AppIcons.delete, color: enabled ? AppColors.critical : disabledColor),
-          ),
+          // IconButton(
+          //   onPressed: enabled ? onPressedDelete : null,
+          //   icon: Icon(AppIcons.delete, color: enabled ? AppColors.critical : disabledColor),
+          // ),
           IconButton(
             onPressed: enabled ? onPressedEdit : null,
             icon: Icon(AppIcons.edit, color: enabled ? AppColors.infoEmphasize : disabledColor),
@@ -491,7 +491,7 @@ class _ShopProductGroupEntryState extends ConsumerState<ShopProductGroupEntry> {
             grpList[i] = grpList[i].copyWith(order: i + 1);
           }
           await ref
-              .read(shopProductGroupViewModelProvider(shopInfo?.id ?? 0).notifier)
+              .read(shopProductGroupViewModelProvider(shopInfo?.id ?? -1).notifier)
               .reorderGroup(grpList);
         },
         itemBuilder: (context, index) {

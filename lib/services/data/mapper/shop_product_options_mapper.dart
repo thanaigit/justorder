@@ -15,8 +15,8 @@ class ShopProductOptionsMapper
   @override
   ShopProductOptionsTblCompanion toCompanion(ShopProductOptions entity) {
     return ShopProductOptionsTblCompanion.insert(
-      productID: entity.productID ?? 0,
-      optionID: entity.optionID ?? 0,
+      productID: entity.productID ?? -1,
+      optionID: entity.optionID ?? -1,
       order: Value(entity.order),
       priceAdded: Value(entity.priceAdded),
       closeSale: Value(entity.closeSale),

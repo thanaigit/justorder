@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:justorder/core/const/fonts.dart';
-import 'package:justorder/core/domain/entities/image_base.dart';
-import 'package:justorder/views/widgets/shop_bank_account_display.dart';
 import 'package:my_ui/widgets/common/input/text_input.dart';
 
 import '../../../../core/const/colors.dart';
@@ -11,6 +8,8 @@ import '../../../../core/const/icon_data.dart';
 import '../../../../core/const/size.dart';
 import '../../../../core/presentation/styles/text_styles.dart';
 import '../../../../core/presentation/widgets/gap.dart';
+import '../../../core/const/fonts.dart';
+import '../../../core/domain/entities/image_base.dart';
 import '../../../core/presentation/pages/images/image_viewer.dart';
 import '../../../core/presentation/widgets/null_box.dart';
 import '../../../entities/shop_info.dart';
@@ -18,6 +17,7 @@ import '../../../enum/service_charge_method.dart';
 import '../../../view_model/shop_bank_account_view_model.dart';
 import '../../../view_model/shop_info_view_model.dart';
 import '../../../view_model/shop_phone_view_model.dart';
+import '../shop_bank_account_display.dart';
 import 'shop_avatar.dart';
 import 'shop_phone_input.dart';
 

@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../database_provider.dart';
@@ -17,8 +18,10 @@ class ShopTableRepository
     extends BaseRepository<ShopTable, ShopTableTblData, ShopTableTblCompanion, $ShopTableTblTable> {
   ShopTableRepository(super.ref, {required super.db, required super.table, required super.mapper});
 
-  Future<Result<List<ShopTable>?>> getShopTables(int shopID) =>
-      getWhere((tbl) => tbl.shopID.equals(shopID));
+  Future<Result<List<ShopTable>?>> getShopTables(int shopID) => getWhere(
+    (tbl) => tbl.shopID.equals(shopID),
+    order: [(tbl) => OrderingTerm(expression: tbl.no)],
+  );
 
   Future<Result<ShopTable>> createShopTable(ShopTable shopTable, {required int shopID}) async {
     int lastNo = 0;

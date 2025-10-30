@@ -34,7 +34,7 @@ class ShopBankAcountMapper
   @override
   ShopBankAccountTblCompanion toCompanion(ShopBankAccount entity) {
     return ShopBankAccountTblCompanion.insert(
-      shopID: entity.shopID ?? 0,
+      shopID: entity.shopID ?? -1,
       accountNo: Value(entity.accountNo),
       accountName: Value(entity.accountName),
       bankName: Value(entity.bankName),

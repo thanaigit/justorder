@@ -19,7 +19,7 @@ class ShopProductOptionsGroupDetailMapper
   @override
   ShopProductOptionsGroupDetailTblCompanion toCompanion(ShopProductOptionsGroupDetail entity) {
     return ShopProductOptionsGroupDetailTblCompanion.insert(
-      groupID: entity.groupID ?? 0,
+      groupID: entity.groupID ?? -1,
       name: Value(entity.name),
       description: Value(entity.description),
       priceAdded: Value(entity.priceAdded),

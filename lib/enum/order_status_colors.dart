@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../enum/order_status.dart';
-import '../../enum/payment_status.dart';
+import 'order_status.dart';
+import 'payment_status.dart';
 
 class OrderStatusColors {
   OrderStatusColors._();

@@ -18,6 +18,10 @@ import '../../../../core/presentation/widgets/gap.dart';
 import '../../../../core/presentation/widgets/null_box.dart';
 import '../../../../core/presentation/widgets/number_incremental_button.dart';
 import '../../../entities/shop_product.dart';
+import '../../../entities/shop_product_options_detail.dart';
+import '../../../entities/utils/product_options_select.dart';
+import '../../../services/data/repositories/shop_product_options_detail_repository.dart';
+import '../../../view_model/shop_product_options_detail_view_model.dart';
 
 enum ErrorGroupType { unselect, exceed }
 
@@ -64,29 +68,29 @@ class _ProductOptionsSelectorState extends ConsumerState<ProductOptionsSelector>
 
   // เก็บ OptionID, qty เฉพาะตัวเลือกที่มีการเลือก
   // ignore: prefer_final_fields
-  var _selOptIDs = <(String, double?)>[];
+  var _selOptIDs = <(int, double?)>[];
   List<ShopProductOptionsDetail>? _prodOpts;
 
   // เก็บ OptionID, qty ที่มีการเปลี่ยนแปลง Qty ทั้งที่เลือกหรือไม่เลือก ใช้เป็น Cache สำหรับจำนวนของตัวเลือก
   // ignore: prefer_final_fields
-  Map<String, double?> _selOptsQty = {};
+  Map<int, double?> _selOptsQty = {};
 
   // เก็บ Group Name, (OptionID, qty) ที่เลือกของ Radio button
-  Map<String?, (String, double?)?>? _selRadioOpts;
+  Map<String?, (int, double?)?>? _selRadioOpts;
   Map<String?, List<ShopProductOptionsDetail>>? _mapOptGrps;
 
   Future<void> _loadOptionsDetail() async {
     await ref
-        .read(shopProductOptionsDetailStateProvider(widget.product.id ?? '').notifier)
-        .getOptionsDetail();
+        .read(shopProductOptionsDetailViewModelProvider(widget.product.id ?? -1).notifier)
+        .loadOptionsDetail();
     final result = await ref
-        .read(shopProductOptionsDetailUsecasesProvider)
-        .getProductOptionsDetail(widget.product.id ?? '');
+        .read(shopProductOptionsDetailRepositoryProvider)
+        .getProductOptionsDetails(widget.product.id ?? -1);
     if (result.hasError) return;
     _prodOpts = result.success;
     if (_prodOpts == null) return;
     _mapOptGrps = groupBy(_prodOpts!, (opt) => opt.groupName);
-    Map<String?, (String, double?)?> selRadioOptID = _mapOptGrps!.map((k, v) => MapEntry(k, null));
+    Map<String?, (int, double?)?> selRadioOptID = _mapOptGrps!.map((k, v) => MapEntry(k, null));
     _selRadioOpts = Map.of(selRadioOptID);
     _selRadioOpts?.forEach((k, v) {
       if (v != null) _selOptsQty[v.$1] = v.$2;
@@ -189,7 +193,7 @@ class _ProductOptionsSelectorState extends ConsumerState<ProductOptionsSelector>
       final optIDs = _selOptIDs.map((e) => e.$1).toList();
       final idx = optIDs.indexWhere((e) => e == value?.$1);
       // ถ้าไม่เจอ ก็เพิ่มเข้าไป
-      if (value != null && value.$1.isNotEmpty && (idx < 0)) _selOptIDs.add(value);
+      if (value != null && (value.$1 >= 0) && (idx < 0)) _selOptIDs.add(value);
     });
     // debugPrint('_selectObjects _selOptIDs 2 : $_selOptIDs');
     // Check Group Condition
@@ -199,7 +203,7 @@ class _ProductOptionsSelectorState extends ConsumerState<ProductOptionsSelector>
       if (widget.onGroupError != null) {
         widget.onGroupError!(true, errDefineGrps, ErrorGroupType.unselect);
       }
-      FlutterBeep.beep();
+      // FlutterBeep.beep();
       // Sound Notification
       return null;
     }
@@ -210,7 +214,7 @@ class _ProductOptionsSelectorState extends ConsumerState<ProductOptionsSelector>
       if (widget.onGroupError != null) {
         widget.onGroupError!(true, errValuesGrps, ErrorGroupType.unselect);
       }
-      FlutterBeep.beep();
+      // FlutterBeep.beep();
       // Sound Notification
       return null;
     }
@@ -362,7 +366,7 @@ class _ProductOptionsSelectorState extends ConsumerState<ProductOptionsSelector>
     }
 
     Widget selectableBox({
-      required String id,
+      required int id,
       required String name,
       String? description,
       bool isSelected = false,
@@ -374,11 +378,11 @@ class _ProductOptionsSelectorState extends ConsumerState<ProductOptionsSelector>
       double? maxQty,
       double? qtyValue,
       double? priceValue,
-      (String, double?)? radioGroupValue,
+      (int, double?)? radioGroupValue,
       void Function(double? qty)? onRadioTap,
       void Function(double qty)? onAddQty,
       void Function(double qty)? onRemoveQty,
-      void Function(String? value, double? qty)? onRadioChanged,
+      void Function(int? value, double? qty)? onRadioChanged,
       void Function(bool? value, double? qty)? onSelectedChanged,
     }) {
       final selIDs = _selOptIDs.map((e) => e.$1).toList();
@@ -429,7 +433,7 @@ class _ProductOptionsSelectorState extends ConsumerState<ProductOptionsSelector>
       return ValueListenableBuilder<bool>(
         valueListenable: selectNotifier,
         builder: (context, isSelected, _) {
-          final checked = multiValue ? isSelected : (id == (radioGroupValue?.$1 ?? ''));
+          final checked = multiValue ? isSelected : (id == (radioGroupValue?.$1 ?? -1));
 
           Widget nameWidget({double? price}) {
             final style = checked
@@ -490,19 +494,34 @@ class _ProductOptionsSelectorState extends ConsumerState<ProductOptionsSelector>
 
           Widget selectRadioBox() {
             final qty = mustDefineQty ? radioGroupValue?.$2 : null;
-            return Radio<String>(
-              value: id,
-              toggleable: radioToggleable,
+            return RadioGroup<int>(
               groupValue: radioGroupValue?.$1,
-              visualDensity: VisualDensity.compact,
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              fillColor: (disabledNonSelect && !checked) || outStock
-                  ? WidgetStateProperty.resolveWith((states) => AppColors.disableMajorInfoColor)
-                  : null,
               onChanged: (disabledNonSelect && !checked) || outStock || (onRadioChanged == null)
-                  ? null
+                  ? (value) {}
                   : (value) => onRadioChanged(value, qty),
+              child: Radio<int>(
+                value: id,
+                enabled: !((disabledNonSelect && !checked) || outStock),
+                visualDensity: VisualDensity.compact,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                fillColor: (disabledNonSelect && !checked) || outStock
+                    ? WidgetStateProperty.resolveWith((states) => AppColors.disableMajorInfoColor)
+                    : null,
+              ),
             );
+            // Radio<String>(
+            //   value: id,
+            //   toggleable: radioToggleable,
+            //   groupValue: radioGroupValue?.$1,
+            //   visualDensity: VisualDensity.compact,
+            //   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            //   fillColor: (disabledNonSelect && !checked) || outStock
+            //       ? WidgetStateProperty.resolveWith((states) => AppColors.disableMajorInfoColor)
+            //       : null,
+            //   onChanged: (disabledNonSelect && !checked) || outStock || (onRadioChanged == null)
+            //       ? null
+            //       : (value) => onRadioChanged(value, qty),
+            // );
           }
 
           // Widget selectNameWidget({double? price}) {
@@ -834,10 +853,10 @@ class _ProductOptionsSelectorState extends ConsumerState<ProductOptionsSelector>
       bool mustDefine = false,
       ErrorGroupType? errorType,
       // optionID, qty
-      (String, double?)? selectRadioGroupValue,
+      (int, double?)? selectRadioGroupValue,
       required List<ShopProductOptionsDetail> groupOptions,
-      void Function(String? value, double? qty, double? price)? onRadioTap,
-      void Function(String? value, double? qty, double? price)? onRadioChanged,
+      void Function(int? value, double? qty, double? price)? onRadioTap,
+      void Function(int? value, double? qty, double? price)? onRadioChanged,
     }) {
       final hasError = errorType != null;
       final grpLabel = (errorType == ErrorGroupType.unselect)
@@ -903,7 +922,7 @@ class _ProductOptionsSelectorState extends ConsumerState<ProductOptionsSelector>
                     ? (optID, qtyOpt)
                     : null;
                 return selectableBox(
-                  id: optID ?? '',
+                  id: optID ?? -1,
                   name: optName,
                   outStock: outStock,
                   disabledNonSelect: isDisabled,
@@ -946,10 +965,8 @@ class _ProductOptionsSelectorState extends ConsumerState<ProductOptionsSelector>
           _prodOpts?.fold(0.0, (prevValue, opt) => (prevValue ?? 0) + (opt.priceAdded ?? 0)) ?? 0.0;
       if (_mapOptGrps == null) return const NullBox();
       // debugPrint('_selRadioOpts : $_selRadioOpts');
-      final selRadOptIdNotifier = ValueNotifier<Map<String?, (String, double?)?>>(
-        _selRadioOpts ?? {},
-      );
-      return ValueListenableBuilder<Map<String?, (String, double?)?>>(
+      final selRadOptIdNotifier = ValueNotifier<Map<String?, (int, double?)?>>(_selRadioOpts ?? {});
+      return ValueListenableBuilder<Map<String?, (int, double?)?>>(
         valueListenable: selRadOptIdNotifier,
         builder: (context, selRadOpts, _) {
           return Column(
@@ -963,7 +980,7 @@ class _ProductOptionsSelectorState extends ConsumerState<ProductOptionsSelector>
                 final maxValue = optList[0].maxValueCount ?? 0;
                 final selGrpValue = selRadOpts.values.elementAt(index);
 
-                void doRadioCheck(String? value, double? qty, double? price) {
+                void doRadioCheck(int? value, double? qty, double? price) {
                   final key = selRadOpts.keys.elementAt(index);
                   if (key == null) return;
                   // debugPrint('doRadioCheck key : $key');
@@ -992,7 +1009,7 @@ class _ProductOptionsSelectorState extends ConsumerState<ProductOptionsSelector>
                   oldSum = oldSum < 0.0 ? 0.0 : oldSum;
                   // if (oldPrice != 0.0) _sumPriceNotifier.value = oldSum;
                   // ------------ Calc Old price ready ---------------------------
-                  _selRadioOpts![key] = (value ?? '', qty);
+                  _selRadioOpts![key] = (value ?? -1, qty);
                   // debugPrint('doRadioCheck new _selRadioOpts : $_selRadioOpts');
                   // debugPrint('doRadioCheck new qty : $qty');
                   // debugPrint('doRadioCheck new price : $price');
@@ -1102,13 +1119,22 @@ class _ProductOptionsSelectorState extends ConsumerState<ProductOptionsSelector>
                 selected: !takeHome,
                 minLeadingWidth: 0.0,
                 title: Text('ทานที่ร้าน', style: takeHome ? normalStyle : selectStyle),
-                leading: Radio<bool>(
-                  value: false,
+                leading: RadioGroup<bool>(
                   groupValue: takeHome,
-                  visualDensity: VisualDensity.compact,
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   onChanged: (value) => _takeHomeNotifier.value = value ?? false,
+                  child: Radio<bool>(
+                    value: false,
+                    visualDensity: VisualDensity.compact,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
                 ),
+                // Radio<bool>(
+                //   value: false,
+                //   groupValue: takeHome,
+                //   visualDensity: VisualDensity.compact,
+                //   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                //   onChanged: (value) => _takeHomeNotifier.value = value ?? false,
+                // ),
                 onTap: () => _takeHomeNotifier.value = false,
               ),
               ListTile(
@@ -1130,13 +1156,22 @@ class _ProductOptionsSelectorState extends ConsumerState<ProductOptionsSelector>
                     ),
                   ],
                 ),
-                leading: Radio<bool>(
-                  value: true,
+                leading: RadioGroup<bool>(
                   groupValue: takeHome,
-                  visualDensity: VisualDensity.compact,
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   onChanged: (value) => _takeHomeNotifier.value = value ?? false,
+                  child: Radio<bool>(
+                    value: true,
+                    visualDensity: VisualDensity.compact,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
                 ),
+                // Radio<bool>(
+                //   value: true,
+                //   groupValue: takeHome,
+                //   visualDensity: VisualDensity.compact,
+                //   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                //   onChanged: (value) => _takeHomeNotifier.value = value ?? false,
+                // ),
                 onTap: () => _takeHomeNotifier.value = true,
               ),
             ],

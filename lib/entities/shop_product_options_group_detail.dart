@@ -1,5 +1,6 @@
 import '../core/domain/entities/base_class.dart';
 import '../core/enum/data_status.dart';
+import 'shop_product_options_group.dart';
 
 class ShopProductOptionsGroupDetail extends BaseClass {
   final int? id;
@@ -15,6 +16,7 @@ class ShopProductOptionsGroupDetail extends BaseClass {
   final bool outStock;
   final DateTime? outStockTime;
   final DateTime? hasStockTime;
+  final ShopProductOptionsGroup? group; // for cache
   ShopProductOptionsGroupDetail({
     this.id,
     this.groupID,
@@ -29,6 +31,7 @@ class ShopProductOptionsGroupDetail extends BaseClass {
     this.outStock = false,
     this.outStockTime,
     this.hasStockTime,
+    this.group,
     super.dataStatus,
     super.createdTime,
     super.updatedTime,
@@ -50,6 +53,7 @@ class ShopProductOptionsGroupDetail extends BaseClass {
     bool? outStock,
     DateTime? outStockTime,
     DateTime? hasStockTime,
+    ShopProductOptionsGroup? group, // for cache
     DataStatus? dataStatus,
     DateTime? createdTime,
     DateTime? updatedTime,
@@ -70,6 +74,7 @@ class ShopProductOptionsGroupDetail extends BaseClass {
       outStock: outStock ?? this.outStock,
       outStockTime: outStockTime ?? this.outStockTime,
       hasStockTime: hasStockTime ?? this.hasStockTime,
+      group: group ?? this.group,
       dataStatus: dataStatus ?? this.dataStatus,
       createdTime: createdTime ?? this.createdTime,
       updatedTime: updatedTime ?? this.updatedTime,
@@ -142,6 +147,7 @@ class ShopProductOptionsGroupDetail extends BaseClass {
       outStock: outStock,
       outStockTime: outStockTime,
       hasStockTime: hasStockTime,
+      group: group,
       dataStatus: dataStatus ?? this.dataStatus,
       createdTime: createdTime ?? this.createdTime,
       updatedTime: updatedTime ?? this.updatedTime,

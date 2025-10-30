@@ -24,6 +24,7 @@ import 'data/tables/shop_product_options_table.dart';
 import 'data/tables/shop_product_table.dart';
 import 'data/tables/shop_product_unit_table.dart';
 import 'data/tables/shop_table_table.dart';
+import 'data/views/shop_product_options_detail.dart';
 
 part 'database.g.dart';
 
@@ -44,12 +45,13 @@ part 'database.g.dart';
     ShopOrderItemsTbl,
     ShopOrderItemOptionsTbl,
   ],
+  views: [ShopProductOptionsDetailView],
 )
 class Database extends _$Database {
   Database() : super(_openConnection());
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration {
@@ -77,6 +79,11 @@ class Database extends _$Database {
           await m.createTable(shopOrderTbl);
           await m.createTable(shopOrderItemsTbl);
           await m.createTable(shopOrderItemOptionsTbl);
+          await m.createView(shopProductOptionsDetailView);
+        }
+        if (from == 5) {
+          await m.deleteTable('shopProductTbl');
+          await m.createTable(shopProductTbl);
         }
       },
     );

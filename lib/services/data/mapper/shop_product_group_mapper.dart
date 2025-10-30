@@ -14,7 +14,7 @@ class ShopProductGroupMapper
   @override
   ShopProductGroupTblCompanion toCompanion(ShopProductGroup entity) {
     return ShopProductGroupTblCompanion.insert(
-      shopID: entity.shopID ?? 0,
+      shopID: entity.shopID ?? -1,
       name: Value(entity.name),
       order: Value(entity.order),
       dataStatus: Value(entity.dataStatus),

@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:intl/intl.dart';
-import 'package:justorder/entities/shop_product_options.dart';
 
 import '../../../../core/const/colors.dart';
 import '../../../../core/const/size.dart';
 import '../../../../core/presentation/styles/text_styles.dart';
 import '../../../entities/shop_product.dart';
+import '../../../entities/shop_product_options.dart';
+import '../../../view_model/shop_product_options_view_model.dart';
 
 class ShopProductOptionsButton extends ConsumerStatefulWidget {
   final ShopProduct product;
@@ -34,8 +35,8 @@ class _ShopProductOptionsButtonState extends ConsumerState<ShopProductOptionsBut
   final _loadingNotifier = ValueNotifier<bool>(false);
 
   void _loadOptions() async {
-    final productID = widget.product.id ?? '';
-    // await ref.read(shopProductOptionsStateProvider(productID).notifier).getProductOptions();
+    final productID = widget.product.id ?? -1;
+    await ref.read(shopProductOptionsViewModelProvider(productID).notifier).loadProductOptions();
     _loadingNotifier.value = false;
   }
 
@@ -48,8 +49,9 @@ class _ShopProductOptionsButtonState extends ConsumerState<ShopProductOptionsBut
 
   @override
   Widget build(BuildContext context) {
-    List<ShopProductOptions>? options =
-        []; // ref.watch(shopProductOptionsStateProvider(widget.product.id ?? ''));
+    List<ShopProductOptions>? options = ref.watch(
+      shopProductOptionsViewModelProvider(widget.product.id ?? -1),
+    );
     options = options?.where((e) => !e.closeSale).toList();
     final optCount = options?.length ?? 0;
 

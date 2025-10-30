@@ -39,7 +39,7 @@ class ShopPhoneMapper extends DriftMapper<ShopPhone, ShopPhoneTblData, ShopPhone
   @override
   ShopPhoneTblCompanion toCompanion(ShopPhone entity) {
     return ShopPhoneTblCompanion.insert(
-      shopID: entity.shopID ?? 0,
+      shopID: entity.shopID ?? -1,
       phoneNo: Value(entity.phoneNo),
       note: Value(entity.note),
       dataStatus: Value(entity.dataStatus),

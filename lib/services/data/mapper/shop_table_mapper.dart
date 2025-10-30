@@ -47,7 +47,7 @@ class ShopTableMapper extends DriftMapper<ShopTable, ShopTableTblData, ShopTable
   @override
   ShopTableTblCompanion toCompanion(ShopTable entity) {
     return ShopTableTblCompanion.insert(
-      shopID: entity.shopID ?? 0,
+      shopID: entity.shopID ?? -1,
       name: Value(entity.name),
       no: Value(entity.no),
       zone: Value(entity.zone),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_popup/flutter_popup.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:justorder/core/presentation/widgets/simple_menu.dart';
+import 'package:justorder/view_model/shop_product_view_model.dart';
 
 import 'core/const/colors.dart';
 import 'core/const/size.dart';
@@ -14,6 +14,8 @@ import 'core/presentation/notifiers/scale_notifier.dart';
 import 'core/presentation/styles/text_styles.dart';
 import 'core/presentation/widgets/buttons/scale_button.dart';
 import 'core/presentation/widgets/gap.dart';
+import 'core/presentation/widgets/image_box.dart';
+import 'core/presentation/widgets/simple_menu.dart';
 import 'core/providers/app_common_data_provider.dart';
 import 'core/utilities/func_utils.dart';
 import 'view_model/shop_info_view_model.dart';
@@ -21,6 +23,7 @@ import 'view_model/shop_product_group_view_model.dart';
 import 'view_model/shop_product_options_group_view_model.dart';
 import 'view_model/shop_product_unit_view_model.dart';
 import 'view_model/shop_table_view_model.dart';
+import 'views/pages/products/shop_product_list.dart';
 import 'views/pages/shop/shop_info_bank_account.dart';
 import 'views/pages/shop/shop_info_edit_addr.dart';
 import 'views/pages/shop/shop_info_edit_phone.dart';
@@ -66,13 +69,14 @@ class _HomePageState extends ConsumerState<HomePage> {
     ref.read(shopInfoViewModelProvider.notifier).loadShop().then((result) {
       final shop = result.success;
       if (shop == null) return;
-      final shopID = shop.id ?? 0;
+      final shopID = shop.id ?? -1;
       ref.read(shopTableViewModelProvider(shopID).notifier).loadShopTables();
       ref.read(shopProductGroupViewModelProvider(shopID).notifier).loadProductGroups();
       ref.read(shopProductUnitViewModelProvider(shopID).notifier).loadProductUnits();
       ref
           .read(shopProductOptionsGroupViewModelProvider(shopID).notifier)
           .loadProductOptionsGroups();
+      ref.read(shopProductViewModelProvider(shopID).notifier).loadShopProducts();
     });
   }
 
@@ -116,6 +120,8 @@ class _HomePageState extends ConsumerState<HomePage> {
     final isVertical = (orient == Orientation.portrait);
     final iconSize = AppSize.iconLarge;
     final size = MediaQuery.sizeOf(context);
+    final paddWdt = MediaQuery.of(context).padding.horizontal;
+    final imgWidth = ((size.width - paddWdt) * 0.6) / 1.618;
     double btnRadius = (size.width - (AppSize.pageHorizontalSpace * 2) - 110) / 14;
     if (btnRadius > 22.0) btnRadius = 22.0;
 
@@ -137,6 +143,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     final shop = ref.watch(shopInfoViewModelProvider);
     final shopExists = (shop != null) && (shop.id != null);
+    final products = ref.watch(shopProductViewModelProvider(shop?.id ?? -1));
     // debugPrint('shop = ${shop.toString()}');
     // debugPrint('shopExists = $shopExists');
 
@@ -214,7 +221,39 @@ class _HomePageState extends ConsumerState<HomePage> {
                 sizeOffset: -0.5,
                 color: AppColors.infoHighlight,
               ),
+              count: products?.length ?? 0,
+              onTap: shop != null
+                  ? () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ShopProductListPage(
+                          shop: shop,
+                          readOnly: false,
+                          forShopCashier: true,
+                          forShopService: true,
+                        ),
+                      ),
+                    )
+                  : null,
             ),
+            // if (products != null && products.isNotEmpty)
+            //   SizedBox(
+            //     height: imgWidth,
+            //     child: ListView.builder(
+            //       itemCount: products.length,
+            //       scrollDirection: Axis.horizontal,
+            //       itemBuilder: (context, index) {
+            //         return ImageBox(
+            //           showLoading: false,
+            //           useFadeEffect: true,
+            //           image: products[index].image?.imageProvider,
+            //           width: imgWidth,
+            //           height: imgWidth,
+            //           // onTap: () => openViewer(),
+            //         );
+            //       },
+            //     ),
+            //   ),
             const Gap.height(GapSize.veryLoose),
           ],
         ),

@@ -4,7 +4,7 @@ import '../../../core/enum/data_status.dart';
 import 'shop_info_table.dart';
 
 class ShopProductTbl extends Table {
-  late final id = integer().autoIncrement()();
+  late final id = integer()();
   late final shopID = integer().references(ShopInfoTbl, #id)();
   late final name = text().nullable()();
   late final description = text().nullable()();

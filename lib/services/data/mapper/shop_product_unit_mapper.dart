@@ -14,7 +14,7 @@ class ShopProductUnitMapper
   @override
   ShopProductUnitTblCompanion toCompanion(ShopProductUnit entity) {
     return ShopProductUnitTblCompanion.insert(
-      shopID: entity.shopID ?? 0,
+      shopID: entity.shopID ?? -1,
       name: Value(entity.name),
       isWeight: Value(entity.isWeight),
       dataStatus: Value(entity.dataStatus),

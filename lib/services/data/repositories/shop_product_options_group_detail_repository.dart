@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/utilities/result_handle.dart';
@@ -36,7 +37,14 @@ class ShopProductOptionsGroupDetailRepository
 
   Future<Result<List<ShopProductOptionsGroupDetail>?>> getProductOptionsGroupDetails(
     int groupID,
-  ) async => getWhere((tbl) => tbl.groupID.equals(groupID));
+  ) async => getWhere(
+    (tbl) => tbl.groupID.equals(groupID),
+    order: [(tbl) => OrderingTerm(expression: tbl.order)],
+  );
+
+  Future<Result<List<ShopProductOptionsGroupDetail>?>> getOptionsDetailInGroups(
+    List<int> groupIDs,
+  ) async => getWhere((tbl) => tbl.groupID.isIn(groupIDs));
 
   Future<Result<ShopProductOptionsGroupDetail>> createProductOptionsGroupDetail(
     ShopProductOptionsGroupDetail detail, {

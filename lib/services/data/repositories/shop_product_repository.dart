@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/utilities/result_handle.dart';
@@ -28,11 +29,27 @@ class ShopProductRepository
     required super.mapper,
   });
 
-  Future<Result<List<ShopProduct>?>> getShopProducts(int shopID) =>
-      getWhere((tbl) => tbl.shopID.equals(shopID));
+  Future<Result<int>> getLastProductID() => getMaxInt(db.shopProductTbl.id);
 
-  Future<Result<ShopProduct>> createShopProduct(ShopProduct product, {required int shopID}) =>
-      createReturn(product.copyWith(shopID: shopID));
+  Future<int> getLastID() async {
+    final result = await getLastProductID();
+    if (result.hasError) return -1;
+    return result.success ?? 0;
+  }
+
+  Future<Result<List<ShopProduct>?>> getShopProducts(int shopID) => getWhere(
+    (tbl) => tbl.shopID.equals(shopID),
+    order: [(tbl) => OrderingTerm(expression: tbl.order)],
+  );
+
+  Future<Result<ShopProduct>> createShopProduct(ShopProduct product, {required int shopID}) async {
+    int lastNo = 0;
+    final result = await getMaxInt(db.shopProductTbl.order);
+    if (!result.hasError) lastNo = result.success ?? 0;
+    final newNo = lastNo + 1;
+    final newProduct = product.copyWith(shopID: shopID, order: newNo);
+    return createReturn(newProduct);
+  }
 
   Future<Result<ShopProduct>> updateShopProduct(ShopProduct product) async {
     final result = await updateWhereReturnSingle(

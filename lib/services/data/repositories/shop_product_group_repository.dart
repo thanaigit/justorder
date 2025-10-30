@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/utilities/result_handle.dart';
@@ -28,8 +29,10 @@ class ShopProductGroupRepository
     required super.mapper,
   });
 
-  Future<Result<List<ShopProductGroup>?>> getProductGroups(int shopID) =>
-      getWhere((tbl) => tbl.shopID.equals(shopID));
+  Future<Result<List<ShopProductGroup>?>> getProductGroups(int shopID) => getWhere(
+    (tbl) => tbl.shopID.equals(shopID),
+    order: [(tbl) => OrderingTerm(expression: tbl.order)],
+  );
 
   Future<Result<ShopProductGroup>> createProductGroup(
     ShopProductGroup group, {

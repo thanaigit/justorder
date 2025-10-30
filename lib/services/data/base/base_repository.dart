@@ -21,9 +21,11 @@ class BaseRepository<
 
   BaseRepository(this.ref, {required this.db, required this.table, required this.mapper});
 
-  Future<Result<List<E>?>> getAll() async {
+  Future<Result<List<E>?>> getAll({List<OrderingTerm Function(T)>? order}) async {
     try {
-      final data = await db.select(table).get();
+      var query = db.select(table);
+      if (order != null) query = query..orderBy(order);
+      final data = await query.get();
       return Result<List<E>?>(success: mapper.toEntities(data));
     } catch (e) {
       return Result<List<E>?>(
@@ -32,9 +34,14 @@ class BaseRepository<
     }
   }
 
-  Future<Result<List<E>?>> getWhere(Expression<bool> Function(T tbl) where) async {
+  Future<Result<List<E>?>> getWhere(
+    Expression<bool> Function(T tbl) where, {
+    List<OrderingTerm Function(T)>? order,
+  }) async {
     try {
-      final data = await (db.select(table)..where(where)).get();
+      var query = db.select(table)..where(where);
+      if (order != null) query = query..orderBy(order);
+      final data = await query.get();
       return Result<List<E>?>(success: mapper.toEntities(data));
     } catch (e) {
       return Result<List<E>?>(

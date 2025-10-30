@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:justorder/core/providers/image_local_storage_provider.dart';
 import 'package:justorder/view_model/shop_product_group_view_model.dart';
 import 'package:justorder/view_model/shop_product_unit_view_model.dart';
+import 'package:justorder/view_model/shop_product_view_model.dart';
 import 'package:my_ui/const/enum.dart';
 import 'package:my_ui/widgets/common/input/dropdown_input.dart';
 import 'package:my_ui/widgets/common/input/text_input.dart';
@@ -32,16 +34,10 @@ import '../../../../core/utilities/input_decimal_format.dart';
 import '../../../../core/utilities/result_handle.dart';
 import '../../../../core/utilities/routes/page_trace.dart';
 import '../../../../core/utilities/toast_message.dart';
-import '../../../../domain/usecases/shop/shop_product_image_state.dart';
 import '../../../entities/shop_info.dart';
 import '../../../entities/shop_product.dart';
 import '../../../entities/shop_product_group.dart';
 import '../../../entities/shop_product_unit.dart';
-import '../../../providers/shop/shop_kitchen_state_provider.dart';
-import '../../../providers/shop/shop_product_group_state_provider.dart';
-import '../../../providers/shop/shop_product_list_state_provider.dart';
-import '../../../providers/shop/shop_product_unit_state_provider.dart';
-import '../shop_info_edit_kitchen.dart';
 import 'shop_product_group_entry.dart';
 import 'shop_product_unit_entry.dart';
 
@@ -210,17 +206,17 @@ class _ShopProductEntryPageState extends ConsumerState<ShopProductEntryPage> {
       return;
     }
 
-    if (_cookItem && _kitchenController.text.trim().isEmpty) {
-      const msg = 'กรุณากำหนดห้องครัวสำหรับเมนูนี้';
-      await errorMessageDialog(msg);
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.fastOutSlowIn,
-      );
-      _kitchenFocus.requestFocus();
-      return;
-    }
+    // if (_cookItem && _kitchenController.text.trim().isEmpty) {
+    //   const msg = 'กรุณากำหนดห้องครัวสำหรับเมนูนี้';
+    //   await errorMessageDialog(msg);
+    //   _scrollController.animateTo(
+    //     _scrollController.position.maxScrollExtent,
+    //     duration: const Duration(milliseconds: 500),
+    //     curve: Curves.fastOutSlowIn,
+    //   );
+    //   _kitchenFocus.requestFocus();
+    //   return;
+    // }
 
     var strPrice = (_priceController.text.trim());
     if (strPrice.isEmpty) {
@@ -242,11 +238,13 @@ class _ShopProductEntryPageState extends ConsumerState<ShopProductEntryPage> {
     strPriceHome = strPriceHome.replaceAll(',', '');
     double? priceHome = (strPriceHome.trim() != '') ? double.parse(strPriceHome) : null;
 
+    final imageChanged =
+        widget.product != null &&
+        widget.product!.image != null &&
+        (widget.product!.image != _imageNotifier.value);
     ImageBase? saveImage = (widget.product == null)
         ? _imageNotifier.value
-        : ((widget.product!.image != null && (widget.product!.image != _imageNotifier.value))
-              ? _imageNotifier.value
-              : null);
+        : ((imageChanged) ? _imageNotifier.value : null);
 
     if (price != null && price > 0 && _unitController.text.trim().isEmpty) {
       const msg = 'กรุณากำหนดหน่วย';
@@ -306,6 +304,7 @@ class _ShopProductEntryPageState extends ConsumerState<ShopProductEntryPage> {
             name: _nameController.text.trim(),
             description: _descController.text.trim(),
             image: saveImage,
+            imagePath: imageChanged ? '' : widget.product!.imagePath,
             mainGroup: _groupController.text.trim(),
             allowTakeHome: _allowTakeHome,
             recommended: _recommendedNotifier.value,
@@ -325,12 +324,12 @@ class _ShopProductEntryPageState extends ConsumerState<ShopProductEntryPage> {
           );
     final saveResult = (widget.product == null)
         ? await ref
-              .read(shopProductListStateProvider(widget.shop.id ?? '').notifier)
-              .createNewProduct(shopProduct)
+              .read(shopProductViewModelProvider(widget.shop.id ?? -1).notifier)
+              .createShopProduct(shopProduct)
         : (shopProduct != widget.product)
         ? await ref
-              .read(shopProductListStateProvider(widget.shop.id ?? '').notifier)
-              .updateProduct(shopProduct)
+              .read(shopProductViewModelProvider(widget.shop.id ?? -1).notifier)
+              .updateShopProduct(shopProduct)
         : Result<ShopProduct>(success: shopProduct);
     var newProd = saveResult.success;
     if (newProd != null) {
@@ -398,16 +397,26 @@ class _ShopProductEntryPageState extends ConsumerState<ShopProductEntryPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (widget.product?.image == null && widget.product?.shopID != null) {
-      ref
-          .read(shopProductImageStateProvider(widget.product!.id!).notifier)
-          .getProductDefaultImage(widget.product!.shopID!)
-          .then((result) {
-            if (result.hasError || result.success == null) return;
-            final img = result.success!;
-            widget.product!.image = img;
-            _imageNotifier.value = img;
-          });
+    if (widget.product?.image == null &&
+        widget.product?.shopID != null &&
+        widget.product?.imagePath != null &&
+        (widget.product?.imagePath ?? '').isNotEmpty) {
+      // ref
+      //     .read(shopProductImageStateProvider(widget.product!.id!).notifier)
+      //     .getProductDefaultImage(widget.product!.shopID!)
+      //     .then((result) {
+      //       if (result.hasError || result.success == null) return;
+      //       final img = result.success!;
+      //       widget.product!.image = img;
+      //       _imageNotifier.value = img;
+      //     });
+      final filePath = widget.product?.imagePath ?? '';
+      ref.read(imageLocalStorageProvider).loadImageLocal(filePath).then((result) {
+        if (result.hasError || result.success == null) return;
+        final img = result.success!;
+        widget.product!.image = img;
+        _imageNotifier.value = img;
+      });
     }
   }
 
@@ -671,9 +680,7 @@ class _ShopProductEntryPageState extends ConsumerState<ShopProductEntryPage> {
                               onPressed: () async {
                                 final group = await Navigator.push(
                                   context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ShopProductGroupEntry(shop: widget.shop),
-                                  ),
+                                  MaterialPageRoute(builder: (context) => ShopProductGroupEntry()),
                                 );
                                 if (group == null || (group is! ShopProductGroup)) return;
                                 _groupController.text = group.name ?? '';
@@ -776,8 +783,7 @@ class _ShopProductEntryPageState extends ConsumerState<ShopProductEntryPage> {
                                       final unit = await Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              ShopProductUnitEntryPage(shop: widget.shop),
+                                          builder: (context) => ShopProductUnitEntryPage(),
                                         ),
                                       );
                                       if (unit == null || (unit is! ShopProductUnit)) return;
@@ -853,8 +859,7 @@ class _ShopProductEntryPageState extends ConsumerState<ShopProductEntryPage> {
                                       final unit = await Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              ShopProductUnitEntryPage(shop: widget.shop),
+                                          builder: (context) => ShopProductUnitEntryPage(),
                                         ),
                                       );
                                       if (unit == null || (unit is! ShopProductUnit)) return;

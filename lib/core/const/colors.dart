@@ -11,8 +11,9 @@ class AppColors {
   static Color divider = Colors.blueGrey.shade50;
   static Color dividerShadow = Colors.blueGrey.shade100.withValues(alpha: 0.6);
   static Color dividerHighlight = Colors.blueGrey.shade100;
-  static Color disableObjectColor = Colors.grey;
-  static Color disableObjectDarkColor = Colors.grey.shade600;
+  static Color disableObjectColor = Colors.grey.shade400;
+  static Color disableObjectDarkColor = Colors.grey;
+  static Color normalObjectColor = Colors.grey.shade800;
   static Color inputFillBackground = Colors.grey.shade100;
   static Color inputFocusBackground = Colors.blue.shade800;
   static Color inputHintStyle = Colors.grey.shade400;

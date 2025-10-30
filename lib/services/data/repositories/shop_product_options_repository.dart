@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/utilities/result_handle.dart';
@@ -28,13 +29,36 @@ class ShopProductOptionsRepository
     required super.mapper,
   });
 
-  Future<Result<List<ShopProductOptions>?>> getProductOptions(int productID) =>
-      getWhere((tbl) => tbl.productID.equals(productID));
+  Future<Result<List<ShopProductOptions>?>> getProductOptions(int productID) => getWhere(
+    (tbl) => tbl.productID.equals(productID),
+    order: [(tbl) => OrderingTerm(expression: tbl.order)],
+  );
 
   Future<Result<ShopProductOptions>> createProductOption(
     ShopProductOptions option, {
     required int productID,
-  }) => createReturn(option.copyWith(productID: productID));
+  }) async {
+    int lastNo = 0;
+    final result = await getMaxInt(db.shopProductOptionsTbl.order);
+    if (!result.hasError) lastNo = result.success ?? 0;
+    final newNo = lastNo + 1;
+    final newOption = option.copyWith(productID: productID, order: newNo);
+    return createReturn(newOption);
+  }
+
+  Future<Result<List<ShopProductOptions>>> createProductOptions(
+    List<ShopProductOptions> options, {
+    required int productID,
+  }) async {
+    int lastNo = 0;
+    final result = await getMaxInt(db.shopProductOptionsTbl.order);
+    if (!result.hasError) lastNo = result.success ?? 0;
+    final newOptions = List.generate(
+      options.length,
+      (index) => options[index].copyWith(productID: productID, order: lastNo + index + 1),
+    );
+    return createBatchReturn(newOptions);
+  }
 
   Future<Result<ShopProductOptions>> updateProductOption(ShopProductOptions option) async {
     final result = await updateWhereReturnSingle(option, where: (tbl) => tbl.id.equals(option.id!));
@@ -44,6 +68,9 @@ class ShopProductOptionsRepository
 
   Future<Result<bool>> deleteOption(ShopProductOptions option) =>
       deleteWhere((tbl) => tbl.id.equals(option.id!));
+
+  Future<Result<bool>> deleteOptions(List<int> optionIDs) =>
+      deleteWhere((tbl) => tbl.id.isIn(optionIDs));
 
   Future<Result<bool>> deleteProductOptions(int productID) =>
       deleteWhere((tbl) => tbl.productID.equals(productID));

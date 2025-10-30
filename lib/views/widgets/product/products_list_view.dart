@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,7 +28,7 @@ import '../../../view_model/shop_product_unit_view_model.dart';
 import '../../../view_model/shop_product_view_model.dart';
 import '../../pages/products/shop_product_entry.dart';
 import '../../../entities/utils/order_item_options_select.dart';
-import '../orders/order_summary_container.dart';
+import '../../pages/products/shop_product_options_entry.dart';
 import 'product_options_selector.dart';
 import 'shop_product_options_button.dart';
 import 'shop_product_view.dart';
@@ -113,12 +114,7 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
   void _createNewProduct() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => ShopProductEntryPage(
-          shop: widget.shop,
-          // param: _param,
-        ),
-      ),
+      MaterialPageRoute(builder: (context) => ShopProductEntryPage(shop: widget.shop)),
     ).then((prod) {
       if (prod == null || prod is! ShopProduct) return;
       // _scrollTo(prod);
@@ -150,12 +146,12 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
       final confirmed = await _confirmDelete(product);
       if (!confirmed) return;
     }
-    // final result = await ref
-    //     .read(shopProductListStateProvider(widget.shop.id ?? '').notifier)
-    //     .deleteProduct(product);
-    // if (result.hasError) {
-    //   await errorMessageDialog(result.error?.message ?? '');
-    // }
+    final result = await ref
+        .read(shopProductViewModelProvider(widget.shop.id ?? -1).notifier)
+        .deleteShopProduct(product);
+    if (result.hasError) {
+      await errorMessageDialog(result.error?.message ?? '');
+    }
   }
 
   Future<void> _loadOrder(int orderID) async {
@@ -175,12 +171,12 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
   }
 
   void _doSearchProduct() {
-    // final text = _productSearch.text;
-    // final prods = ref.read(shopProductListStateProvider(widget.shop.id ?? ''));
-    // final searchProds = prods
-    //     ?.where((e) => !e.closeSale && (e.name ?? '').toLowerCase().contains(text.toLowerCase()))
-    //     .toList();
-    // if (!listEquals(_products.value, searchProds)) _products.value = searchProds;
+    final text = _productSearch.text;
+    final prods = ref.read(shopProductViewModelProvider(widget.shop.id ?? -1));
+    final searchProds = prods
+        ?.where((e) => !e.closeSale && (e.name ?? '').toLowerCase().contains(text.toLowerCase()))
+        .toList();
+    if (!listEquals(_products.value, searchProds)) _products.value = searchProds;
   }
 
   @override
@@ -256,7 +252,9 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
     // if (orderParam != null && widget.canSelectItem) {
     if (widget.canSelectItem) {
       // debugPrint('_orderID = $_orderID');
-      _order = ref.watch(shopOrderStateProvider(_orderID));
+
+      // _order = ref.watch(shopOrderStateProvider(_orderID));
+
       // final orders = widget.forShopService
       //     ? ref.watch(shopTableOrdersStateProvider(widget.table?.id ?? ''))
       //     : ref.watch(shopOrdersStateProvider(widget.shop));
@@ -698,14 +696,15 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
       );
     }
 
-    Widget summaryContainer({double? width}) => OrderSummaryContainer(
-      shop: widget.shop,
-      orderID: _orderID ?? -1,
-      width: width,
-      forShopService: widget.forShopService,
-      forShopCashier: widget.forShopCashier,
-      combineOrderCookProcess: true,
-    );
+    Widget summaryContainer({double? width}) => Container();
+    // OrderSummaryContainer(
+    //   shop: widget.shop,
+    //   orderID: _orderID ?? -1,
+    //   width: width,
+    //   forShopService: widget.forShopService,
+    //   forShopCashier: widget.forShopCashier,
+    //   combineOrderCookProcess: true,
+    // );
 
     Widget summaryPane() {
       final width = isWideScreen

@@ -8,7 +8,7 @@ class ShopImageMapper extends DriftMapper<ShopImage, ShopImageTblData, ShopImage
   @override
   ShopImageTblCompanion toCompanion(ShopImage entity) {
     return ShopImageTblCompanion.insert(
-      shopID: entity.shopID ?? 0,
+      shopID: entity.shopID ?? -1,
       refID: Value(entity.refID),
       bucket: Value(entity.bucket),
       folder: Value(entity.folder),
