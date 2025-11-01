@@ -98,7 +98,15 @@ class ShopAvatar extends ConsumerWidget {
     return loadAsync.when(
       data: (data) {
         imageBase = data.success;
-        return profileAvatar(image: imageBase?.imageProvider, isLoadning: false);
+        final imgProv = imageBase != null && imageBase?.imageFile != null
+            ? Image.file(
+                imageBase!.imageFile!,
+                fit: BoxFit.cover,
+                cacheWidth: size?.toInt(),
+                filterQuality: FilterQuality.low,
+              ).image
+            : imageBase?.imageProvider;
+        return profileAvatar(image: imgProv, isLoadning: false);
       },
       error: (err, stack) => profileAvatar(isLoadning: false),
       loading: () => profileAvatar(isLoadning: true),

@@ -43,7 +43,7 @@ class ShopProductViewModel extends Notifier<List<ShopProduct>?> {
     if (products.isNotEmpty) {
       for (var i = 0; i < products.length; i++) {
         var product = products[i];
-        if (product.imagePath != null) {
+        if (product.imagePath != null && product.imagePath!.isNotEmpty && product.image == null) {
           final imgResult = await _imageRepo.loadImageLocal(product.imagePath ?? '');
           if (!(imgResult.hasError)) products[i].image = imgResult.success;
         }
@@ -97,7 +97,7 @@ class ShopProductViewModel extends Notifier<List<ShopProduct>?> {
     }
     String? imagePath;
     // ถ้ามี Image File แต่ ImagePath = '' แสดงว่ามีการเปลี่ยนรูป ต้องบันทึกรูปใหม่
-    // แต่ถ้ามี Image Field แต่ ImagePath != '' แสดงว่าไม่มีการเปลี่ยนรูป
+    // แต่ถ้ามี Image File แต่ ImagePath != '' แสดงว่าไม่มีการเปลี่ยนรูป
     if (product.image != null &&
         product.image!.imageFile != null &&
         (product.imagePath == null || (product.imagePath != null && product.imagePath!.isEmpty))) {

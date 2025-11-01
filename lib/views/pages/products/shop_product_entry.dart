@@ -124,7 +124,6 @@ class _ShopProductEntryPageState extends ConsumerState<ShopProductEntryPage> {
         final imageBase = ImageBase(
           imageInt: imgInt,
           imageFile: File(image.path),
-          image: Image.memory(imgInt),
           imageBase64: ImageConverter.uint8ListToBase64(imgInt),
         );
         _imageNotifier.value = imageBase;
@@ -149,7 +148,6 @@ class _ShopProductEntryPageState extends ConsumerState<ShopProductEntryPage> {
       final imageBase = ImageBase(
         imageInt: imgInt,
         imageFile: File(image.path),
-        image: Image.memory(imgInt),
         imageBase64: ImageConverter.uint8ListToBase64(imgInt),
       );
       _imageNotifier.value = imageBase;

@@ -221,6 +221,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 sizeOffset: -0.5,
                 color: AppColors.infoHighlight,
               ),
+              enabled: shopExists,
               count: products?.length ?? 0,
               onTap: shop != null
                   ? () => Navigator.push(

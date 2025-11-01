@@ -381,7 +381,6 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
   void initState() {
     super.initState();
     _deviceDataRepo = ref.read(deviceDataProvider);
-    _image = widget.imageObject?.image;
     _imageInt = widget.imageObject?.imageInt;
     _imageFile = widget.imageObject?.imageFile;
     _imageProvider = widget.imageObject?.imageProvider;
@@ -566,7 +565,6 @@ class _ImageViewerState extends ConsumerState<ImageViewer> {
                   ? () => Navigator.pop(
                       context,
                       ImageBase(
-                        image: _image,
                         imageInt: _imageInt,
                         imageFile: _imageFile,
                         imageBase64: (_imageInt != null)

@@ -1,12 +1,12 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:justorder/core/domain/entities/image_base.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
-import '../../domain/entities/image_base.dart';
 import '../../utilities/result_handle.dart';
-import '../services/image_converter.dart';
 
 class ImageStorageLocalRepository {
   ImageStorageLocalRepository();
@@ -56,28 +56,23 @@ class ImageStorageLocalRepository {
       imgPath = path.join(dir.path, filePath);
     }
     // print('imgPath : $imgPath');
-    return _loadImageFromPath(imgPath);
+    return await compute(_loadImageFromPath, imgPath);
   }
 
-  Future<Result<ImageBase>> _loadImageFromPath(String filePath) async {
+  Result<ImageBase> _loadImageFromPath(String filePath) {
     File? imageFile;
-    String imageStr;
+    // String imageStr;
     try {
       // debugPrint('filePath : $filePath');
+      // imageStr = ImageConverter.fileToBase64String(imageFile);
       imageFile = File(filePath);
-      imageStr = ImageConverter.fileToBase64String(imageFile);
+      final image = ImageBase(imageFile: imageFile);
+      return Result<ImageBase>(success: image);
     } catch (e) {
       // debugPrint('Error : ${e.toString()}');
       return Result<ImageBase>(
         error: Failure(message: e.toString(), stackTrace: StackTrace.current),
       );
     }
-    final imgBase = ImageBase(
-      imageFile: imageFile,
-      imageBase64: imageStr,
-      imageInt: ImageConverter.fileToUint8List(imageFile),
-      image: Image.file(imageFile), // ImageConverter.fromBase64String(imageStr),
-    );
-    return Result<ImageBase>(success: imgBase);
   }
 }

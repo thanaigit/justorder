@@ -83,7 +83,6 @@ class _ShopProductListPageState extends ConsumerState<ShopProductListPage> {
     await ref
         .read(shopProductViewModelProvider(shopID).notifier)
         .loadShopProducts(refreshed: refreshed);
-    await ref.read(shopProductViewModelProvider(shopID).notifier).loadCacheImages();
     _loadingNotifier.value = false;
   }
 

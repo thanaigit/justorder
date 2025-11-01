@@ -100,7 +100,7 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
         .loadProductUnits(refreshed: refreshed);
   }
 
-  Future<void> _loadShopProduct({bool refreshed = false}) async {
+  Future<void> _loadShopProduct({bool refreshed = false, int? cacheSize}) async {
     final shopID = widget.shop.id ?? 0;
     await ref
         .read(shopProductGroupViewModelProvider(shopID).notifier)
@@ -108,6 +108,7 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
     await ref
         .read(shopProductViewModelProvider(shopID).notifier)
         .loadShopProducts(refreshed: refreshed);
+    await ref.read(shopProductViewModelProvider(shopID).notifier).loadCacheImages();
     _loadingNotifier.value = false;
   }
 
@@ -186,8 +187,17 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
     _loadingNotifier.value = true;
     if (widget.canSelectItem && _orderID != null) _loadOrder(_orderID!);
     _loadUnits();
-    _loadShopProduct();
     _productSearch.addListener(() => _doSearchProduct());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final size = MediaQuery.of(context).size;
+    final banerWdt =
+        widget.width ?? size.width - (AppSize.indentNormal * 2) - (AppSize.pageHorizontalSpace * 2);
+    final imgSize = ((banerWdt * 0.40) - GapSize.loose).toInt();
+    _loadShopProduct(cacheSize: imgSize);
   }
 
   @override

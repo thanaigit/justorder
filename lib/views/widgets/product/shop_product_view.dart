@@ -68,6 +68,10 @@ class _ShopProductViewState extends ConsumerState<ShopProductView> {
     _loadUnits();
   }
 
+  void _cacheImage(ImageProvider provider) {
+    precacheImage(provider, context);
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -86,6 +90,7 @@ class _ShopProductViewState extends ConsumerState<ShopProductView> {
         final img = result.success;
         widget.product.image = img;
         imageNotifier.value = img;
+        if (img?.imageProvider != null) _cacheImage(img!.imageProvider!);
         progressNotifier.value = false;
       });
     }
@@ -345,12 +350,18 @@ class _ShopProductViewState extends ConsumerState<ShopProductView> {
       return ValueListenableBuilder<bool>(
         valueListenable: progressNotifier,
         builder: (context, isBusy, _) {
-          return (image == null || image.imageProvider == null)
+          // final aImage = Image.file(image!.imageFile!, cacheHeight: height.toInt(), cacheWidth: width.toInt(),);
+          return (image == null || image.imageFile == null)
               ? const NullBox()
               : ImageBox(
                   showLoading: isBusy,
-                  useFadeEffect: isBusy,
-                  image: image.imageProvider,
+                  useFadeEffect: false,
+                  image: Image.file(
+                    image.imageFile!,
+                    fit: BoxFit.cover,
+                    filterQuality: FilterQuality.low,
+                    cacheWidth: width.toInt(),
+                  ).image,
                   width: width,
                   height: height,
                   borderRadius: borderRadius ?? 12,

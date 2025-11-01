@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:justorder/core/domain/entities/image_base.dart';
+
 import '../core/domain/entities/base_class.dart';
-import '../core/domain/entities/image_base.dart';
 import '../core/enum/data_status.dart';
 
 class ShopProduct extends BaseClass {
@@ -224,6 +226,7 @@ class ShopProduct extends BaseClass {
       hasStockTime: hasStockTime,
       order: order,
       imagePath: imagePath,
+      image: image,
       dataStatus: dataStatus ?? this.dataStatus,
       createdTime: createdTime ?? this.createdTime,
       updatedTime: updatedTime ?? this.updatedTime,
