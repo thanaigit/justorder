@@ -84,6 +84,8 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
   final _loadingNotifier = ValueNotifier<bool>(false);
   final _products = ValueNotifier<List<ShopProduct>?>(null);
   final _productSearch = TextEditingController();
+  final _scrollController = ItemScrollController();
+  final _scrollListener = ItemPositionsListener.create();
   // final int _reopenDelay = 800;
   int? _orderID;
   ShopOrder? _order;
@@ -180,6 +182,30 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
     if (!listEquals(_products.value, searchProds)) _products.value = searchProds;
   }
 
+  void _saveScrollPosition() async {
+    final positions = _scrollListener.itemPositions.value;
+    if (positions.isNotEmpty) {
+      // ดึง Index ของรายการแรกที่มองเห็น (รายการที่อยู่บนสุด)
+      final firstIndex = positions
+          .where((position) => position.itemTrailingEdge > 0)
+          .reduce(
+            (min, position) => position.itemLeadingEdge < min.itemLeadingEdge ? position : min,
+          )
+          .index;
+      ref
+          .read(shopProductViewModelProvider(widget.shop.id ?? -1).notifier)
+          .setScrollPosition(firstIndex.toDouble());
+    }
+  }
+
+  void _scrollToPosition(int index) async {
+    await Future.doWhile(() async {
+      await Future.delayed(const Duration(milliseconds: 50));
+      return !_scrollController.isAttached;
+    });
+    _scrollController.jumpTo(index: index);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -188,6 +214,14 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
     if (widget.canSelectItem && _orderID != null) _loadOrder(_orderID!);
     _loadUnits();
     _productSearch.addListener(() => _doSearchProduct());
+    _scrollListener.itemPositions.addListener(_saveScrollPosition);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final posIndex = ref
+          .read(shopProductViewModelProvider(widget.shop.id ?? -1).notifier)
+          .scrollPosition
+          .toInt();
+      _scrollToPosition(posIndex);
+    });
   }
 
   @override
@@ -202,6 +236,7 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
 
   @override
   void dispose() {
+    _scrollListener.itemPositions.removeListener(_saveScrollPosition);
     _products.dispose();
     _productSearch.dispose();
     _loadingNotifier.dispose();
@@ -601,6 +636,8 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
       }
       return ScrollableListTabScroller(
         itemCount: prodTabs.length,
+        itemScrollController: _scrollController,
+        itemPositionsListener: _scrollListener,
         tabBuilder: (context, index, active) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Text(

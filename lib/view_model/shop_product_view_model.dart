@@ -19,6 +19,8 @@ class ShopProductViewModel extends Notifier<List<ShopProduct>?> {
   late final ShopProductRepository _repo;
   late final ImageStorageLocalRepository _imageRepo;
 
+  double _scrollPosition = 0;
+
   @override
   List<ShopProduct>? build() {
     _repo = ref.read(shopProductRepositoryProvider);
@@ -27,6 +29,10 @@ class ShopProductViewModel extends Notifier<List<ShopProduct>?> {
   }
 
   String _getImagePath(int productID) => path.join('$shopID', 'products', '$productID');
+
+  double get scrollPosition => _scrollPosition;
+
+  void setScrollPosition(double position) => _scrollPosition = position;
 
   Future<Result<bool>> loadShopProducts({bool refreshed = false}) async {
     if (!refreshed && state != null && state!.isNotEmpty) return const Result<bool>(success: true);
