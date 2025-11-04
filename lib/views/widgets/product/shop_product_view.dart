@@ -356,12 +356,13 @@ class _ShopProductViewState extends ConsumerState<ShopProductView> {
               : ImageBox(
                   showLoading: isBusy,
                   useFadeEffect: false,
-                  image: Image.file(
-                    image.imageFile!,
-                    fit: BoxFit.cover,
-                    filterQuality: FilterQuality.low,
-                    cacheWidth: width.toInt(),
-                  ).image,
+                  image: image.imageProvider,
+                  // image: Image.file(
+                  //   image.imageFile!,
+                  //   fit: BoxFit.cover,
+                  //   filterQuality: FilterQuality.low,
+                  //   cacheWidth: width.toInt(),
+                  // ).image,
                   width: width,
                   height: height,
                   borderRadius: borderRadius ?? 12,

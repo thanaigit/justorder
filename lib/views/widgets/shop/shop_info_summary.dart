@@ -49,12 +49,16 @@ class _ShopInfoSummaryState extends ConsumerState<ShopInfoSummary> {
   final _editNameNotifier = ValueNotifier<bool>(false);
   final _editNameController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
+  Future<void> _initLoad() async {
     final shop = ref.read(shopInfoViewModelProvider);
     ref.read(shopPhoneViewModelProvider(shop?.id ?? 0).notifier).loadShopPhones();
     ref.read(shopBankAccountViewModelProvider(shop?.id ?? 0).notifier).loadBankAccounts();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initLoad();
   }
 
   @override

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_popup/flutter_popup.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:justorder/view_model/shop_product_view_model.dart';
 
 import 'core/const/colors.dart';
 import 'core/const/size.dart';
@@ -14,14 +13,15 @@ import 'core/presentation/notifiers/scale_notifier.dart';
 import 'core/presentation/styles/text_styles.dart';
 import 'core/presentation/widgets/buttons/scale_button.dart';
 import 'core/presentation/widgets/gap.dart';
-import 'core/presentation/widgets/image_box.dart';
 import 'core/presentation/widgets/simple_menu.dart';
 import 'core/providers/app_common_data_provider.dart';
+import 'core/providers/image_local_storage_provider.dart';
 import 'core/utilities/func_utils.dart';
 import 'view_model/shop_info_view_model.dart';
 import 'view_model/shop_product_group_view_model.dart';
 import 'view_model/shop_product_options_group_view_model.dart';
 import 'view_model/shop_product_unit_view_model.dart';
+import 'view_model/shop_product_view_model.dart';
 import 'view_model/shop_table_view_model.dart';
 import 'views/pages/products/shop_product_list.dart';
 import 'views/pages/shop/shop_info_bank_account.dart';
@@ -66,7 +66,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   void _loadInitialData() {
-    ref.read(shopInfoViewModelProvider.notifier).loadShop().then((result) {
+    ref.read(shopInfoViewModelProvider.notifier).loadShop().then((result) async {
       final shop = result.success;
       if (shop == null) return;
       final shopID = shop.id ?? -1;
@@ -77,6 +77,11 @@ class _HomePageState extends ConsumerState<HomePage> {
           .read(shopProductOptionsGroupViewModelProvider(shopID).notifier)
           .loadProductOptionsGroups();
       ref.read(shopProductViewModelProvider(shopID).notifier).loadShopProducts();
+      if (shop.logoImagePath != null && shop.logoImagePath!.isNotEmpty) {
+        final logoPath = shop.logoImagePath!;
+        final result = await ref.read(imageLocalStorageProvider).loadImageLocal(logoPath);
+        shop.logoImage = result.success;
+      }
     });
   }
 

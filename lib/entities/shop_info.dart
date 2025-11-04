@@ -1,4 +1,5 @@
 import '../core/domain/entities/base_class.dart';
+import '../core/domain/entities/image_base.dart';
 import '../core/enum/data_status.dart';
 import '../enum/service_charge_method.dart';
 import 'address/address.dart';
@@ -22,6 +23,7 @@ class ShopInfo extends BaseClass {
   final bool includeVat;
   final String? taxID;
   final String? logoImagePath;
+  ImageBase? logoImage; // for cache
   ShopInfo({
     this.id,
     this.name,
@@ -41,6 +43,7 @@ class ShopInfo extends BaseClass {
     this.includeVat = false,
     this.taxID,
     this.logoImagePath,
+    this.logoImage,
     super.dataStatus,
     super.createdTime,
     super.updatedTime,
@@ -67,6 +70,7 @@ class ShopInfo extends BaseClass {
     bool? includeVat,
     String? taxID,
     String? logoImagePath,
+    ImageBase? logoImage,
     DataStatus? dataStatus,
     DateTime? createdTime,
     DateTime? updatedTime,
@@ -92,6 +96,7 @@ class ShopInfo extends BaseClass {
       includeVat: includeVat ?? this.includeVat,
       taxID: taxID ?? this.taxID,
       logoImagePath: logoImagePath ?? this.logoImagePath,
+      logoImage: logoImage ?? this.logoImage,
       dataStatus: dataStatus ?? this.dataStatus,
       createdTime: createdTime ?? this.createdTime,
       updatedTime: updatedTime ?? this.updatedTime,
@@ -179,6 +184,7 @@ class ShopInfo extends BaseClass {
       includeVat: includeVat,
       taxID: taxID,
       logoImagePath: logoImagePath,
+      logoImage: logoImage,
       dataStatus: dataStatus ?? this.dataStatus,
       createdTime: createdTime ?? this.createdTime,
       updatedTime: updatedTime ?? this.updatedTime,
