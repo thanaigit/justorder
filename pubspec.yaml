@@ -53,6 +53,7 @@ dependencies:
   animated_emoji: ^3.2.1
   # flutter_beep: ^1.0.0
   collection: ^1.19.1
+  barcode_scan2: ^4.5.1
   # flutter_beep_plus: ^0.0.3
 
 dev_dependencies:

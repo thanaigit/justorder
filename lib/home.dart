@@ -125,8 +125,8 @@ class _HomePageState extends ConsumerState<HomePage> {
     final isVertical = (orient == Orientation.portrait);
     final iconSize = AppSize.iconLarge;
     final size = MediaQuery.sizeOf(context);
-    final paddWdt = MediaQuery.of(context).padding.horizontal;
-    final imgWidth = ((size.width - paddWdt) * 0.6) / 1.618;
+    // final paddWdt = MediaQuery.of(context).padding.horizontal;
+    // final imgWidth = ((size.width - paddWdt) * 0.6) / 1.618;
     double btnRadius = (size.width - (AppSize.pageHorizontalSpace * 2) - 110) / 14;
     if (btnRadius > 22.0) btnRadius = 22.0;
 

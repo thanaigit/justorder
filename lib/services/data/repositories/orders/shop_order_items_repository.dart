@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/utilities/result_handle.dart';
@@ -28,14 +29,29 @@ class ShopOrderItemsRepository
     required super.mapper,
   });
 
-  Future<Result<List<ShopOrderItems>?>> getOrderItems(int orderID) async =>
-      getWhere((tbl) => tbl.orderID.equals(orderID));
+  Future<Result<List<ShopOrderItems>?>> getOrderItems(int orderID) async => getWhere(
+    (tbl) => tbl.orderID.equals(orderID),
+    order: [(tbl) => OrderingTerm(expression: tbl.no)],
+  );
+
+  Future<Result<ShopOrderItems?>> getOrderItem(int itemID) =>
+      getSingleWhere((tbl) => tbl.id.equals(itemID));
 
   Future<Result<ShopOrderItems>> createOrderItem(
     ShopOrderItems item, {
     required int orderID,
     required int shopID,
-  }) => createReturn(item.copyWith(orderID: orderID, shopID: shopID));
+  }) async {
+    int lastNo = 0;
+    final result = await getMaxIntWhere(
+      db.shopOrderItemsTbl.no,
+      where: (tbl) => tbl.orderID.equals(orderID),
+    );
+    if (!result.hasError) lastNo = result.success ?? 0;
+    final newNo = lastNo + 1;
+    final newItem = item.copyWith(orderID: orderID, shopID: shopID, no: newNo);
+    return createReturn(newItem);
+  }
 
   Future<Result<ShopOrderItems>> updateOrderItem(ShopOrderItems item) async {
     final result = await updateWhereReturnSingle(item, where: (tbl) => tbl.id.equals(item.id!));

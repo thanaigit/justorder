@@ -44,14 +44,23 @@ class ShopProductOptionsGroupDetailRepository
 
   Future<Result<List<ShopProductOptionsGroupDetail>?>> getOptionsDetailInGroups(
     List<int> groupIDs,
-  ) async => getWhere((tbl) => tbl.groupID.isIn(groupIDs));
+  ) async => getWhere(
+    (tbl) => tbl.groupID.isIn(groupIDs),
+    order: [
+      (tbl) => OrderingTerm(expression: tbl.groupID),
+      (tbl) => OrderingTerm(expression: tbl.order),
+    ],
+  );
 
   Future<Result<ShopProductOptionsGroupDetail>> createProductOptionsGroupDetail(
     ShopProductOptionsGroupDetail detail, {
     required int groupID,
   }) async {
     int lastNo = 0;
-    final result = await getMaxInt(db.shopProductOptionsGroupDetailTbl.order);
+    final result = await getMaxIntWhere(
+      db.shopProductOptionsGroupDetailTbl.order,
+      where: (tbl) => tbl.groupID.equals(groupID),
+    );
     if (!result.hasError) lastNo = result.success ?? 0;
     final newNo = lastNo + 1;
     final newDetail = detail.copyWith(groupID: groupID, order: newNo);

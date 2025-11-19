@@ -37,8 +37,15 @@ class ShopProductGroupRepository
   Future<Result<ShopProductGroup>> createProductGroup(
     ShopProductGroup group, {
     required int shopID,
-  }) {
-    final newGroup = group.copyWith(shopID: shopID);
+  }) async {
+    int lastNo = 0;
+    final result = await getMaxIntWhere(
+      db.shopProductGroupTbl.order,
+      where: (tbl) => tbl.shopID.equals(shopID),
+    );
+    if (!result.hasError) lastNo = result.success ?? 0;
+    final newNo = lastNo + 1;
+    final newGroup = group.copyWith(shopID: shopID, order: newNo);
     return createReturn(newGroup);
   }
 

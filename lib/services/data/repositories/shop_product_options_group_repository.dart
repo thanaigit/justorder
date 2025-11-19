@@ -46,7 +46,10 @@ class ShopProductOptionsGroupRepository
     required int shopID,
   }) async {
     int lastNo = 0;
-    final result = await getMaxInt(db.shopProductOptionsGroupTbl.order);
+    final result = await getMaxIntWhere(
+      db.shopProductOptionsGroupTbl.order,
+      where: (tbl) => tbl.shopID.equals(shopID),
+    );
     if (!result.hasError) lastNo = result.success ?? 0;
     final newNo = lastNo + 1;
     final newGroup = group.copyWith(shopID: shopID, order: newNo);

@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../database.dart';
@@ -29,7 +30,13 @@ class ShopProductOptionsDetailRepository {
   Future<Result<List<ShopProductOptionsDetail>?>> getProductOptionsDetails(int productID) async {
     final view = db.shopProductOptionsDetailView;
     try {
-      final data = await (db.select(view)..where((v) => v.productID.equals(productID))).get();
+      var query = db.select(view)..where((v) => v.productID.equals(productID));
+      query = query
+        ..orderBy([
+          (v) => OrderingTerm(expression: v.groupOrder),
+          (v) => OrderingTerm(expression: v.optionOrder),
+        ]);
+      final data = await query.get();
       return Result<List<ShopProductOptionsDetail>?>(success: mapper.toEntities(data));
     } catch (e) {
       return Result<List<ShopProductOptionsDetail>?>(

@@ -34,13 +34,15 @@ class ShopProductViewModel extends Notifier<List<ShopProduct>?> {
 
   void setScrollPosition(double position) => _scrollPosition = position;
 
-  Future<Result<bool>> loadShopProducts({bool refreshed = false}) async {
-    if (!refreshed && state != null && state!.isNotEmpty) return const Result<bool>(success: true);
+  Future<Result<List<ShopProduct>?>> loadShopProducts({bool refreshed = false}) async {
+    if (!refreshed && state != null && state!.isNotEmpty) {
+      return Result<List<ShopProduct>?>(success: state);
+    }
     final result = await _repo.getShopProducts(shopID);
-    if (result.hasError) return Result<bool>(success: false, error: result.error);
+    if (result.hasError) return Result<List<ShopProduct>?>(error: result.error);
     final products = result.success;
     state = products != null ? List.of(products) : null;
-    return const Result<bool>(success: true);
+    return Result<List<ShopProduct>?>(success: products);
   }
 
   Future<void> loadCacheImages() async {

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:justorder/core/domain/entities/image_base.dart';
 
 import '../core/domain/entities/base_class.dart';

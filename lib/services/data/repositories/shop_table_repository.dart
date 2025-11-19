@@ -23,9 +23,14 @@ class ShopTableRepository
     order: [(tbl) => OrderingTerm(expression: tbl.no)],
   );
 
+  Future<Result<ShopTable?>> getTableByID(int id) => getSingleWhere((tbl) => tbl.id.equals(id));
+
   Future<Result<ShopTable>> createShopTable(ShopTable shopTable, {required int shopID}) async {
     int lastNo = 0;
-    final result = await getMaxInt(db.shopTableTbl.no);
+    final result = await getMaxIntWhere(
+      db.shopTableTbl.no,
+      where: (tbl) => tbl.shopID.equals(shopID),
+    );
     if (!result.hasError) lastNo = result.success ?? 0;
     final newNo = lastNo + 1;
     final newTable = shopTable.copyWith(shopID: shopID, no: newNo);
@@ -37,7 +42,10 @@ class ShopTableRepository
     required int shopID,
   }) async {
     int lastNo = 0;
-    final result = await getMaxInt(db.shopTableTbl.no);
+    final result = await getMaxIntWhere(
+      db.shopTableTbl.no,
+      where: (tbl) => tbl.shopID.equals(shopID),
+    );
     if (!result.hasError) lastNo = result.success ?? 0;
     final newNo = lastNo + 1;
     var newTables = <ShopTable>[];

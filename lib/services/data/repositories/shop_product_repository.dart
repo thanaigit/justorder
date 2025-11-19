@@ -37,6 +37,9 @@ class ShopProductRepository
     return result.success ?? 0;
   }
 
+  Future<Result<ShopProduct?>> getShopProductByID(int id) =>
+      getSingleWhere((tbl) => tbl.id.equals(id));
+
   Future<Result<List<ShopProduct>?>> getShopProducts(int shopID) => getWhere(
     (tbl) => tbl.shopID.equals(shopID),
     order: [(tbl) => OrderingTerm(expression: tbl.order)],
@@ -44,7 +47,10 @@ class ShopProductRepository
 
   Future<Result<ShopProduct>> createShopProduct(ShopProduct product, {required int shopID}) async {
     int lastNo = 0;
-    final result = await getMaxInt(db.shopProductTbl.order);
+    final result = await getMaxIntWhere(
+      db.shopProductTbl.order,
+      where: (tbl) => tbl.shopID.equals(shopID),
+    );
     if (!result.hasError) lastNo = result.success ?? 0;
     final newNo = lastNo + 1;
     final newProduct = product.copyWith(shopID: shopID, order: newNo);

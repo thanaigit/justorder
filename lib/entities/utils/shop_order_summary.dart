@@ -1,5 +1,5 @@
 class ShopOrderSummary {
-  final String orderID;
+  final int orderID;
   final int itemCount;
   final double qty;
   final double wgtQty;
@@ -31,7 +31,7 @@ class ShopOrderSummary {
   });
 
   ShopOrderSummary copyWith({
-    String? orderID,
+    int? orderID,
     int? itemCount,
     double? qty,
     double? wgtQty,

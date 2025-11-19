@@ -89,6 +89,7 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
   // final int _reopenDelay = 800;
   int? _orderID;
   ShopOrder? _order;
+  int _initScrollIndex = 0;
   // List<ShopOrder>? _orders;
   // List<ShopOrderItems>? _items;
   // ignore: prefer_final_fields
@@ -198,13 +199,17 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
     }
   }
 
-  void _scrollToPosition(int index) async {
-    await Future.doWhile(() async {
-      await Future.delayed(const Duration(milliseconds: 50));
-      return !_scrollController.isAttached;
-    });
-    _scrollController.jumpTo(index: index);
-  }
+  // void _scrollToPosition(int index) async {
+  //   await Future.doWhile(() async {
+  //     await Future.delayed(const Duration(milliseconds: 50));
+  //     return !_scrollController.isAttached;
+  //   });
+  //   _scrollController.scrollTo(
+  //     index: index,
+  //     duration: const Duration(milliseconds: 800),
+  //     curve: Curves.fastOutSlowIn,
+  //   );
+  // }
 
   @override
   void initState() {
@@ -215,13 +220,11 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
     _loadUnits();
     _productSearch.addListener(() => _doSearchProduct());
     _scrollListener.itemPositions.addListener(_saveScrollPosition);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final posIndex = ref
-          .read(shopProductViewModelProvider(widget.shop.id ?? -1).notifier)
-          .scrollPosition
-          .toInt();
-      _scrollToPosition(posIndex);
-    });
+    _initScrollIndex = ref
+        .read(shopProductViewModelProvider(widget.shop.id ?? -1).notifier)
+        .scrollPosition
+        .toInt();
+    // WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToPosition(_initScrollIndex));
   }
 
   @override
@@ -636,6 +639,7 @@ class _ProductsListViewState extends ConsumerState<ProductsListView> {
       }
       return ScrollableListTabScroller(
         itemCount: prodTabs.length,
+        initialScrollIndex: _initScrollIndex,
         itemScrollController: _scrollController,
         itemPositionsListener: _scrollListener,
         tabBuilder: (context, index, active) => Padding(

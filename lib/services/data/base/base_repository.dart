@@ -50,7 +50,7 @@ class BaseRepository<
     }
   }
 
-  Future<Result<E?>> getSingleWhere({required Expression<bool> Function(T tbl) where}) async {
+  Future<Result<E?>> getSingleWhere(Expression<bool> Function(T tbl) where) async {
     try {
       final data = await (db.select(table)..where(where)).getSingleOrNull();
       return Result<E?>(success: data != null ? mapper.toEntity(data) : null);
@@ -85,7 +85,7 @@ class BaseRepository<
     }
   }
 
-  Future<Result<int>> countDataWhere({required Expression<bool> Function(T tbl) where}) async {
+  Future<Result<int>> countDataWhere(Expression<bool> Function(T tbl) where) async {
     try {
       final query = (db.select(table)..where(where)).addColumns([countAll()]);
       final qryResult = await query.getSingle();
@@ -101,6 +101,22 @@ class BaseRepository<
   Future<Result<int>> getMaxInt(Column<int> column) async {
     try {
       final query = db.selectOnly(table)..addColumns([column.max()]);
+      final qryResult = await query.getSingleOrNull();
+      final maxValue = qryResult?.read(column.max()) ?? 0;
+      return Result<int>(success: maxValue);
+    } catch (e) {
+      return Result<int>(
+        error: Failure(message: e.toString(), stackTrace: StackTrace.current),
+      );
+    }
+  }
+
+  Future<Result<int>> getMaxIntWhere(
+    Column<int> column, {
+    required Expression<bool> Function(T tbl) where,
+  }) async {
+    try {
+      final query = (db.select(table)..where(where)).addColumns([column.max()]);
       final qryResult = await query.getSingleOrNull();
       final maxValue = qryResult?.read(column.max()) ?? 0;
       return Result<int>(success: maxValue);

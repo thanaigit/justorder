@@ -39,7 +39,10 @@ class ShopProductOptionsRepository
     required int productID,
   }) async {
     int lastNo = 0;
-    final result = await getMaxInt(db.shopProductOptionsTbl.order);
+    final result = await getMaxIntWhere(
+      db.shopProductOptionsTbl.order,
+      where: (tbl) => tbl.productID.equals(productID),
+    );
     if (!result.hasError) lastNo = result.success ?? 0;
     final newNo = lastNo + 1;
     final newOption = option.copyWith(productID: productID, order: newNo);
@@ -51,7 +54,10 @@ class ShopProductOptionsRepository
     required int productID,
   }) async {
     int lastNo = 0;
-    final result = await getMaxInt(db.shopProductOptionsTbl.order);
+    final result = await getMaxIntWhere(
+      db.shopProductOptionsTbl.order,
+      where: (tbl) => tbl.productID.equals(productID),
+    );
     if (!result.hasError) lastNo = result.success ?? 0;
     final newOptions = List.generate(
       options.length,

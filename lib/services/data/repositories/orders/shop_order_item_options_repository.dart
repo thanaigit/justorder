@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/utilities/result_handle.dart';
@@ -33,13 +34,23 @@ class ShopOrderItemOptionsRepository
     required super.mapper,
   });
 
-  Future<Result<List<ShopOrderItemOptions>?>> getOrderItemOptions(int itemID) =>
-      getWhere((tbl) => tbl.itemID.equals(itemID));
+  Future<Result<List<ShopOrderItemOptions>?>> getOrderItemOptions(int itemID) => getWhere(
+    (tbl) => tbl.itemID.equals(itemID),
+    order: [
+      (tbl) => OrderingTerm(expression: tbl.groupOrder),
+      (tbl) => OrderingTerm(expression: tbl.optionOrder),
+    ],
+  );
 
   Future<Result<ShopOrderItemOptions>> createOrderItemOption(
     ShopOrderItemOptions option, {
     required int itemID,
   }) => createReturn(option.copyWith(itemID: itemID));
+
+  Future<Result<List<ShopOrderItemOptions>>> createOrderItemOptions(
+    List<ShopOrderItemOptions> options, {
+    required int itemID,
+  }) => createBatchReturn(options.map((e) => e.copyWith(itemID: itemID)).toList());
 
   Future<Result<ShopOrderItemOptions>> updateOrderItemOption(ShopOrderItemOptions option) async {
     final result = await updateWhereReturnSingle(option, where: (tbl) => tbl.id.equals(option.id!));
